@@ -10,3 +10,4 @@ export * from './timesheet.model';
 export * from './vendor.model';
 export * from './feedback.model';
 export * from './workspace.model';
+export * from './derived.model';
