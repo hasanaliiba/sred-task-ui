@@ -13,6 +13,7 @@ import { ProjectsSummaryComponent } from '../../components/projects-summary/proj
 import { VendorInvoicesComponent } from '../../components/vendor-invoices/vendor-invoices.component';
 import { ExpenditureSummaryComponent } from '../../components/expenditure-summary/expenditure-summary.component';
 import { YearProjectionComponent } from '../../components/year-projection/year-projection.component';
+import { FeedbackButtonComponent } from '../../components/feedback-button/feedback-button.component';
 import { RevealDirective } from '../../shared';
 
 /** Dashboard shell (Req 1–6 + features A–H). Each section is a focused, reactive component. */
@@ -33,6 +34,7 @@ import { RevealDirective } from '../../shared';
     VendorInvoicesComponent,
     ExpenditureSummaryComponent,
     YearProjectionComponent,
+    FeedbackButtonComponent,
     RevealDirective,
   ],
   templateUrl: './dashboard.component.html',

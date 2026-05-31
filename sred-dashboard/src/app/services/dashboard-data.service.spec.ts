@@ -222,6 +222,18 @@ describe('DashboardDataService', () => {
     expect(summaries.find((s) => s.projectId === 'sr')?.vendorAmount).toBe(1000);
   });
 
+  it('adds feedback tagged to the active client', async () => {
+    flushSeed();
+    service.setActiveClient('acme');
+    service.addFeedback('Great tool', 5);
+    const feedback = await firstValueFrom(service.feedback$);
+    const added = feedback.find((f) => f.message === 'Great tool');
+    expect(added).toBeTruthy();
+    expect(added?.clientId).toBe('acme');
+    expect(added?.clientName).toBe('Acme');
+    expect(added?.rating).toBe(5);
+  });
+
   it('government assistance lowers the creditable base (clamped at 0)', async () => {
     flushSeed();
     service.setActiveClient('acme');

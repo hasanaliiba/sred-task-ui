@@ -152,6 +152,24 @@ export class DashboardDataService {
     map((w) => (w ? buildProjection(w) : null)),
   );
 
+  /** Appends a feedback entry tagged to the active client (Feature G). No-op if no active client. */
+  addFeedback(message: string, rating: number): void {
+    const id = this.activeClientId$$.value;
+    const ws = this.workspaces$$.value.find((w) => w.client.id === id);
+    if (!ws) {
+      return;
+    }
+    const entry: Feedback = {
+      id: typeof crypto !== 'undefined' && 'randomUUID' in crypto ? `fb-${crypto.randomUUID()}` : `fb-${Date.now()}`,
+      clientId: ws.client.id,
+      clientName: ws.client.name,
+      message: message.trim(),
+      rating,
+      submittedAt: new Date().toISOString(),
+    };
+    this.feedback$$.next([...this.feedback$$.value, entry]);
+  }
+
   /** Per-employee detail for the modal, reactive to the selected period (Feature C). */
   employeeDetail$(employeeId: string): Observable<EmployeeDetail | null> {
     return combineLatest([this.activeWorkspace$, this.period$$]).pipe(
