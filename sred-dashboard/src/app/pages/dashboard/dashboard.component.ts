@@ -6,6 +6,7 @@ import { PeriodSelectorComponent } from '../../components/period-selector/period
 import { EmployeeGridComponent } from '../../components/employee-grid/employee-grid.component';
 import { EmployeeHoursChartComponent } from '../../components/employee-hours-chart/employee-hours-chart.component';
 import { TeamsTableComponent } from '../../components/teams-table/teams-table.component';
+import { TeamHoursChartComponent } from '../../components/team-hours-chart/team-hours-chart.component';
 import { RevealDirective } from '../../shared';
 
 /**
@@ -22,6 +23,7 @@ import { RevealDirective } from '../../shared';
     EmployeeGridComponent,
     EmployeeHoursChartComponent,
     TeamsTableComponent,
+    TeamHoursChartComponent,
     RevealDirective,
   ],
   templateUrl: './dashboard.component.html',
