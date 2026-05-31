@@ -1,0 +1,75 @@
+/*
+ * Project color palette (source: task-research/palette.css).
+ * Bootstrap-derived semantic colors + the sredi logo/brand colors.
+ * Exposed as CSS custom properties so raw CSS and chart configs can reference
+ * the same source of truth as the Tailwind theme (see tailwind.config.js).
+ */
+:root {
+  /* whitesmoke */
+  --whitesmoke-100: #eee;
+  --whitesmoke-200: #f8f9fa;
+  --whitesmoke-300: #e9ecef;
+  --whitesmoke-400: rgba(248, 249, 250, 0.5);
+  --whitesmoke-500: #f7f7f7;
+  --whitesmoke-600: #ebebeb;
+  /* white */
+  --white-100: #fff;
+  --white-200: #fdfdfe;
+  --white-500: #fefefe;
+  /* royalblue (primary) */
+  --royalblue-100: #007bff;
+  --royalblue-200: #0056b3;
+  --royalblue-300: #0069d9;
+  --royalblue-400: #0062cc;
+  --royalblue-500: #005cbf;
+  /* mediumblue / slateblue / hotpink */
+  --mediumblue-100: #6610f2;
+  --slateblue-100: #6f42c1;
+  --hotpink-100: #e83e8c;
+  /* crimson (danger) */
+  --crimson-100: #dc3545;
+  --crimson-200: rgba(220, 53, 69, 0.9);
+  /* darkorange / gold (warning) */
+  --darkorange-100: #fd7e14;
+  --gold-100: #ffc107;
+  /* forestgreen (success) */
+  --forestgreen-100: #28a745;
+  --forestgreen-200: #218838;
+  /* mediumseagreen / cadetblue (info) */
+  --mediumseagreen-100: #20c997;
+  --cadetblue-100: #17a2b8;
+  /* slategray / darkslategray */
+  --slategray-100: #6c757d;
+  --slategray-300: #5d6a7d;
+  --slategray-400: #587688;
+  --darkslategray-100: #343a40;
+  --darkslategray-300: #495057;
+  /* black */
+  --black-100: #212529;
+  --black-300: #1d2124;
+  /* gainsboro / lightsteelblue / lightskyblue */
+  --gainsboro-100: #dee2e6;
+  --gainsboro-200: #d6d8db;
+  --lightsteelblue-100: #b8daff;
+  --lightskyblue-100: #9fcdff;
+  --lightskyblue-200: #80bdff;
+  /* lightgray */
+  --lightgray-100: #c8cbcf;
+  --lightgray-200: #ced4da;
+  /* darkslateblue / lavender */
+  --darkslateblue-100: #004085;
+  --darkslateblue-200: #002752;
+  --lavender-100: #cce5ff;
+
+  /* ---- sredi brand / logo colors -------------------------------------- */
+  --logo-deepskyblue: rgb(0, 183, 255);   /* #00b7ff */
+  --brand-darkslategray: rgb(50, 68, 85); /* #324455 */
+  --brand-azure: rgb(243, 251, 251);      /* #f3fbfb */
+  --brand-skyblue: rgb(83, 201, 233);     /* #53c9e9 */
+  --brand-palevioletred: rgb(137, 79, 113);
+  --brand-lightgray: rgb(193, 210, 214);
+  --brand-aliceblue: rgb(219, 241, 248);
+  --brand-silver: rgb(184, 198, 177);
+  --brand-gray: rgb(124, 124, 116);
+  --brand-beige: rgb(215, 228, 209);
+}
