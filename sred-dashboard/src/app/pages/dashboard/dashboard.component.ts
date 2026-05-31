@@ -5,6 +5,7 @@ import { ClientHeaderComponent } from '../../components/client-header/client-hea
 import { PeriodSelectorComponent } from '../../components/period-selector/period-selector.component';
 import { EmployeeGridComponent } from '../../components/employee-grid/employee-grid.component';
 import { EmployeeHoursChartComponent } from '../../components/employee-hours-chart/employee-hours-chart.component';
+import { EmployeeHourAndCostChartComponent } from '../../components/employee-hour-and-cost-chart/employee-hour-and-cost-chart.component';
 import { TeamsTableComponent } from '../../components/teams-table/teams-table.component';
 import { TeamHoursChartComponent } from '../../components/team-hours-chart/team-hours-chart.component';
 import { ProjectChartComponent } from '../../components/project-chart/project-chart.component';
@@ -26,6 +27,7 @@ import { RevealDirective } from '../../shared';
     PeriodSelectorComponent,
     EmployeeGridComponent,
     EmployeeHoursChartComponent,
+    EmployeeHourAndCostChartComponent,
     TeamsTableComponent,
     TeamHoursChartComponent,
     ProjectChartComponent,

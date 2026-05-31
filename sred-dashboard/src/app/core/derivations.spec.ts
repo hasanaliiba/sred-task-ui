@@ -1,5 +1,6 @@
 import { ClientWorkspace } from '../models';
 import {
+  buildEmployeeCostBreakdown,
   buildEmployeeDetail,
   buildGrandTotals,
   buildProjection,
@@ -113,6 +114,29 @@ describe('derivations — projection (linear run-rate)', () => {
     expect(p.projectedHours).toBeCloseTo(160, 5);
     expect(p.projectedHours * p.fractionElapsed).toBeCloseTo(p.ytdHours, 5);
     expect(p.remainingHours).toBeCloseTo(80, 5);
+  });
+});
+
+describe('derivations — employee cost breakdown (SR&ED only)', () => {
+  it('computes SR&ED cost as SR&ED hours × the employee hourly rate', () => {
+    const ws = workedExampleWorkspace(); // project 'p' is SR&ED; A: 10h@$100, B: 20h@$20, C: 50h@$10
+    const rows = buildEmployeeCostBreakdown(ws, 'FY');
+    const a = rows.find((r) => r.id === 'a')!;
+    expect(a.hours).toBe(10);
+    expect(a.hourlyRate).toBe(100);
+    expect(a.amount).toBe(1000); // 10 × 100
+    expect(rows.find((r) => r.id === 'b')!.amount).toBe(400); // 20 × 20
+    expect(rows.find((r) => r.id === 'c')!.amount).toBe(500); // 50 × 10
+  });
+
+  it('excludes hours logged on non-SR&ED (Unclaimed) projects', () => {
+    const ws = workedExampleWorkspace();
+    // Give employee 'a' 90h on a new Unclaimed project — must NOT be counted.
+    ws.projects.push({ id: 'unc', name: 'Unclaimed', color: '#999', isSred: false });
+    ws.timesheets.push({ employeeId: 'a', projectId: 'unc', hours: { q1: 90, q2: 0, q3: 0, q4: 0 } });
+    const a = buildEmployeeCostBreakdown(ws, 'FY').find((r) => r.id === 'a')!;
+    expect(a.hours).toBe(10); // still only the SR&ED hours
+    expect(a.amount).toBe(1000); // unchanged
   });
 });
 

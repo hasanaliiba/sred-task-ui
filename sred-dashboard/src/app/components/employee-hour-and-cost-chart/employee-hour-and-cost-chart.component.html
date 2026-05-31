@@ -1,0 +1,26 @@
+<div class="bg-white rounded-2xl shadow ring-1 ring-gray-100 p-6">
+  <div class="mb-2">
+    <h2 class="text-lg font-bold text-ink">Employee SR&amp;ED Hours &amp; Cost</h2>
+    <p class="text-sm text-gray-400">SR&amp;ED hours and SR&amp;ED labor cost (SR&amp;ED hours × hourly rate) per employee, for the selected period.</p>
+  </div>
+
+  @if (vm$ | async; as vm) {
+    @if (vm.empty) {
+      <p class="py-8 text-sm text-gray-400 text-center">No employees to display.</p>
+    } @else {
+      <apx-chart
+        [series]="vm.series"
+        [chart]="chart"
+        [xaxis]="vm.xaxis"
+        [yaxis]="yaxis"
+        [colors]="colors"
+        [stroke]="stroke"
+        [markers]="markers"
+        [plotOptions]="plotOptions"
+        [dataLabels]="dataLabels"
+        [legend]="legend"
+        [tooltip]="tooltip"
+      ></apx-chart>
+    }
+  }
+</div>

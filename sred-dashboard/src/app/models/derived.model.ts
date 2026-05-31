@@ -44,6 +44,15 @@ export interface HoursSplit {
   totalHours: number;
 }
 
+/** Per-employee SR&ED hours and SR&ED labor cost for a period (cost = SR&ED hours × hourly rate). */
+export interface EmployeeCost {
+  id: string;
+  name: string;
+  hours: number; // SR&ED-eligible hours only
+  hourlyRate: number;
+  amount: number; // hours × hourlyRate
+}
+
 /** A team's members and aggregated hours split (Feature D & H). */
 export interface TeamHoursBreakdown {
   teamId: string | null; // null = the "Unassigned" group

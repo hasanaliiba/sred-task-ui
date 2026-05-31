@@ -8,6 +8,7 @@ import {
   ClientWorkspace,
   DashboardSeed,
   Employee,
+  EmployeeCost,
   EmployeeDetail,
   EmployeeRow,
   Project,
@@ -24,6 +25,7 @@ import {
   VendorInvoice,
 } from '../models';
 import {
+  buildEmployeeCostBreakdown,
   buildEmployeeDetail,
   buildEmployeeHoursBreakdown,
   buildEmployeeRows,
@@ -133,6 +135,11 @@ export class DashboardDataService {
     this.activeWorkspace$,
     this.period$$,
   ]).pipe(map(([w, p]) => (w ? buildEmployeeHoursBreakdown(w, p) : [])));
+
+  readonly employeeCostBreakdown$: Observable<EmployeeCost[]> = combineLatest([
+    this.activeWorkspace$,
+    this.period$$,
+  ]).pipe(map(([w, p]) => (w ? buildEmployeeCostBreakdown(w, p) : [])));
 
   readonly teamHoursBreakdown$: Observable<TeamHoursBreakdown[]> = combineLatest([
     this.activeWorkspace$,

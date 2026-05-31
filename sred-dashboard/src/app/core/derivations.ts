@@ -9,6 +9,7 @@ import type {
   VendorInvoice,
 } from '../models';
 import type {
+  EmployeeCost,
   EmployeeDetail,
   EmployeeRow,
   ExpenditureSummary,
@@ -185,6 +186,22 @@ function splitForEmployee(ws: ClientWorkspace, employee: Employee, period: Perio
     unclaimedHours,
     totalHours: sredHours + unclaimedHours,
   };
+}
+
+/**
+ * Per-employee SR&ED hours and SR&ED labor cost for the period. Only hours on
+ * SR&ED-eligible projects are counted; cost = SR&ED hours × the employee's hourly rate.
+ */
+export function buildEmployeeCostBreakdown(ws: ClientWorkspace, period: Period): EmployeeCost[] {
+  const std = ws.client.standardAnnualHours;
+  const sredProjectIds = new Set(ws.projects.filter((p) => p.isSred).map((p) => p.id));
+  return ws.employees.map((employee) => {
+    const hours = ws.timesheets
+      .filter((t) => t.employeeId === employee.id && sredProjectIds.has(t.projectId))
+      .reduce((sum, t) => sum + periodHours(t.hours, period), 0);
+    const rate = hourlyRate(employee, std);
+    return { id: employee.id, name: employee.name, hours, hourlyRate: rate, amount: hours * rate };
+  });
 }
 
 /** Teams with members and aggregated hours, plus an "Unassigned" group (Feature D & H). */
