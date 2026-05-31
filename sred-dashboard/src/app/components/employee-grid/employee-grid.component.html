@@ -1,0 +1,67 @@
+<div class="bg-white rounded-2xl shadow ring-1 ring-gray-100 overflow-hidden">
+  <div class="px-6 py-4 border-b border-gray-100">
+    <h2 class="text-lg font-bold text-ink">Staff Salary</h2>
+    <p class="text-sm text-gray-400">Annual salary and equivalent hourly rate per employee.</p>
+  </div>
+
+  @if (employees$ | async; as employees) {
+    @if (employees.length === 0) {
+      <p class="px-6 py-8 text-sm text-gray-400 text-center">No employees to display.</p>
+    } @else {
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+          <thead class="text-xs uppercase tracking-wide text-gray-500 bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3">Name</th>
+              <th scope="col" class="px-6 py-3">Team</th>
+              <th scope="col" class="px-6 py-3">Province</th>
+              <th scope="col" class="px-6 py-3">Start</th>
+              <th scope="col" class="px-6 py-3">End</th>
+              <th scope="col" class="px-6 py-3 text-right">Expected Salary</th>
+              <th scope="col" class="px-6 py-3 text-right">Confirmed Salary</th>
+              <th scope="col" class="px-6 py-3 text-right">Hourly Rate</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            @for (row of employees; track row.employee.id) {
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">
+                  {{ row.employee.name }}
+                  @if (row.employee.isSpecialEmployee) {
+                    <span class="ml-2 align-middle text-[10px] uppercase tracking-wide bg-warning/20 text-warning-dark rounded-full px-2 py-0.5">Specified</span>
+                  }
+                </td>
+                <td class="px-6 py-3">
+                  @if (row.team; as team) {
+                    <span class="inline-flex items-center gap-1.5">
+                      <span class="h-2.5 w-2.5 rounded-full" [style.background-color]="team.color"></span>
+                      {{ team.name }}
+                    </span>
+                  } @else {
+                    <span class="text-gray-400">Unassigned</span>
+                  }
+                </td>
+                <td class="px-6 py-3 text-gray-600">{{ row.employee.province }}</td>
+                <td class="px-6 py-3 text-gray-600 whitespace-nowrap">{{ row.employee.startDate | date: 'mediumDate' : 'UTC' }}</td>
+                <td class="px-6 py-3 text-gray-600 whitespace-nowrap">
+                  {{ row.employee.endDate ? (row.employee.endDate | date: 'mediumDate' : 'UTC') : '—' }}
+                </td>
+                <td class="px-6 py-3 text-right text-gray-600">
+                  {{ row.employee.expectedSalary !== null ? (row.employee.expectedSalary | currency: 'USD':'symbol':'1.0-0') : '—' }}
+                </td>
+                <td class="px-6 py-3 text-right text-gray-600">
+                  {{ row.employee.confirmedSalary !== null ? (row.employee.confirmedSalary | currency: 'USD':'symbol':'1.0-0') : '—' }}
+                </td>
+                <td class="px-6 py-3 text-right font-semibold text-ink">
+                  {{ row.hourlyRate | currency: 'USD':'symbol':'1.2-2' }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  } @else {
+    <p class="px-6 py-8 text-sm text-gray-400 text-center">Loading…</p>
+  }
+</div>

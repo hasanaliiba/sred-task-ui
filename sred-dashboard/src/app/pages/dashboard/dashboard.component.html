@@ -13,6 +13,11 @@
     <app-client-header></app-client-header>
   </section>
 
+  <!-- Req 3: employee salary grid -->
+  <section id="employees" appReveal class="scroll-mt-36">
+    <app-employee-grid></app-employee-grid>
+  </section>
+
   <!-- Sections filled by later sprints -->
   @for (section of pending; track section.id) {
     <section [id]="section.id" appReveal class="scroll-mt-36">
