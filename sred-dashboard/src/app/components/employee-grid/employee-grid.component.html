@@ -35,8 +35,11 @@
           <tbody class="divide-y divide-gray-100">
             @for (row of employees; track row.employee.id) {
               <tr class="hover:bg-gray-50 transition-colors">
-                <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap">
-                  {{ row.employee.name }}
+                <td class="px-6 py-3 font-medium whitespace-nowrap">
+                  <button type="button" (click)="openDetail(row.employee.id)"
+                    class="text-brand-700 hover:underline">
+                    {{ row.employee.name }}
+                  </button>
                   @if (row.employee.isSpecialEmployee) {
                     <span class="ml-2 align-middle text-[10px] uppercase tracking-wide bg-warning/20 text-warning-dark rounded-full px-2 py-0.5">Specified</span>
                   }
@@ -81,6 +84,11 @@
     <p class="px-6 py-8 text-sm text-gray-400 text-center">Loading…</p>
   }
 </div>
+
+<!-- Read-only detail modal (click a name) -->
+@if (detailId; as id) {
+  <app-employee-detail [employeeId]="id" (close)="closeDetail()"></app-employee-detail>
+}
 
 <!-- Add / edit modal -->
 @if (formOpen) {

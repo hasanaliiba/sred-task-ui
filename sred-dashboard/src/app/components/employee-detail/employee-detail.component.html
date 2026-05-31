@@ -1,0 +1,72 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div class="absolute inset-0 bg-black/40" (click)="onClose()"></div>
+
+  <div class="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl p-6" role="dialog" aria-modal="true">
+    @if (detail$ | async; as detail) {
+      <!-- Header -->
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h2 class="text-lg font-bold text-ink">{{ detail.employee.name }}</h2>
+          <p class="text-sm text-gray-500">
+            {{ detail.employee.province }}
+            · Hired {{ detail.employee.startDate | date: 'mediumDate' : 'UTC' }}
+            @if (detail.employee.isSpecialEmployee) { · <span class="text-warning-dark">Specified</span> }
+          </p>
+        </div>
+        <button type="button" (click)="onClose()" class="text-gray-400 hover:text-gray-600 text-xl leading-none">&times;</button>
+      </div>
+
+      <!-- SR&ED vs Unclaimed proportion bar -->
+      <div class="mt-5">
+        <p class="text-xs uppercase tracking-wide text-gray-400 mb-1">SR&amp;ED allocation</p>
+        <div class="h-3 w-full rounded-full overflow-hidden bg-gray-100 flex">
+          <div class="bg-brand-600 h-full" [style.width.%]="widthPct(detail.sredHours, detail.totalHours)"></div>
+          <div class="bg-gray-300 h-full" [style.width.%]="widthPct(detail.unclaimedHours, detail.totalHours)"></div>
+        </div>
+        <div class="flex justify-between text-xs text-gray-500 mt-1">
+          <span><span class="inline-block h-2 w-2 rounded-full bg-brand-600 mr-1"></span>SR&amp;ED {{ detail.sredHours | number }}h</span>
+          <span><span class="inline-block h-2 w-2 rounded-full bg-gray-300 mr-1"></span>Unclaimed {{ detail.unclaimedHours | number }}h</span>
+        </div>
+      </div>
+
+      <!-- Per-project breakdown -->
+      <div class="mt-5">
+        <p class="text-xs uppercase tracking-wide text-gray-400 mb-2">Projects</p>
+        @if (detail.perProject.length === 0) {
+          <p class="text-sm text-gray-400">No hours logged for this period.</p>
+        } @else {
+          <ul class="space-y-1.5">
+            @for (p of detail.perProject; track p.projectId) {
+              <li class="flex items-center justify-between text-sm">
+                <span class="inline-flex items-center gap-2">
+                  <span class="h-2.5 w-2.5 rounded-full" [style.background-color]="p.color"></span>
+                  {{ p.name }}
+                  @if (!p.isSred) { <span class="text-[10px] uppercase text-gray-400">unclaimed</span> }
+                </span>
+                <span class="font-medium text-gray-700">{{ p.hours | number }}h</span>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+
+      <!-- Summary -->
+      <dl class="mt-5 grid grid-cols-3 gap-3 text-center border-t border-gray-100 pt-4">
+        <div>
+          <dt class="text-xs text-gray-400">SR&amp;ED hours</dt>
+          <dd class="text-lg font-bold text-brand-700">{{ detail.sredHours | number }}</dd>
+        </div>
+        <div>
+          <dt class="text-xs text-gray-400">Total hours</dt>
+          <dd class="text-lg font-bold text-ink">{{ detail.totalHours | number }}</dd>
+        </div>
+        <div>
+          <dt class="text-xs text-gray-400">Allocation</dt>
+          <dd class="text-lg font-bold text-ink">{{ detail.sredAllocation | percent: '1.1-2' }}</dd>
+        </div>
+      </dl>
+    } @else {
+      <p class="text-sm text-gray-400">Employee not found.</p>
+    }
+  </div>
+</div>

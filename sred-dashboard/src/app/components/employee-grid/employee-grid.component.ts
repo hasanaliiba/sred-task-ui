@@ -4,6 +4,7 @@ import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { DashboardDataService } from '../../services/dashboard-data.service';
 import { Employee } from '../../models';
 import { EmployeeFormComponent } from '../employee-form/employee-form.component';
+import { EmployeeDetailComponent } from '../employee-detail/employee-detail.component';
 
 /**
  * Employee salary grid + CRUD (Req 3, Feature C). Lists employees with the derived
@@ -13,7 +14,7 @@ import { EmployeeFormComponent } from '../employee-form/employee-form.component'
 @Component({
   selector: 'app-employee-grid',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, DatePipe, EmployeeFormComponent],
+  imports: [AsyncPipe, CurrencyPipe, DatePipe, EmployeeFormComponent, EmployeeDetailComponent],
   templateUrl: './employee-grid.component.html',
 })
 export class EmployeeGridComponent {
@@ -28,6 +29,17 @@ export class EmployeeGridComponent {
 
   /** Delete confirmation state. */
   pendingDelete: Employee | null = null;
+
+  /** Detail modal: id of the employee being inspected (null = closed). */
+  detailId: string | null = null;
+
+  openDetail(id: string): void {
+    this.detailId = id;
+  }
+
+  closeDetail(): void {
+    this.detailId = null;
+  }
 
   openAdd(): void {
     this.editing = null;
