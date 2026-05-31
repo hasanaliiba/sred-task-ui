@@ -12,12 +12,10 @@ import { ProjectManagerComponent } from '../../components/project-manager/projec
 import { ProjectsSummaryComponent } from '../../components/projects-summary/projects-summary.component';
 import { VendorInvoicesComponent } from '../../components/vendor-invoices/vendor-invoices.component';
 import { ExpenditureSummaryComponent } from '../../components/expenditure-summary/expenditure-summary.component';
+import { YearProjectionComponent } from '../../components/year-projection/year-projection.component';
 import { RevealDirective } from '../../shared';
 
-/**
- * Dashboard shell (Req 1–6). Sections are added by their sprints; remaining ones
- * show a labeled placeholder so the navbar anchors have targets.
- */
+/** Dashboard shell (Req 1–6 + features A–H). Each section is a focused, reactive component. */
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -34,13 +32,9 @@ import { RevealDirective } from '../../shared';
     ProjectsSummaryComponent,
     VendorInvoicesComponent,
     ExpenditureSummaryComponent,
+    YearProjectionComponent,
     RevealDirective,
   ],
   templateUrl: './dashboard.component.html',
 })
-export class DashboardComponent {
-  /** Sections not yet built — rendered as labeled placeholders. */
-  readonly pending = [
-    { id: 'projection', title: 'Year Projection', note: 'YTD vs projected full-year + credit (S20)' },
-  ];
-}
+export class DashboardComponent {}

@@ -1,0 +1,66 @@
+@if (vm$ | async; as vm) {
+  @if (vm.p; as p) {
+    <div class="space-y-6">
+      <!-- Method + gauge banner -->
+      <div class="bg-white rounded-2xl shadow ring-1 ring-gray-100 p-6 grid lg:grid-cols-3 gap-6 items-center">
+        <div class="lg:col-span-2">
+          <h2 class="text-lg font-bold text-ink">Year Projection</h2>
+          <p class="text-sm text-gray-500 mt-1">
+            Linear run-rate from fiscal-year start to
+            <span class="font-medium text-gray-700">{{ vm.client?.asOfDate | date: 'mediumDate' : 'UTC' }}</span>.
+            About <span class="font-medium text-gray-700">{{ vm.pct }}%</span> of the year has elapsed;
+            full-year figures assume the same pace continues.
+          </p>
+        </div>
+        <div class="flex justify-center">
+          <apx-chart
+            [series]="vm.gauge"
+            [chart]="chart"
+            [labels]="gaugeLabels"
+            [plotOptions]="plotOptions"
+            [colors]="gaugeColors"
+          ></apx-chart>
+        </div>
+      </div>
+
+      <!-- KPI cards -->
+      <div class="grid sm:grid-cols-3 gap-6">
+        <!-- Hours -->
+        <div class="bg-white rounded-2xl shadow ring-1 ring-gray-100 p-6">
+          <p class="text-xs uppercase tracking-wide text-gray-400">Hours</p>
+          <p class="text-3xl font-extrabold text-ink mt-1" [appCountUp]="p.ytdHours" [countUpSuffix]="' h'"></p>
+          <p class="text-xs text-gray-400">year to date</p>
+          <div class="mt-4 pt-3 border-t border-gray-100">
+            <p class="text-sm text-gray-500">Projected full year</p>
+            <p class="text-xl font-bold text-brand-700" [appCountUp]="p.projectedHours" [countUpSuffix]="' h'"></p>
+            <p class="text-xs text-gray-400">+<span [appCountUp]="p.remainingHours"></span> h to go</p>
+          </div>
+        </div>
+
+        <!-- Amount -->
+        <div class="bg-white rounded-2xl shadow ring-1 ring-gray-100 p-6">
+          <p class="text-xs uppercase tracking-wide text-gray-400">Expenditure</p>
+          <p class="text-3xl font-extrabold text-ink mt-1" [appCountUp]="p.ytdAmount" countUpPrefix="$"></p>
+          <p class="text-xs text-gray-400">year to date</p>
+          <div class="mt-4 pt-3 border-t border-gray-100">
+            <p class="text-sm text-gray-500">Projected full year</p>
+            <p class="text-xl font-bold text-brand-700" [appCountUp]="p.projectedAmount" countUpPrefix="$"></p>
+            <p class="text-xs text-gray-400">+$<span [appCountUp]="p.remainingAmount"></span> to go</p>
+          </div>
+        </div>
+
+        <!-- Credit -->
+        <div class="bg-gradient-to-br from-success to-success-dark text-white rounded-2xl shadow-lg p-6">
+          <p class="text-xs uppercase tracking-wide text-white/60">SR&amp;ED credit</p>
+          <p class="text-3xl font-extrabold mt-1" [appCountUp]="p.ytdCredit" countUpPrefix="$"></p>
+          <p class="text-xs text-white/60">year to date</p>
+          <div class="mt-4 pt-3 border-t border-white/15">
+            <p class="text-sm text-white/70">Projected full year</p>
+            <p class="text-xl font-bold" [appCountUp]="p.projectedCredit" countUpPrefix="$"></p>
+            <p class="text-xs text-white/60">at the current run-rate</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+}

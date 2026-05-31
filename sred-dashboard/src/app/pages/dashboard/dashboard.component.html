@@ -39,13 +39,8 @@
     <app-expenditure-summary></app-expenditure-summary>
   </section>
 
-  <!-- Sections filled by later sprints -->
-  @for (section of pending; track section.id) {
-    <section [id]="section.id" appReveal class="scroll-mt-36">
-      <div class="bg-white rounded-2xl shadow ring-1 ring-gray-100 p-6">
-        <h2 class="text-lg font-bold text-ink">{{ section.title }}</h2>
-        <p class="text-sm text-gray-400 mt-1">{{ section.note }}</p>
-      </div>
-    </section>
-  }
+  <!-- Req 6: year projection -->
+  <section id="projection" appReveal class="scroll-mt-36">
+    <app-year-projection></app-year-projection>
+  </section>
 </main>
