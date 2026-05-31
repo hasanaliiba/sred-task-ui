@@ -25,6 +25,11 @@
     <app-team-hours-chart></app-team-hours-chart>
   </section>
 
+  <!-- Req 4: per-project hours & cost -->
+  <section id="projects" appReveal class="scroll-mt-36 space-y-6">
+    <app-project-chart></app-project-chart>
+  </section>
+
   <!-- Sections filled by later sprints -->
   @for (section of pending; track section.id) {
     <section [id]="section.id" appReveal class="scroll-mt-36">
