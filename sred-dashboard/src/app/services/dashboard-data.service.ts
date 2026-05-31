@@ -87,6 +87,11 @@ export class DashboardDataService {
   readonly users$ = this.users$$.asObservable();
   readonly feedback$ = this.feedback$$.asObservable();
 
+  /** All clients (every workspace) — for the admin settings view (not client-scoped). */
+  readonly clients$: Observable<Client[]> = this.workspaces$$.pipe(
+    map((workspaces) => workspaces.map((w) => w.client)),
+  );
+
   /** Snapshot of seeded users — used by AuthService for mock login (S5). */
   get users(): User[] {
     return this.users$$.value;
@@ -248,6 +253,16 @@ export class DashboardDataService {
       ...ws,
       governmentAssistanceTotal: Math.max(0, amount),
     }));
+  }
+
+  /** Admin: set a specific client's SR&ED credit rate (0..1). Feeds that client's credit (Feature G). */
+  setSredCreditRate(clientId: string, rate: number): void {
+    const clamped = Math.min(1, Math.max(0, rate));
+    this.workspaces$$.next(
+      this.workspaces$$.value.map((w) =>
+        w.client.id === clientId ? { ...w, client: { ...w.client, sredCreditRate: clamped } } : w,
+      ),
+    );
   }
 
   // ---- Internal helpers ----------------------------------------------------

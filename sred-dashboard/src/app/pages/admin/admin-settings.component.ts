@@ -1,20 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { AsyncPipe, DatePipe } from '@angular/common';
 
 import { AdminNavbarComponent } from '../../components/navbar/admin-navbar.component';
+import { DashboardDataService } from '../../services/dashboard-data.service';
 
-/** Admin client settings — configurable credit rate (Feature G). Placeholder body; built in S23. */
+/**
+ * Admin client settings (Feature G): edit each client's SR&ED credit rate. The rate
+ * feeds that client's credit calculation, so a change here is visible on the client's
+ * dashboard. Rate is entered as a percentage and stored as a 0..1 fraction.
+ */
 @Component({
   selector: 'app-admin-settings',
   standalone: true,
-  imports: [AdminNavbarComponent],
-  template: `
-    <app-admin-navbar></app-admin-navbar>
-    <main class="max-w-7xl mx-auto px-4 py-8">
-      <div class="bg-white rounded-2xl shadow ring-1 ring-gray-100 p-8">
-        <h1 class="text-2xl font-bold text-ink mb-1">Client Settings</h1>
-        <p class="text-gray-500">Per-client SR&amp;ED credit rate configuration — built in S23.</p>
-      </div>
-    </main>
-  `,
+  imports: [AsyncPipe, DatePipe, AdminNavbarComponent],
+  templateUrl: './admin-settings.component.html',
 })
-export class AdminSettingsComponent {}
+export class AdminSettingsComponent {
+  private readonly data = inject(DashboardDataService);
+  readonly clients$ = this.data.clients$;
+
+  onRate(clientId: string, value: string): void {
+    const pct = Number(value);
+    this.data.setSredCreditRate(clientId, isNaN(pct) ? 0 : pct / 100);
+  }
+}

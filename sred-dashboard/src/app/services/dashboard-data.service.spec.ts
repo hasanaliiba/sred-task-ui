@@ -234,6 +234,25 @@ describe('DashboardDataService', () => {
     expect(added?.rating).toBe(5);
   });
 
+  it('admin sets a client credit rate, changing that client credit (clamped 0..1)', async () => {
+    flushSeed();
+    service.setActiveClient('acme');
+    service.setPeriod('FY');
+
+    // creditableBase 3500 (from earlier). Change rate 0.5 → 0.2 → credit 700.
+    service.setSredCreditRate('acme', 0.2);
+    let exp = await firstValueFrom(service.expenditureSummary$);
+    expect(exp?.creditAmount).toBe(700);
+
+    // Clamp above 1.
+    service.setSredCreditRate('acme', 5);
+    exp = await firstValueFrom(service.expenditureSummary$);
+    expect(exp?.creditAmount).toBe(3500); // base × 1.0
+
+    const clients = await firstValueFrom(service.clients$);
+    expect(clients.find((c) => c.id === 'acme')?.sredCreditRate).toBe(1);
+  });
+
   it('government assistance lowers the creditable base (clamped at 0)', async () => {
     flushSeed();
     service.setActiveClient('acme');
