@@ -7,6 +7,7 @@ import {
   Client,
   ClientWorkspace,
   DashboardSeed,
+  Employee,
   EmployeeDetail,
   EmployeeRow,
   ExpenditureSummary,
@@ -157,7 +158,37 @@ export class DashboardDataService {
     );
   }
 
+  // ---- Employee CRUD (immutable; Feature C) --------------------------------
+
+  addEmployee(employee: Employee): void {
+    this.mutateActiveWorkspace((ws) => ({ ...ws, employees: [...ws.employees, employee] }));
+  }
+
+  updateEmployee(employee: Employee): void {
+    this.mutateActiveWorkspace((ws) => ({
+      ...ws,
+      employees: ws.employees.map((e) => (e.id === employee.id ? employee : e)),
+    }));
+  }
+
+  /** Removes an employee and their timesheet rows (so totals/charts stay consistent). */
+  removeEmployee(employeeId: string): void {
+    this.mutateActiveWorkspace((ws) => ({
+      ...ws,
+      employees: ws.employees.filter((e) => e.id !== employeeId),
+      timesheets: ws.timesheets.filter((t) => t.employeeId !== employeeId),
+    }));
+  }
+
   // ---- Internal helpers ----------------------------------------------------
+
+  /** Replaces the active workspace with a NEW value produced by `mutator` (never mutates in place). */
+  private mutateActiveWorkspace(mutator: (ws: ClientWorkspace) => ClientWorkspace): void {
+    const id = this.activeClientId$$.value;
+    this.workspaces$$.next(
+      this.workspaces$$.value.map((w) => (w.client.id === id ? mutator(w) : w)),
+    );
+  }
 
   private snapshotSeed(): DashboardSeed {
     return {

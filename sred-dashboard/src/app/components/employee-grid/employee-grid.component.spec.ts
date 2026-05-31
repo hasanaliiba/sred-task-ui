@@ -22,6 +22,10 @@ const ROWS: EmployeeRow[] = [
 
 class FakeDataService {
   employees$ = of(ROWS);
+  teams$ = of([{ id: 't1', name: 'Rendering Team', color: '#28a745' }]);
+  addEmployee = jasmine.createSpy('addEmployee');
+  updateEmployee = jasmine.createSpy('updateEmployee');
+  removeEmployee = jasmine.createSpy('removeEmployee');
 }
 
 describe('EmployeeGridComponent', () => {

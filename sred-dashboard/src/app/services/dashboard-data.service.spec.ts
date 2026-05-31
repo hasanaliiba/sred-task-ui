@@ -121,4 +121,42 @@ describe('DashboardDataService', () => {
     expect(exp?.creditableBase).toBe(3500);
     expect(exp?.creditAmount).toBe(1750);
   });
+
+  it('adds an employee (immutably) and reflects it in employees$', async () => {
+    flushSeed();
+    service.setActiveClient('acme');
+    service.addEmployee({
+      id: 'e9', name: 'New Hire', province: 'ON', startDate: '2025-01-01', endDate: null,
+      confirmedSalary: 100000, expectedSalary: null, isSpecialEmployee: false, teamId: null,
+    });
+    const employees = await firstValueFrom(service.employees$);
+    expect(employees.length).toBe(3);
+    expect(employees.find((e) => e.employee.id === 'e9')?.hourlyRate).toBe(50);
+  });
+
+  it('updates an employee in place (new array)', async () => {
+    flushSeed();
+    service.setActiveClient('acme');
+    service.updateEmployee({
+      id: 'e1', name: 'E1 Renamed', province: 'ON', startDate: '2025-01-01', endDate: null,
+      confirmedSalary: 120000, expectedSalary: 60000, isSpecialEmployee: false, teamId: 't1',
+    });
+    const employees = await firstValueFrom(service.employees$);
+    const e1 = employees.find((e) => e.employee.id === 'e1');
+    expect(e1?.employee.name).toBe('E1 Renamed');
+    expect(e1?.hourlyRate).toBe(60); // 120000 / 2000
+  });
+
+  it('removes an employee and their timesheet hours from totals', async () => {
+    flushSeed();
+    service.setActiveClient('acme');
+    service.setPeriod('Q1');
+    service.removeEmployee('e1'); // e1 had 100h on SRED in Q1
+    const employees = await firstValueFrom(service.employees$);
+    expect(employees.find((e) => e.employee.id === 'e1')).toBeUndefined();
+    const totals = await firstValueFrom(service.grandTotals$);
+    // e1's 100h and $3000 labor gone; only the Q1 vendor invoice ($1000) remains
+    expect(totals.totalHours).toBe(0);
+    expect(totals.totalAmount).toBe(1000);
+  });
 });
