@@ -10,6 +10,7 @@ import {
   Employee,
   EmployeeDetail,
   EmployeeRow,
+  Project,
   ExpenditureSummary,
   Feedback,
   GrandTotals,
@@ -177,6 +178,29 @@ export class DashboardDataService {
       ...ws,
       employees: ws.employees.filter((e) => e.id !== employeeId),
       timesheets: ws.timesheets.filter((t) => t.employeeId !== employeeId),
+    }));
+  }
+
+  // ---- Project CRUD (immutable, cascade on remove; Feature F) --------------
+
+  addProject(project: Project): void {
+    this.mutateActiveWorkspace((ws) => ({ ...ws, projects: [...ws.projects, project] }));
+  }
+
+  updateProject(project: Project): void {
+    this.mutateActiveWorkspace((ws) => ({
+      ...ws,
+      projects: ws.projects.map((p) => (p.id === project.id ? project : p)),
+    }));
+  }
+
+  /** Removes a project and cascades: its timesheet rows and vendor invoices go too (no orphans). */
+  removeProject(projectId: string): void {
+    this.mutateActiveWorkspace((ws) => ({
+      ...ws,
+      projects: ws.projects.filter((p) => p.id !== projectId),
+      timesheets: ws.timesheets.filter((t) => t.projectId !== projectId),
+      vendorInvoices: ws.vendorInvoices.filter((v) => v.projectId !== projectId),
     }));
   }
 

@@ -8,6 +8,7 @@ import { EmployeeHoursChartComponent } from '../../components/employee-hours-cha
 import { TeamsTableComponent } from '../../components/teams-table/teams-table.component';
 import { TeamHoursChartComponent } from '../../components/team-hours-chart/team-hours-chart.component';
 import { ProjectChartComponent } from '../../components/project-chart/project-chart.component';
+import { ProjectManagerComponent } from '../../components/project-manager/project-manager.component';
 import { RevealDirective } from '../../shared';
 
 /**
@@ -26,6 +27,7 @@ import { RevealDirective } from '../../shared';
     TeamsTableComponent,
     TeamHoursChartComponent,
     ProjectChartComponent,
+    ProjectManagerComponent,
     RevealDirective,
   ],
   templateUrl: './dashboard.component.html',

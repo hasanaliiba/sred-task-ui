@@ -159,4 +159,29 @@ describe('DashboardDataService', () => {
     expect(totals.totalHours).toBe(0);
     expect(totals.totalAmount).toBe(1000);
   });
+
+  it('adds a project, then removing it cascades to its timesheets and invoices', async () => {
+    flushSeed();
+    service.setActiveClient('acme');
+    service.setPeriod('FY');
+
+    service.addProject({ id: 'np', name: 'New Project', color: '#000', isSred: true });
+    let summaries = await firstValueFrom(service.projectSummaries$);
+    expect(summaries.find((s) => s.projectId === 'np')).toBeTruthy();
+
+    // Remove the seeded SR&ED project 'sr' (e1's 100h + the $1000 SR&ED invoice).
+    service.removeProject('sr');
+    summaries = await firstValueFrom(service.projectSummaries$);
+    expect(summaries.find((s) => s.projectId === 'sr')).toBeUndefined();
+
+    const exp = await firstValueFrom(service.expenditureSummary$);
+    // sredLabor and sredVendor both came from 'sr' → now zero.
+    expect(exp?.sredLabor).toBe(0);
+    expect(exp?.sredVendor).toBe(0);
+
+    const totals = await firstValueFrom(service.grandTotals$);
+    // Only e2's 50h @ $20 on the Unclaimed project remains.
+    expect(totals.totalHours).toBe(50);
+    expect(totals.totalAmount).toBe(1000);
+  });
 });

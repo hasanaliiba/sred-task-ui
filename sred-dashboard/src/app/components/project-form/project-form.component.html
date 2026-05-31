@@ -1,0 +1,38 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div class="absolute inset-0 bg-black/40" (click)="onCancel()"></div>
+
+  <div class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl p-6" role="dialog" aria-modal="true">
+    <h2 class="text-lg font-bold text-ink mb-4">{{ isEdit ? 'Edit project' : 'Add project' }}</h2>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="space-y-4">
+      <div>
+        <label for="proj-name" class="block mb-1 text-sm font-medium text-gray-700">Name</label>
+        <input id="proj-name" type="text" formControlName="name"
+          class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-300 focus:border-brand-500 outline-none"
+          [class.border-danger]="nameInvalid" />
+        @if (nameInvalid) { <p class="mt-1 text-xs text-danger">Name is required.</p> }
+      </div>
+
+      <div class="flex items-center gap-4">
+        <div>
+          <label for="proj-color" class="block mb-1 text-sm font-medium text-gray-700">Color</label>
+          <input id="proj-color" type="color" formControlName="color"
+            class="h-10 w-16 rounded border border-gray-300 cursor-pointer" />
+        </div>
+        <label class="flex items-center gap-2 text-sm text-gray-700 mt-5">
+          <input type="checkbox" formControlName="isSred" class="rounded border-gray-300 text-brand-600 focus:ring-brand-300" />
+          SR&amp;ED-eligible project
+        </label>
+      </div>
+
+      <div class="flex justify-end gap-3 pt-2">
+        <button type="button" (click)="onCancel()"
+          class="text-sm text-gray-600 hover:bg-gray-100 rounded-lg px-4 py-2 transition-colors">Cancel</button>
+        <button type="submit"
+          class="text-sm text-white bg-brand-600 hover:bg-brand-700 rounded-lg px-4 py-2 transition-colors">
+          {{ isEdit ? 'Save changes' : 'Add project' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
