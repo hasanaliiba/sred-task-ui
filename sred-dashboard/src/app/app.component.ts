@@ -8,6 +8,7 @@ import {
   ApexDataLabels,
   ApexPlotOptions,
 } from 'ng-apexcharts';
+import { RevealDirective, CountUpDirective } from './shared';
 
 /**
  * S0 toolchain-proof shell.
@@ -19,7 +20,7 @@ import {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NgApexchartsModule],
+  imports: [RouterOutlet, NgApexchartsModule, RevealDirective, CountUpDirective],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
@@ -35,4 +36,7 @@ export class AppComponent {
   readonly plotOptions: ApexPlotOptions = {
     bar: { borderRadius: 6, columnWidth: '45%' },
   };
+
+  // S4 demo: a value for the count-up directive.
+  readonly demoTotalHours = 12345;
 }

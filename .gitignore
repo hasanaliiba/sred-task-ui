@@ -22,3 +22,6 @@ Thumbs.db
 # Coverage
 /coverage
 **/coverage/
+
+# Private interview cheat-sheet (not for the deliverable repo)
+docs/project-walkthrough.md
