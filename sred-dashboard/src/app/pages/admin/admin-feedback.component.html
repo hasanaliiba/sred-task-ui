@@ -1,0 +1,60 @@
+<app-admin-navbar></app-admin-navbar>
+
+<main class="max-w-5xl mx-auto px-4 py-8">
+  @if (vm$ | async; as vm) {
+    <!-- Header + summary -->
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+      <div>
+        <h1 class="text-2xl font-bold text-ink">Client Feedback</h1>
+        <p class="text-sm text-gray-500">
+          {{ vm.count }} {{ vm.count === 1 ? 'entry' : 'entries' }}
+          @if (vm.count) { · average rating {{ vm.avg | number: '1.1-1' }} ★ }
+        </p>
+      </div>
+
+      <!-- Filters -->
+      <div class="flex gap-3">
+        <select (change)="setFilter($any($event.target).value)"
+          class="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-300 outline-none">
+          <option value="all">All clients</option>
+          @for (c of vm.clients; track c.id) {
+            <option [value]="c.id" [selected]="c.id === vm.filterClient">{{ c.name }}</option>
+          }
+        </select>
+        <select (change)="setSort($any($event.target).value)"
+          class="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-300 outline-none">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="highest">Highest rating</option>
+          <option value="lowest">Lowest rating</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Feedback list -->
+    @if (vm.rows.length === 0) {
+      <div class="bg-white rounded-2xl shadow ring-1 ring-gray-100 p-10 text-center text-gray-400">
+        No feedback yet.
+      </div>
+    } @else {
+      <div class="space-y-4">
+        @for (f of vm.rows; track f.id) {
+          <div class="bg-white rounded-2xl shadow ring-1 ring-gray-100 p-5">
+            <div class="flex items-center justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <span class="font-semibold text-ink">{{ f.clientName }}</span>
+                <span class="text-sm" [attr.aria-label]="f.rating + ' out of 5'">
+                  @for (s of stars; track s) {
+                    <span [class.text-warning]="s <= f.rating" [class.text-gray-300]="s > f.rating">★</span>
+                  }
+                </span>
+              </div>
+              <span class="text-xs text-gray-400">{{ f.submittedAt | date: 'medium' : 'UTC' }}</span>
+            </div>
+            <p class="text-sm text-gray-700 mt-2">{{ f.message }}</p>
+          </div>
+        }
+      </div>
+    }
+  }
+</main>
