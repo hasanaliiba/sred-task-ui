@@ -1,0 +1,95 @@
+<div class="bg-white rounded-2xl shadow ring-1 ring-gray-100 overflow-hidden">
+  <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
+    <div>
+      <h2 class="text-lg font-bold text-ink">Vendor Invoices</h2>
+      <p class="text-sm text-gray-400">Non-labor expenses for the selected period. SR&amp;ED invoices add to the credit.</p>
+    </div>
+    <button type="button" (click)="openAdd()"
+      class="shrink-0 text-sm text-white bg-brand-600 hover:bg-brand-700 rounded-lg px-4 py-2 transition-colors">
+      + Add invoice
+    </button>
+  </div>
+
+  @if (vm$ | async; as vm) {
+    @if (vm.rows.length === 0) {
+      <p class="px-6 py-8 text-sm text-gray-400 text-center">No vendor invoices in this period.</p>
+    } @else {
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+          <thead class="text-xs uppercase tracking-wide text-gray-500 bg-gray-50">
+            <tr>
+              <th class="px-4 py-3">Date</th>
+              <th class="px-4 py-3">Invoice #</th>
+              <th class="px-4 py-3">Vendor</th>
+              <th class="px-4 py-3">Project</th>
+              <th class="px-4 py-3">SR&amp;ED</th>
+              <th class="px-4 py-3">Status</th>
+              <th class="px-4 py-3 text-right">Amount</th>
+              <th class="px-4 py-3 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            @for (row of vm.rows; track row.invoice.id) {
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-4 py-3 whitespace-nowrap text-gray-600">{{ row.invoice.invoiceDate | date: 'mediumDate' : 'UTC' }}</td>
+                <td class="px-4 py-3 text-gray-600">{{ row.invoice.invoiceNumber || '—' }}</td>
+                <td class="px-4 py-3 font-medium text-gray-900">{{ row.invoice.vendorName }}</td>
+                <td class="px-4 py-3 text-gray-600">{{ row.projectName }}</td>
+                <td class="px-4 py-3">
+                  @if (row.invoice.isSred) {
+                    <span class="text-[10px] uppercase tracking-wide bg-success/15 text-success-dark rounded-full px-2 py-0.5">Yes</span>
+                  } @else {
+                    <span class="text-[10px] uppercase tracking-wide bg-gray-100 text-gray-500 rounded-full px-2 py-0.5">No</span>
+                  }
+                </td>
+                <td class="px-4 py-3 text-gray-600">{{ row.invoice.status }}</td>
+                <td class="px-4 py-3 text-right font-semibold text-ink">{{ row.invoice.amount | currency: 'USD':'symbol':'1.2-2' }}</td>
+                <td class="px-4 py-3 text-right whitespace-nowrap">
+                  <button type="button" (click)="openEdit(row.invoice)"
+                    class="text-xs text-brand-600 hover:bg-brand-50 rounded px-2 py-1 transition-colors">Edit</button>
+                  <button type="button" (click)="askDelete(row.invoice)"
+                    class="text-xs text-danger hover:bg-danger/10 rounded px-2 py-1 transition-colors">Delete</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+          <tfoot>
+            <tr class="bg-gray-50 font-semibold text-ink">
+              <td class="px-4 py-3" colspan="6">Total vendor expenses</td>
+              <td class="px-4 py-3 text-right">{{ vm.total | currency: 'USD':'symbol':'1.2-2' }}</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    }
+
+    <!-- Add / edit modal -->
+    @if (formOpen) {
+      <app-vendor-form [invoice]="editing" [projects]="vm.projects"
+        (save)="onSave($event)" (cancel)="closeForm()"></app-vendor-form>
+    }
+  } @else {
+    <p class="px-6 py-8 text-sm text-gray-400 text-center">Loading…</p>
+  }
+</div>
+
+<!-- Delete confirmation -->
+@if (pendingDelete; as inv) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/40" (click)="cancelDelete()"></div>
+    <div class="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl p-6" role="alertdialog" aria-modal="true">
+      <h3 class="text-base font-bold text-ink">Remove invoice?</h3>
+      <p class="text-sm text-gray-500 mt-2">
+        Remove the <span class="font-medium text-gray-700">{{ inv.vendorName }}</span> invoice? Its
+        amount will be removed from the project total and SR&amp;ED expenditure.
+      </p>
+      <div class="flex justify-end gap-3 mt-5">
+        <button type="button" (click)="cancelDelete()"
+          class="text-sm text-gray-600 hover:bg-gray-100 rounded-lg px-4 py-2 transition-colors">Cancel</button>
+        <button type="button" (click)="confirmDelete()"
+          class="text-sm text-white bg-danger hover:bg-danger-dark rounded-lg px-4 py-2 transition-colors">Remove</button>
+      </div>
+    </div>
+  </div>
+}

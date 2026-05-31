@@ -33,6 +33,11 @@
     <app-projects-summary></app-projects-summary>
   </section>
 
+  <!-- Feature E: vendor invoices (government assistance & credit added in S19) -->
+  <section id="expenses" appReveal class="scroll-mt-36 space-y-6">
+    <app-vendor-invoices></app-vendor-invoices>
+  </section>
+
   <!-- Sections filled by later sprints -->
   @for (section of pending; track section.id) {
     <section [id]="section.id" appReveal class="scroll-mt-36">

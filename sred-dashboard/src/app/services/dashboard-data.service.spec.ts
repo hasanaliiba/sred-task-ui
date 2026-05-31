@@ -184,4 +184,22 @@ describe('DashboardDataService', () => {
     expect(totals.totalHours).toBe(50);
     expect(totals.totalAmount).toBe(1000);
   });
+
+  it('adds/removes a vendor invoice and reflects it in SR&ED expenditure', async () => {
+    flushSeed();
+    service.setActiveClient('acme');
+    service.setPeriod('FY');
+
+    service.addVendorInvoice({
+      id: 'v2', invoiceDate: '2025-03-01', invoiceNumber: 'B', amount: 2000, vendorName: 'New',
+      providerName: 'P', projectId: 'sr', description: '', isSred: true, province: 'ON', status: 'Completed',
+    });
+    let exp = await firstValueFrom(service.expenditureSummary$);
+    // seed SR&ED vendor was 1000; +2000 = 3000
+    expect(exp?.sredVendor).toBe(3000);
+
+    service.removeVendorInvoice('v2');
+    exp = await firstValueFrom(service.expenditureSummary$);
+    expect(exp?.sredVendor).toBe(1000);
+  });
 });

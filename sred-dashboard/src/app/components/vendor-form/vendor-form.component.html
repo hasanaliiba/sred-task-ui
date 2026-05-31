@@ -1,0 +1,106 @@
+<div class="fixed inset-0 z-50 overflow-y-auto">
+  <div class="flex min-h-full items-center justify-center p-4">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-black/40" (click)="onCancel()"></div>
+
+    <!-- Dialog: capped height, scrollable body, sticky footer -->
+    <div class="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl flex flex-col max-h-[90vh]"
+      role="dialog" aria-modal="true">
+      <div class="px-6 pt-6 pb-3 shrink-0">
+        <h2 class="text-lg font-bold text-ink">{{ isEdit ? 'Edit vendor invoice' : 'Add vendor invoice' }}</h2>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="flex flex-col min-h-0 flex-1">
+        <!-- Scrollable fields -->
+        <div class="px-6 pb-2 overflow-y-auto space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="vi-date" class="block mb-1 text-sm font-medium text-gray-700">Invoice date</label>
+              <input id="vi-date" type="date" formControlName="invoiceDate"
+                class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-300 outline-none"
+                [class.border-danger]="invalid('invoiceDate')" />
+              @if (invalid('invoiceDate')) { <p class="mt-1 text-xs text-danger">Required.</p> }
+            </div>
+            <div>
+              <label for="vi-number" class="block mb-1 text-sm font-medium text-gray-700">Invoice #</label>
+              <input id="vi-number" type="text" formControlName="invoiceNumber"
+                class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-300 outline-none" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="vi-amount" class="block mb-1 text-sm font-medium text-gray-700">Amount</label>
+              <input id="vi-amount" type="number" min="0" step="0.01" formControlName="amount"
+                class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-300 outline-none"
+                [class.border-danger]="invalid('amount')" />
+              @if (invalid('amount')) { <p class="mt-1 text-xs text-danger">Enter an amount (≥ 0).</p> }
+            </div>
+            <div>
+              <label for="vi-project" class="block mb-1 text-sm font-medium text-gray-700">Project</label>
+              <select id="vi-project" formControlName="projectId"
+                class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-300 outline-none"
+                [class.border-danger]="invalid('projectId')">
+                <option value="" disabled>Select a project…</option>
+                @for (p of projects; track p.id) { <option [value]="p.id">{{ p.name }}</option> }
+              </select>
+              @if (invalid('projectId')) { <p class="mt-1 text-xs text-danger">Required.</p> }
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="vi-vendor" class="block mb-1 text-sm font-medium text-gray-700">Vendor name</label>
+              <input id="vi-vendor" type="text" formControlName="vendorName"
+                class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-300 outline-none"
+                [class.border-danger]="invalid('vendorName')" />
+              @if (invalid('vendorName')) { <p class="mt-1 text-xs text-danger">Required.</p> }
+            </div>
+            <div>
+              <label for="vi-provider" class="block mb-1 text-sm font-medium text-gray-700">Provider</label>
+              <input id="vi-provider" type="text" formControlName="providerName"
+                class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-300 outline-none" />
+            </div>
+          </div>
+
+          <div>
+            <label for="vi-desc" class="block mb-1 text-sm font-medium text-gray-700">Description</label>
+            <input id="vi-desc" type="text" formControlName="description"
+              class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-300 outline-none" />
+          </div>
+
+          <div class="grid grid-cols-3 gap-4 items-end">
+            <div>
+              <label for="vi-province" class="block mb-1 text-sm font-medium text-gray-700">Province</label>
+              <select id="vi-province" formControlName="province"
+                class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-300 outline-none">
+                @for (p of provinces; track p) { <option [value]="p">{{ p }}</option> }
+              </select>
+            </div>
+            <div>
+              <label for="vi-status" class="block mb-1 text-sm font-medium text-gray-700">Status</label>
+              <select id="vi-status" formControlName="status"
+                class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-300 outline-none">
+                @for (s of statuses; track s) { <option [value]="s">{{ s }}</option> }
+              </select>
+            </div>
+            <label class="flex items-center gap-2 text-sm text-gray-700 pb-2">
+              <input type="checkbox" formControlName="isSred" class="rounded border-gray-300 text-brand-600 focus:ring-brand-300" />
+              SR&amp;ED
+            </label>
+          </div>
+        </div>
+
+        <!-- Sticky footer: always visible -->
+        <div class="px-6 py-4 border-t border-gray-100 shrink-0 flex justify-end gap-3 bg-white rounded-b-2xl">
+          <button type="button" (click)="onCancel()"
+            class="text-sm text-gray-600 hover:bg-gray-100 rounded-lg px-4 py-2 transition-colors">Cancel</button>
+          <button type="submit"
+            class="text-sm text-white bg-brand-600 hover:bg-brand-700 rounded-lg px-4 py-2 transition-colors">
+            {{ isEdit ? 'Save changes' : 'Add invoice' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

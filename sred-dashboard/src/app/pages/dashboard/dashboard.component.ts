@@ -10,6 +10,7 @@ import { TeamHoursChartComponent } from '../../components/team-hours-chart/team-
 import { ProjectChartComponent } from '../../components/project-chart/project-chart.component';
 import { ProjectManagerComponent } from '../../components/project-manager/project-manager.component';
 import { ProjectsSummaryComponent } from '../../components/projects-summary/projects-summary.component';
+import { VendorInvoicesComponent } from '../../components/vendor-invoices/vendor-invoices.component';
 import { RevealDirective } from '../../shared';
 
 /**
@@ -30,6 +31,7 @@ import { RevealDirective } from '../../shared';
     ProjectChartComponent,
     ProjectManagerComponent,
     ProjectsSummaryComponent,
+    VendorInvoicesComponent,
     RevealDirective,
   ],
   templateUrl: './dashboard.component.html',
@@ -37,7 +39,6 @@ import { RevealDirective } from '../../shared';
 export class DashboardComponent {
   /** Sections not yet built — rendered as labeled placeholders. */
   readonly pending = [
-    { id: 'expenses', title: 'Other Expenses', note: 'Vendor invoices (S18) + government assistance & credit (S19)' },
     { id: 'projection', title: 'Year Projection', note: 'YTD vs projected full-year + credit (S20)' },
   ];
 }

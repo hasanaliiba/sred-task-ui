@@ -204,6 +204,26 @@ export class DashboardDataService {
     }));
   }
 
+  // ---- Vendor invoice CRUD (immutable; Feature E) --------------------------
+
+  addVendorInvoice(invoice: VendorInvoice): void {
+    this.mutateActiveWorkspace((ws) => ({ ...ws, vendorInvoices: [...ws.vendorInvoices, invoice] }));
+  }
+
+  updateVendorInvoice(invoice: VendorInvoice): void {
+    this.mutateActiveWorkspace((ws) => ({
+      ...ws,
+      vendorInvoices: ws.vendorInvoices.map((v) => (v.id === invoice.id ? invoice : v)),
+    }));
+  }
+
+  removeVendorInvoice(invoiceId: string): void {
+    this.mutateActiveWorkspace((ws) => ({
+      ...ws,
+      vendorInvoices: ws.vendorInvoices.filter((v) => v.id !== invoiceId),
+    }));
+  }
+
   // ---- Internal helpers ----------------------------------------------------
 
   /** Replaces the active workspace with a NEW value produced by `mutator` (never mutates in place). */
