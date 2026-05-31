@@ -1,0 +1,22 @@
+@if (current$ | async; as current) {
+  <div class="flex items-center gap-3 flex-wrap">
+    <span class="text-sm font-medium text-gray-500">Period</span>
+    <div class="inline-flex flex-wrap gap-1 bg-gray-100 rounded-xl p-1" role="group" aria-label="Reporting period">
+      @for (opt of options; track opt.value) {
+        <button
+          type="button"
+          (click)="select(opt.value)"
+          [attr.aria-pressed]="current === opt.value"
+          class="px-3 py-1.5 text-sm font-medium rounded-lg transition-colors"
+          [class.bg-brand-600]="current === opt.value"
+          [class.text-white]="current === opt.value"
+          [class.shadow]="current === opt.value"
+          [class.text-gray-600]="current !== opt.value"
+          [class.hover:bg-gray-200]="current !== opt.value"
+        >
+          {{ opt.label }}
+        </button>
+      }
+    </div>
+  </div>
+}

@@ -1,14 +1,21 @@
 <app-navbar></app-navbar>
 
+<!-- Feature B: global period selector — sticky under the navbar, drives every section -->
+<div class="sticky top-16 z-30 bg-gray-50/90 backdrop-blur border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 py-3">
+    <app-period-selector></app-period-selector>
+  </div>
+</div>
+
 <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
   <!-- Req 1: client information header -->
-  <section id="overview" appReveal class="scroll-mt-20">
+  <section id="overview" appReveal class="scroll-mt-36">
     <app-client-header></app-client-header>
   </section>
 
   <!-- Sections filled by later sprints -->
   @for (section of pending; track section.id) {
-    <section [id]="section.id" appReveal class="scroll-mt-20">
+    <section [id]="section.id" appReveal class="scroll-mt-36">
       <div class="bg-white rounded-2xl shadow ring-1 ring-gray-100 p-6">
         <h2 class="text-lg font-bold text-ink">{{ section.title }}</h2>
         <p class="text-sm text-gray-400 mt-1">{{ section.note }}</p>

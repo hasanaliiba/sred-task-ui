@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { ClientHeaderComponent } from '../../components/client-header/client-header.component';
+import { PeriodSelectorComponent } from '../../components/period-selector/period-selector.component';
 import { RevealDirective } from '../../shared';
 
 /**
@@ -11,7 +12,7 @@ import { RevealDirective } from '../../shared';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [NavbarComponent, ClientHeaderComponent, RevealDirective],
+  imports: [NavbarComponent, ClientHeaderComponent, PeriodSelectorComponent, RevealDirective],
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {
