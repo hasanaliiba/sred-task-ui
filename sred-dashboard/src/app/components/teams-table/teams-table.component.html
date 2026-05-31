@@ -1,0 +1,49 @@
+<div class="bg-white rounded-2xl shadow ring-1 ring-gray-100 overflow-hidden">
+  <div class="px-6 py-4 border-b border-gray-100">
+    <h2 class="text-lg font-bold text-ink">Teams</h2>
+    <p class="text-sm text-gray-400">Members and SR&amp;ED vs Unclaimed hours per team (selected period).</p>
+  </div>
+
+  @if (teams$ | async; as teams) {
+    @if (teams.length === 0) {
+      <p class="px-6 py-8 text-sm text-gray-400 text-center">No teams to display.</p>
+    } @else {
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+          <thead class="text-xs uppercase tracking-wide text-gray-500 bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3">Team</th>
+              <th scope="col" class="px-6 py-3">Members</th>
+              <th scope="col" class="px-6 py-3 text-right">SR&amp;ED Hours</th>
+              <th scope="col" class="px-6 py-3 text-right">Unclaimed Hours</th>
+              <th scope="col" class="px-6 py-3 text-right">Total Hours</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            @for (team of teams; track team.teamId) {
+              <tr class="hover:bg-gray-50 transition-colors align-top">
+                <td class="px-6 py-3 whitespace-nowrap">
+                  <span class="inline-flex items-center gap-2 font-medium text-gray-900">
+                    <span class="h-2.5 w-2.5 rounded-full" [style.background-color]="team.color"></span>
+                    {{ team.teamName }}
+                  </span>
+                </td>
+                <td class="px-6 py-3 text-gray-600">
+                  <span class="font-medium text-gray-900">{{ team.members.length }}</span>
+                  @if (team.members.length) {
+                    <span class="text-gray-400"> · {{ names(team.members) }}</span>
+                  }
+                </td>
+                <td class="px-6 py-3 text-right text-brand-700 font-medium">{{ team.teamSredHours | number }}</td>
+                <td class="px-6 py-3 text-right text-gray-500">{{ team.teamUnclaimedHours | number }}</td>
+                <td class="px-6 py-3 text-right font-semibold text-ink">{{ team.teamSredHours + team.teamUnclaimedHours | number }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  } @else {
+    <p class="px-6 py-8 text-sm text-gray-400 text-center">Loading…</p>
+  }
+</div>

@@ -19,6 +19,11 @@
     <app-employee-hours-chart></app-employee-hours-chart>
   </section>
 
+  <!-- Feature D: teams table -->
+  <section id="teams" appReveal class="scroll-mt-36">
+    <app-teams-table></app-teams-table>
+  </section>
+
   <!-- Sections filled by later sprints -->
   @for (section of pending; track section.id) {
     <section [id]="section.id" appReveal class="scroll-mt-36">

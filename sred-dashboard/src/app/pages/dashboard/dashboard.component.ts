@@ -5,6 +5,7 @@ import { ClientHeaderComponent } from '../../components/client-header/client-hea
 import { PeriodSelectorComponent } from '../../components/period-selector/period-selector.component';
 import { EmployeeGridComponent } from '../../components/employee-grid/employee-grid.component';
 import { EmployeeHoursChartComponent } from '../../components/employee-hours-chart/employee-hours-chart.component';
+import { TeamsTableComponent } from '../../components/teams-table/teams-table.component';
 import { RevealDirective } from '../../shared';
 
 /**
@@ -20,6 +21,7 @@ import { RevealDirective } from '../../shared';
     PeriodSelectorComponent,
     EmployeeGridComponent,
     EmployeeHoursChartComponent,
+    TeamsTableComponent,
     RevealDirective,
   ],
   templateUrl: './dashboard.component.html',
@@ -27,7 +29,6 @@ import { RevealDirective } from '../../shared';
 export class DashboardComponent {
   /** Sections not yet built — rendered as labeled placeholders. */
   readonly pending = [
-    { id: 'teams', title: 'Teams', note: 'Teams table (S13) + team hours chart (S14)' },
     { id: 'projects', title: 'Projects', note: 'Per-project chart (S15), CRUD (S16), all-projects summary (S17)' },
     { id: 'expenses', title: 'Other Expenses', note: 'Vendor invoices (S18) + government assistance & credit (S19)' },
     { id: 'projection', title: 'Year Projection', note: 'YTD vs projected full-year + credit (S20)' },
