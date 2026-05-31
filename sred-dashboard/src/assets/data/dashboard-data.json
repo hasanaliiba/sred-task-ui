@@ -1,0 +1,123 @@
+{
+  "users": [
+    { "username": "afiniti", "displayName": "Afiniti", "role": "client", "clientId": "afiniti", "password": "sred2025" },
+    { "username": "salesflo", "displayName": "Salesflo", "role": "client", "clientId": "salesflo", "password": "sred2025" },
+    { "username": "admin", "displayName": "Admin", "role": "admin", "clientId": null, "password": "sred2025" }
+  ],
+  "workspaces": [
+    {
+      "client": {
+        "id": "afiniti",
+        "name": "Afiniti",
+        "loggedInUser": "xavier.ali@afiniti.io",
+        "timeZone": "EST",
+        "fiscalYearStart": "2025-01-01",
+        "fiscalYearEnd": "2025-12-31",
+        "asOfDate": "2025-11-15",
+        "standardAnnualHours": 2000,
+        "sredCreditRate": 0.445
+      },
+      "teams": [
+        { "id": "t-render", "name": "Rendering Team", "color": "#28a745" },
+        { "id": "t-mobile", "name": "Mobile Team", "color": "#17a2b8" }
+      ],
+      "employees": [
+        { "id": "e-anne", "name": "Anne User", "province": "ON", "startDate": "2021-01-01", "endDate": null, "confirmedSalary": null, "expectedSalary": 60000, "isSpecialEmployee": false, "teamId": "t-render" },
+        { "id": "e-john", "name": "John Doé", "province": "ON", "startDate": "2020-06-15", "endDate": null, "confirmedSalary": null, "expectedSalary": 80000, "isSpecialEmployee": false, "teamId": null },
+        { "id": "e-kaitlyn", "name": "Kaitlyn Holt", "province": "BC", "startDate": "2022-03-01", "endDate": null, "confirmedSalary": 90000, "expectedSalary": 80000, "isSpecialEmployee": false, "teamId": "t-render" },
+        { "id": "e-michael", "name": "Michael User", "province": "ON", "startDate": "2021-09-01", "endDate": null, "confirmedSalary": null, "expectedSalary": 48060, "isSpecialEmployee": false, "teamId": "t-mobile" },
+        { "id": "e-sophia", "name": "Sophia Tremblay", "province": "QC", "startDate": "2019-02-11", "endDate": null, "confirmedSalary": null, "expectedSalary": 110000, "isSpecialEmployee": true, "teamId": "t-mobile" },
+        { "id": "e-liam", "name": "Liam Chen", "province": "ON", "startDate": "2018-11-05", "endDate": null, "confirmedSalary": 130000, "expectedSalary": null, "isSpecialEmployee": false, "teamId": "t-render" },
+        { "id": "e-olivia", "name": "Olivia Singh", "province": "AB", "startDate": "2023-01-09", "endDate": null, "confirmedSalary": null, "expectedSalary": 72000, "isSpecialEmployee": false, "teamId": null },
+        { "id": "e-noah", "name": "Noah Patel", "province": "ON", "startDate": "2020-08-17", "endDate": null, "confirmedSalary": null, "expectedSalary": 95000, "isSpecialEmployee": true, "teamId": "t-mobile" }
+      ],
+      "projects": [
+        { "id": "p-unclaimed", "name": "Unclaimed Work", "color": "#6c757d", "isSred": false },
+        { "id": "p-render", "name": "Rendering System", "color": "#28a745", "isSred": true },
+        { "id": "p-api", "name": "API Performance", "color": "#dc3545", "isSred": true },
+        { "id": "p-anim", "name": "Animations Project", "color": "#007bff", "isSred": true },
+        { "id": "p-mobile", "name": "Mobile App", "color": "#17a2b8", "isSred": true },
+        { "id": "p-data", "name": "Data Pipeline", "color": "#fd7e14", "isSred": true }
+      ],
+      "timesheets": [
+        { "employeeId": "e-anne", "projectId": "p-render", "hours": { "q1": 400, "q2": 420, "q3": 410, "q4": 200 } },
+        { "employeeId": "e-anne", "projectId": "p-unclaimed", "hours": { "q1": 120, "q2": 100, "q3": 110, "q4": 60 } },
+        { "employeeId": "e-john", "projectId": "p-api", "hours": { "q1": 300, "q2": 320, "q3": 300, "q4": 150 } },
+        { "employeeId": "e-john", "projectId": "p-anim", "hours": { "q1": 150, "q2": 160, "q3": 150, "q4": 80 } },
+        { "employeeId": "e-john", "projectId": "p-unclaimed", "hours": { "q1": 60, "q2": 50, "q3": 40, "q4": 30 } },
+        { "employeeId": "e-kaitlyn", "projectId": "p-render", "hours": { "q1": 350, "q2": 360, "q3": 340, "q4": 170 } },
+        { "employeeId": "e-kaitlyn", "projectId": "p-data", "hours": { "q1": 120, "q2": 130, "q3": 120, "q4": 60 } },
+        { "employeeId": "e-kaitlyn", "projectId": "p-unclaimed", "hours": { "q1": 40, "q2": 30, "q3": 30, "q4": 20 } },
+        { "employeeId": "e-michael", "projectId": "p-mobile", "hours": { "q1": 380, "q2": 400, "q3": 390, "q4": 190 } },
+        { "employeeId": "e-michael", "projectId": "p-unclaimed", "hours": { "q1": 110, "q2": 100, "q3": 90, "q4": 50 } },
+        { "employeeId": "e-sophia", "projectId": "p-mobile", "hours": { "q1": 300, "q2": 320, "q3": 310, "q4": 150 } },
+        { "employeeId": "e-sophia", "projectId": "p-anim", "hours": { "q1": 120, "q2": 110, "q3": 100, "q4": 50 } },
+        { "employeeId": "e-sophia", "projectId": "p-unclaimed", "hours": { "q1": 50, "q2": 40, "q3": 40, "q4": 20 } },
+        { "employeeId": "e-liam", "projectId": "p-render", "hours": { "q1": 320, "q2": 330, "q3": 320, "q4": 160 } },
+        { "employeeId": "e-liam", "projectId": "p-api", "hours": { "q1": 140, "q2": 150, "q3": 140, "q4": 70 } },
+        { "employeeId": "e-liam", "projectId": "p-unclaimed", "hours": { "q1": 40, "q2": 30, "q3": 30, "q4": 20 } },
+        { "employeeId": "e-olivia", "projectId": "p-data", "hours": { "q1": 360, "q2": 370, "q3": 360, "q4": 180 } },
+        { "employeeId": "e-olivia", "projectId": "p-unclaimed", "hours": { "q1": 90, "q2": 80, "q3": 80, "q4": 40 } },
+        { "employeeId": "e-noah", "projectId": "p-api", "hours": { "q1": 300, "q2": 310, "q3": 300, "q4": 150 } },
+        { "employeeId": "e-noah", "projectId": "p-mobile", "hours": { "q1": 130, "q2": 140, "q3": 130, "q4": 70 } },
+        { "employeeId": "e-noah", "projectId": "p-unclaimed", "hours": { "q1": 60, "q2": 50, "q3": 50, "q4": 30 } }
+      ],
+      "vendorInvoices": [
+        { "id": "afi-vi-1", "invoiceDate": "2025-03-15", "invoiceNumber": "INV-1001", "amount": 4000.05, "vendorName": "Testing Co", "providerName": "Node Experts", "projectId": "p-render", "description": "Automated test harness build-out", "isSred": true, "province": "ON", "status": "In Progress" },
+        { "id": "afi-vi-2", "invoiceDate": "2025-07-22", "invoiceNumber": "INV-1002", "amount": 12500, "vendorName": "Cloud Infra Inc", "providerName": "Server Pros", "projectId": "p-api", "description": "Load-testing infrastructure", "isSred": true, "province": "BC", "status": "Completed" },
+        { "id": "afi-vi-3", "invoiceDate": "2025-10-05", "invoiceNumber": "INV-1003", "amount": 3200, "vendorName": "Design Studio", "providerName": "UX Labs", "projectId": "p-anim", "description": "Marketing animation assets", "isSred": false, "province": "ON", "status": "In Progress" }
+      ],
+      "governmentAssistanceTotal": 8000
+    },
+    {
+      "client": {
+        "id": "salesflo",
+        "name": "Salesflo",
+        "loggedInUser": "ops@salesflo.io",
+        "timeZone": "EST",
+        "fiscalYearStart": "2025-01-01",
+        "fiscalYearEnd": "2025-12-31",
+        "asOfDate": "2025-11-15",
+        "standardAnnualHours": 2000,
+        "sredCreditRate": 0.41
+      },
+      "teams": [
+        { "id": "sc-core", "name": "Core Team", "color": "#007bff" }
+      ],
+      "employees": [
+        { "id": "se-emma", "name": "Emma Brown", "province": "ON", "startDate": "2022-04-01", "endDate": null, "confirmedSalary": null, "expectedSalary": 70000, "isSpecialEmployee": false, "teamId": "sc-core" },
+        { "id": "se-raj", "name": "Raj Patel", "province": "BC", "startDate": "2021-07-19", "endDate": null, "confirmedSalary": 100000, "expectedSalary": 95000, "isSpecialEmployee": false, "teamId": "sc-core" },
+        { "id": "se-mia", "name": "Mia Wong", "province": "ON", "startDate": "2023-02-13", "endDate": null, "confirmedSalary": null, "expectedSalary": 56000, "isSpecialEmployee": false, "teamId": null },
+        { "id": "se-leo", "name": "Leo Martin", "province": "QC", "startDate": "2020-10-05", "endDate": null, "confirmedSalary": null, "expectedSalary": 84000, "isSpecialEmployee": true, "teamId": "sc-core" }
+      ],
+      "projects": [
+        { "id": "sp-unclaimed", "name": "Unclaimed Work", "color": "#6c757d", "isSred": false },
+        { "id": "sp-web", "name": "Web Platform", "color": "#007bff", "isSred": true },
+        { "id": "sp-ml", "name": "ML Engine", "color": "#6610f2", "isSred": true },
+        { "id": "sp-infra", "name": "Infrastructure", "color": "#20c997", "isSred": true }
+      ],
+      "timesheets": [
+        { "employeeId": "se-emma", "projectId": "sp-web", "hours": { "q1": 300, "q2": 310, "q3": 300, "q4": 150 } },
+        { "employeeId": "se-emma", "projectId": "sp-unclaimed", "hours": { "q1": 80, "q2": 70, "q3": 60, "q4": 40 } },
+        { "employeeId": "se-raj", "projectId": "sp-ml", "hours": { "q1": 320, "q2": 330, "q3": 320, "q4": 160 } },
+        { "employeeId": "se-raj", "projectId": "sp-infra", "hours": { "q1": 100, "q2": 110, "q3": 100, "q4": 50 } },
+        { "employeeId": "se-raj", "projectId": "sp-unclaimed", "hours": { "q1": 30, "q2": 30, "q3": 20, "q4": 20 } },
+        { "employeeId": "se-mia", "projectId": "sp-web", "hours": { "q1": 280, "q2": 290, "q3": 280, "q4": 140 } },
+        { "employeeId": "se-mia", "projectId": "sp-unclaimed", "hours": { "q1": 90, "q2": 80, "q3": 70, "q4": 40 } },
+        { "employeeId": "se-leo", "projectId": "sp-infra", "hours": { "q1": 300, "q2": 310, "q3": 300, "q4": 150 } },
+        { "employeeId": "se-leo", "projectId": "sp-unclaimed", "hours": { "q1": 60, "q2": 50, "q3": 50, "q4": 30 } }
+      ],
+      "vendorInvoices": [
+        { "id": "sf-vi-1", "invoiceDate": "2025-05-10", "invoiceNumber": "SINV-201", "amount": 6000, "vendorName": "Data Vendor", "providerName": "ETL Co", "projectId": "sp-ml", "description": "Training data acquisition", "isSred": true, "province": "BC", "status": "Completed" },
+        { "id": "sf-vi-2", "invoiceDate": "2025-09-18", "invoiceNumber": "SINV-202", "amount": 2500, "vendorName": "Hosting LLC", "providerName": "CloudHost", "projectId": "sp-infra", "description": "GPU compute hours", "isSred": true, "province": "ON", "status": "In Progress" }
+      ],
+      "governmentAssistanceTotal": 3000
+    }
+  ],
+  "feedback": [
+    { "id": "fb-1", "clientId": "afiniti", "clientName": "Afiniti", "message": "The projection view is incredibly helpful for planning our R&D spend.", "rating": 5, "submittedAt": "2025-10-12T14:30:00Z" },
+    { "id": "fb-2", "clientId": "afiniti", "clientName": "Afiniti", "message": "Would love to export the salary grid to CSV.", "rating": 4, "submittedAt": "2025-11-01T09:05:00Z" },
+    { "id": "fb-3", "clientId": "salesflo", "clientName": "Salesflo", "message": "Love the per-employee SR&ED breakdown modal.", "rating": 5, "submittedAt": "2025-09-20T16:45:00Z" },
+    { "id": "fb-4", "clientId": "salesflo", "clientName": "Salesflo", "message": "The period selector is intuitive and fast.", "rating": 4, "submittedAt": "2025-10-30T11:20:00Z" }
+  ]
+}
