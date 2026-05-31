@@ -4,6 +4,7 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { ClientHeaderComponent } from '../../components/client-header/client-header.component';
 import { PeriodSelectorComponent } from '../../components/period-selector/period-selector.component';
 import { EmployeeGridComponent } from '../../components/employee-grid/employee-grid.component';
+import { EmployeeHoursChartComponent } from '../../components/employee-hours-chart/employee-hours-chart.component';
 import { RevealDirective } from '../../shared';
 
 /**
@@ -18,6 +19,7 @@ import { RevealDirective } from '../../shared';
     ClientHeaderComponent,
     PeriodSelectorComponent,
     EmployeeGridComponent,
+    EmployeeHoursChartComponent,
     RevealDirective,
   ],
   templateUrl: './dashboard.component.html',
