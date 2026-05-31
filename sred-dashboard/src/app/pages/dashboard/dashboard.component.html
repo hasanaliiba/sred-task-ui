@@ -1,7 +1,13 @@
 <app-navbar></app-navbar>
 
 <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
-  @for (section of sections; track section.id) {
+  <!-- Req 1: client information header -->
+  <section id="overview" appReveal class="scroll-mt-20">
+    <app-client-header></app-client-header>
+  </section>
+
+  <!-- Sections filled by later sprints -->
+  @for (section of pending; track section.id) {
     <section [id]="section.id" appReveal class="scroll-mt-20">
       <div class="bg-white rounded-2xl shadow ring-1 ring-gray-100 p-6">
         <h2 class="text-lg font-bold text-ink">{{ section.title }}</h2>

@@ -1,28 +1,22 @@
-import { Component, inject } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
+import { Component } from '@angular/core';
 
-import { DashboardDataService } from '../../services/dashboard-data.service';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { ClientHeaderComponent } from '../../components/client-header/client-header.component';
 import { RevealDirective } from '../../shared';
 
 /**
- * Dashboard shell (Req 1–6). S6 adds the navbar and the section scaffold the nav
- * anchors scroll to; later sprints fill each section (header, grids, charts, etc.).
+ * Dashboard shell (Req 1–6). Sections are added by their sprints; remaining ones
+ * show a labeled placeholder so the navbar anchors have targets.
  */
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [AsyncPipe, NavbarComponent, RevealDirective],
+  imports: [NavbarComponent, ClientHeaderComponent, RevealDirective],
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {
-  private readonly data = inject(DashboardDataService);
-
-  readonly client$ = this.data.client$;
-
-  /** Section scaffold — each is filled by its sprint. */
-  readonly sections = [
-    { id: 'overview', title: 'Overview', note: 'Client header — S7' },
+  /** Sections not yet built — rendered as labeled placeholders. */
+  readonly pending = [
     { id: 'employees', title: 'Employees', note: 'Salary grid (S9), CRUD (S10), detail (S11), hours chart (S12)' },
     { id: 'teams', title: 'Teams', note: 'Teams table (S13) + team hours chart (S14)' },
     { id: 'projects', title: 'Projects', note: 'Per-project chart (S15), CRUD (S16), all-projects summary (S17)' },
