@@ -51,6 +51,8 @@ export class EmployeeHoursChartComponent {
     height: 360,
     stacked: true,
     toolbar: { show: false },
+    zoom: { enabled: false },
+    selection: { enabled: false },
     animations: { enabled: true },
     fontFamily: 'inherit',
   };

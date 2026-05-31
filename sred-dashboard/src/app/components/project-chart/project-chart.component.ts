@@ -53,6 +53,8 @@ export class ProjectChartComponent {
     height: 400,
     stacked: false,
     toolbar: { show: false },
+    zoom: { enabled: false },
+    selection: { enabled: false },
     animations: { enabled: true },
     fontFamily: 'inherit',
   };
