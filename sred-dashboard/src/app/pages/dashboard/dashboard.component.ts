@@ -1,48 +1,32 @@
 import { Component, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
-import { Router } from '@angular/router';
 
 import { DashboardDataService } from '../../services/dashboard-data.service';
-import { AuthService } from '../../services/auth.service';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { RevealDirective } from '../../shared';
 
 /**
- * Dashboard shell (Req 1–6 + features). For S5 this is a placeholder proving the
- * authenticated, client-scoped route works. S6+ add the navbar, header, period
- * selector, grids, and charts here.
+ * Dashboard shell (Req 1–6). S6 adds the navbar and the section scaffold the nav
+ * anchors scroll to; later sprints fill each section (header, grids, charts, etc.).
  */
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [AsyncPipe],
-  template: `
-    <main class="min-h-screen p-8">
-      <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow p-8">
-        <p class="text-sm text-gray-500">Signed in to</p>
-        <h1 class="text-3xl font-bold text-ink mb-2">{{ (client$ | async)?.name }}</h1>
-        <p class="text-gray-500 mb-6">
-          Dashboard shell — content is added in the next sprints (navbar, header, period
-          selector, grids, charts, projection).
-        </p>
-        <button
-          type="button"
-          (click)="logout()"
-          class="text-white bg-brand-600 hover:bg-brand-700 rounded-lg text-sm px-5 py-2.5 transition-colors"
-        >
-          Log out
-        </button>
-      </div>
-    </main>
-  `,
+  imports: [AsyncPipe, NavbarComponent, RevealDirective],
+  templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {
   private readonly data = inject(DashboardDataService);
-  private readonly auth = inject(AuthService);
-  private readonly router = inject(Router);
 
   readonly client$ = this.data.client$;
 
-  logout(): void {
-    this.auth.logout();
-    this.router.navigate(['/login']);
-  }
+  /** Section scaffold — each is filled by its sprint. */
+  readonly sections = [
+    { id: 'overview', title: 'Overview', note: 'Client header — S7' },
+    { id: 'employees', title: 'Employees', note: 'Salary grid (S9), CRUD (S10), detail (S11), hours chart (S12)' },
+    { id: 'teams', title: 'Teams', note: 'Teams table (S13) + team hours chart (S14)' },
+    { id: 'projects', title: 'Projects', note: 'Per-project chart (S15), CRUD (S16), all-projects summary (S17)' },
+    { id: 'expenses', title: 'Other Expenses', note: 'Vendor invoices (S18) + government assistance & credit (S19)' },
+    { id: 'projection', title: 'Year Projection', note: 'YTD vs projected full-year + credit (S20)' },
+  ];
 }
