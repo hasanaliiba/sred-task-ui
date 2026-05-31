@@ -11,6 +11,7 @@ import { ProjectChartComponent } from '../../components/project-chart/project-ch
 import { ProjectManagerComponent } from '../../components/project-manager/project-manager.component';
 import { ProjectsSummaryComponent } from '../../components/projects-summary/projects-summary.component';
 import { VendorInvoicesComponent } from '../../components/vendor-invoices/vendor-invoices.component';
+import { ExpenditureSummaryComponent } from '../../components/expenditure-summary/expenditure-summary.component';
 import { RevealDirective } from '../../shared';
 
 /**
@@ -32,6 +33,7 @@ import { RevealDirective } from '../../shared';
     ProjectManagerComponent,
     ProjectsSummaryComponent,
     VendorInvoicesComponent,
+    ExpenditureSummaryComponent,
     RevealDirective,
   ],
   templateUrl: './dashboard.component.html',

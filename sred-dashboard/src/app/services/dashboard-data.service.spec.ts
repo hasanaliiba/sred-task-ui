@@ -202,4 +202,39 @@ describe('DashboardDataService', () => {
     exp = await firstValueFrom(service.expenditureSummary$);
     expect(exp?.sredVendor).toBe(1000);
   });
+
+  it('toggling an invoice off SR&ED removes it from credit but not the project total', async () => {
+    flushSeed();
+    service.setActiveClient('acme');
+    service.setPeriod('FY');
+
+    // Flip the seed SR&ED invoice (v1, $1000 on project 'sr') to non-SR&ED.
+    service.updateVendorInvoice({
+      id: 'v1', invoiceDate: '2025-02-01', invoiceNumber: 'A', amount: 1000, vendorName: 'V',
+      providerName: 'P', projectId: 'sr', description: '', isSred: false, province: 'ON', status: 'Completed',
+    });
+
+    const exp = await firstValueFrom(service.expenditureSummary$);
+    expect(exp?.sredVendor).toBe(0); // no longer counted as SR&ED
+
+    const summaries = await firstValueFrom(service.projectSummaries$);
+    // The project's total $ still includes the invoice (total cost, not SR&ED-only).
+    expect(summaries.find((s) => s.projectId === 'sr')?.vendorAmount).toBe(1000);
+  });
+
+  it('government assistance lowers the creditable base (clamped at 0)', async () => {
+    flushSeed();
+    service.setActiveClient('acme');
+    service.setPeriod('FY');
+
+    service.setGovernmentAssistance(1000); // total SR&ED expenditure was 4000
+    let exp = await firstValueFrom(service.expenditureSummary$);
+    expect(exp?.creditableBase).toBe(3000);
+    expect(exp?.creditAmount).toBe(1500); // 3000 × 0.5
+
+    service.setGovernmentAssistance(999999); // exceeds expenditure → clamp to 0
+    exp = await firstValueFrom(service.expenditureSummary$);
+    expect(exp?.creditableBase).toBe(0);
+    expect(exp?.creditAmount).toBe(0);
+  });
 });

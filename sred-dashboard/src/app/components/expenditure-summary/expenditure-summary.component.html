@@ -1,0 +1,65 @@
+@if (vm$ | async; as vm) {
+  @if (vm.exp; as exp) {
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Breakdown -->
+      <div class="bg-white rounded-2xl shadow ring-1 ring-gray-100 p-6">
+        <h2 class="text-lg font-bold text-ink mb-1">SR&amp;ED Credit</h2>
+        <p class="text-sm text-gray-400 mb-4">How the estimated credit is calculated (selected period).</p>
+
+        <dl class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <dt class="text-gray-500">SR&amp;ED labor</dt>
+            <dd class="font-medium text-gray-800">{{ exp.sredLabor | currency: 'USD':'symbol':'1.0-0' }}</dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-gray-500">SR&amp;ED vendor invoices</dt>
+            <dd class="font-medium text-gray-800">{{ exp.sredVendor | currency: 'USD':'symbol':'1.0-0' }}</dd>
+          </div>
+          <div class="flex justify-between border-t border-gray-100 pt-2">
+            <dt class="text-gray-600 font-medium">Total SR&amp;ED expenditure</dt>
+            <dd class="font-semibold text-ink">{{ exp.totalSredExpenditure | currency: 'USD':'symbol':'1.0-0' }}</dd>
+          </div>
+
+          <div class="flex justify-between items-center">
+            <dt class="text-gray-500">
+              Government assistance
+              <span class="block text-xs text-gray-400">annual; reduces the base</span>
+            </dt>
+            <dd>
+              <div class="relative">
+                <span class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+                <input
+                  type="number"
+                  min="0"
+                  [value]="exp.governmentAssistance"
+                  (change)="onAssistance($any($event.target).value)"
+                  class="w-32 rounded-lg border border-gray-300 pl-5 pr-2 py-1.5 text-sm text-right focus:ring-2 focus:ring-brand-300 outline-none"
+                  aria-label="Government assistance amount"
+                />
+              </div>
+            </dd>
+          </div>
+
+          <div class="flex justify-between border-t border-gray-100 pt-2">
+            <dt class="text-gray-600 font-medium">Creditable base</dt>
+            <dd class="font-semibold text-ink">{{ exp.creditableBase | currency: 'USD':'symbol':'1.0-0' }}</dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-gray-500">Credit rate</dt>
+            <dd class="font-medium text-gray-800">{{ vm.rate | percent: '1.0-2' }}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Headline credit -->
+      <div class="bg-gradient-to-br from-success to-success-dark text-white rounded-2xl shadow-lg p-6 flex flex-col justify-center">
+        <p class="text-sm text-white/70">Estimated SR&amp;ED credit</p>
+        <p class="text-4xl font-extrabold mt-1" [appCountUp]="exp.creditAmount" countUpPrefix="$"></p>
+        <p class="text-xs text-white/70 mt-3">
+          = max(0, SR&amp;ED labor + SR&amp;ED vendor − government assistance) × credit rate.
+          Toggle an invoice's SR&amp;ED flag to see this move.
+        </p>
+      </div>
+    </div>
+  }
+}

@@ -224,6 +224,14 @@ export class DashboardDataService {
     }));
   }
 
+  /** Sets the active client's annual government assistance (clamped ≥ 0). Lowers the creditable base. */
+  setGovernmentAssistance(amount: number): void {
+    this.mutateActiveWorkspace((ws) => ({
+      ...ws,
+      governmentAssistanceTotal: Math.max(0, amount),
+    }));
+  }
+
   // ---- Internal helpers ----------------------------------------------------
 
   /** Replaces the active workspace with a NEW value produced by `mutator` (never mutates in place). */
