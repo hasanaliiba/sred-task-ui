@@ -6,8 +6,8 @@ import { DashboardDataService } from '../../services/dashboard-data.service';
 import { ProjectSummary } from '../../models';
 
 const SUMMARIES: ProjectSummary[] = [
-  { projectId: 'p1', name: 'Rendering System', color: '#28a745', isSred: true, hours: 80, laborAmount: 1900, vendorAmount: 0, amount: 1900 },
-  { projectId: 'p2', name: 'API Performance', color: '#dc3545', isSred: true, hours: 200, laborAmount: 9000, vendorAmount: 1000, amount: 10000 },
+  { projectId: 'p1', name: 'Rendering System', color: '#28a745', isSred: true, hours: 80, laborAmount: 1900, vendorAmount: 0, sredVendorAmount: 0, amount: 1900 },
+  { projectId: 'p2', name: 'API Performance', color: '#dc3545', isSred: true, hours: 200, laborAmount: 9000, vendorAmount: 1000, sredVendorAmount: 1000, amount: 10000 },
 ];
 
 class FakeDataService {

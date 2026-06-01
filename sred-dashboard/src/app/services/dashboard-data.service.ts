@@ -16,6 +16,7 @@ import {
   Feedback,
   GrandTotals,
   HoursSplit,
+  Metric,
   Period,
   ProjectSummary,
   Projection,
@@ -56,6 +57,7 @@ export class DashboardDataService {
   private readonly feedback$$ = new BehaviorSubject<Feedback[]>([]);
   private readonly activeClientId$$ = new BehaviorSubject<string | null>(null);
   private readonly period$$ = new BehaviorSubject<Period>('FY');
+  private readonly metric$$ = new BehaviorSubject<Metric>('hours');
 
   private loaded = false;
 
@@ -85,7 +87,12 @@ export class DashboardDataService {
     this.period$$.next(period);
   }
 
+  setMetric(metric: Metric): void {
+    this.metric$$.next(metric);
+  }
+
   readonly period$ = this.period$$.asObservable();
+  readonly metric$ = this.metric$$.asObservable();
   readonly users$ = this.users$$.asObservable();
   readonly feedback$ = this.feedback$$.asObservable();
 

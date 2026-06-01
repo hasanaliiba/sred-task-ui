@@ -16,6 +16,7 @@ export interface ProjectSummary {
   hours: number; // labor hours only
   laborAmount: number; // Σ periodHours × hourlyRate
   vendorAmount: number; // Σ in-period invoices on this project
+  sredVendorAmount: number; // Σ in-period SR&ED-flagged invoices on this project
   amount: number; // laborAmount + vendorAmount
 }
 

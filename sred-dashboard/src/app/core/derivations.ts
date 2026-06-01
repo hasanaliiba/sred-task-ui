@@ -2,9 +2,10 @@ import type {
   Client,
   ClientWorkspace,
   Employee,
+  Metric,
+  MonthlyHours,
   Period,
   Project,
-  QuarterlyHours,
   TimesheetEntry,
   VendorInvoice,
 } from '../models';
@@ -27,15 +28,19 @@ import type {
  */
 
 type QuarterKey = 'q1' | 'q2' | 'q3' | 'q4';
+type MonthKey = keyof MonthlyHours;
 
-const QUARTERS_IN_PERIOD: Record<Period, QuarterKey[]> = {
-  Q1: ['q1'],
-  Q2: ['q2'],
-  Q3: ['q3'],
-  Q4: ['q4'],
-  H1: ['q1', 'q2'],
-  H2: ['q3', 'q4'],
-  FY: ['q1', 'q2', 'q3', 'q4'],
+const M = (...n: number[]): MonthKey[] => n.map((i) => `m${i}` as MonthKey);
+
+/** Which months make up each period (months drive everything; quarters = groups of 3). */
+const MONTHS_IN_PERIOD: Record<Period, MonthKey[]> = {
+  Q1: M(1, 2, 3),
+  Q2: M(4, 5, 6),
+  Q3: M(7, 8, 9),
+  Q4: M(10, 11, 12),
+  H1: M(1, 2, 3, 4, 5, 6),
+  H2: M(7, 8, 9, 10, 11, 12),
+  FY: M(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
 };
 
 /** Salary actually used for the hourly rate: confirmed takes precedence over expected. */
@@ -52,9 +57,9 @@ export function hourlyRate(employee: Employee, standardAnnualHours: number): num
   return salary / standardAnnualHours;
 }
 
-/** Hours within the selected period (Q1–Q4 / H1 / H2 / FY). */
-export function periodHours(hours: QuarterlyHours, period: Period): number {
-  return QUARTERS_IN_PERIOD[period].reduce((sum, q) => sum + hours[q], 0);
+/** Hours within the selected period (sum of the period's months). */
+export function periodHours(hours: MonthlyHours, period: Period): number {
+  return MONTHS_IN_PERIOD[period].reduce((sum, m) => sum + hours[m], 0);
 }
 
 /** Map an ISO date to its fiscal quarter key (calendar quarters). */
@@ -66,9 +71,14 @@ export function quarterOfDate(isoDate: string): QuarterKey {
   return 'q4';
 }
 
-/** Whether an invoice (by its date's quarter) falls within the selected period. */
+/** Map an ISO date to its month key (m1..m12). */
+export function monthOfDate(isoDate: string): MonthKey {
+  return `m${new Date(isoDate).getUTCMonth() + 1}` as MonthKey;
+}
+
+/** Whether an invoice (by its date's month) falls within the selected period. */
 export function invoiceInPeriod(invoice: VendorInvoice, period: Period): boolean {
-  return QUARTERS_IN_PERIOD[period].includes(quarterOfDate(invoice.invoiceDate));
+  return MONTHS_IN_PERIOD[period].includes(monthOfDate(invoice.invoiceDate));
 }
 
 /** Share of the fiscal year elapsed at asOfDate, clamped to (0, 1]. */
@@ -111,9 +121,11 @@ export function buildProjectSummaries(ws: ClientWorkspace, period: Period): Proj
       const emp = emps.get(t.employeeId);
       return emp ? sum + entryAmount(t, emp, std, period) : sum;
     }, 0);
-    const vendorAmount = ws.vendorInvoices
-      .filter((v) => v.projectId === project.id && invoiceInPeriod(v, period))
-      .reduce((sum, v) => sum + v.amount, 0);
+    const inPeriodInvoices = ws.vendorInvoices.filter(
+      (v) => v.projectId === project.id && invoiceInPeriod(v, period),
+    );
+    const vendorAmount = inPeriodInvoices.reduce((sum, v) => sum + v.amount, 0);
+    const sredVendorAmount = inPeriodInvoices.filter((v) => v.isSred).reduce((sum, v) => sum + v.amount, 0);
 
     return {
       projectId: project.id,
@@ -123,9 +135,24 @@ export function buildProjectSummaries(ws: ClientWorkspace, period: Period): Proj
       hours,
       laborAmount,
       vendorAmount,
+      sredVendorAmount,
       amount: laborAmount + vendorAmount,
     };
   });
+}
+
+/** The value of a project under the active metric (hours / $ expenditure / SR&ED credit). */
+export function projectMetricValue(summary: ProjectSummary, metric: Metric, creditRate: number): number {
+  switch (metric) {
+    case 'hours':
+      return summary.hours;
+    case 'expenditure':
+      return summary.amount;
+    case 'credit': {
+      const sredLabor = summary.isSred ? summary.laborAmount : 0;
+      return (sredLabor + summary.sredVendorAmount) * creditRate;
+    }
+  }
 }
 
 /** Grand totals across all project summaries (Req 5). */

@@ -1,4 +1,4 @@
-import { ClientWorkspace } from '../models';
+import { ClientWorkspace, MonthlyHours } from '../models';
 import {
   buildEmployeeCostBreakdown,
   buildEmployeeDetail,
@@ -10,8 +10,15 @@ import {
   hourlyRate,
   invoiceInPeriod,
   periodHours,
+  projectMetricValue,
   quarterOfDate,
 } from './derivations';
+import { ProjectSummary } from '../models';
+
+/** Build MonthlyHours from a partial (unset months default to 0). */
+const months = (over: Partial<MonthlyHours>): MonthlyHours => ({
+  m1: 0, m2: 0, m3: 0, m4: 0, m5: 0, m6: 0, m7: 0, m8: 0, m9: 0, m10: 0, m11: 0, m12: 0, ...over,
+});
 
 /** Minimal workspace reproducing the PDF worked example:
  *  Person A 10h @ $100, B 20h @ $20, C 50h @ $10 → 80h, $1,900. */
@@ -36,9 +43,9 @@ function workedExampleWorkspace(asOfDate = '2025-12-31'): ClientWorkspace {
     ],
     projects: [{ id: 'p', name: 'Project', color: '#000', isSred: true }],
     timesheets: [
-      { employeeId: 'a', projectId: 'p', hours: { q1: 10, q2: 0, q3: 0, q4: 0 } },
-      { employeeId: 'b', projectId: 'p', hours: { q1: 20, q2: 0, q3: 0, q4: 0 } },
-      { employeeId: 'c', projectId: 'p', hours: { q1: 50, q2: 0, q3: 0, q4: 0 } },
+      { employeeId: 'a', projectId: 'p', hours: months({ m1: 10 }) },
+      { employeeId: 'b', projectId: 'p', hours: months({ m1: 20 }) },
+      { employeeId: 'c', projectId: 'p', hours: months({ m1: 50 }) },
     ],
     vendorInvoices: [],
     governmentAssistanceTotal: 0,
@@ -62,8 +69,9 @@ describe('derivations — salary & hourly rate', () => {
 });
 
 describe('derivations — period math', () => {
-  const h = { q1: 100, q2: 200, q3: 300, q4: 400 };
-  it('sums the right quarters per period', () => {
+  // One value per quarter (in its first month) so quarter totals are 100/200/300/400.
+  const h = months({ m1: 100, m4: 200, m7: 300, m10: 400 });
+  it('sums the right months per period', () => {
     expect(periodHours(h, 'Q1')).toBe(100);
     expect(periodHours(h, 'Q3')).toBe(300);
     expect(periodHours(h, 'H1')).toBe(300);
@@ -133,10 +141,23 @@ describe('derivations — employee cost breakdown (SR&ED only)', () => {
     const ws = workedExampleWorkspace();
     // Give employee 'a' 90h on a new Unclaimed project — must NOT be counted.
     ws.projects.push({ id: 'unc', name: 'Unclaimed', color: '#999', isSred: false });
-    ws.timesheets.push({ employeeId: 'a', projectId: 'unc', hours: { q1: 90, q2: 0, q3: 0, q4: 0 } });
+    ws.timesheets.push({ employeeId: 'a', projectId: 'unc', hours: months({ m1: 90 }) });
     const a = buildEmployeeCostBreakdown(ws, 'FY').find((r) => r.id === 'a')!;
     expect(a.hours).toBe(10); // still only the SR&ED hours
     expect(a.amount).toBe(1000); // unchanged
+  });
+});
+
+describe('derivations — project metric value', () => {
+  const sred: ProjectSummary = { projectId: 'p', name: 'P', color: '#000', isSred: true, hours: 80, laborAmount: 1900, vendorAmount: 200, sredVendorAmount: 200, amount: 2100 };
+  it('returns hours / expenditure / credit per the metric', () => {
+    expect(projectMetricValue(sred, 'hours', 0.5)).toBe(80);
+    expect(projectMetricValue(sred, 'expenditure', 0.5)).toBe(2100);
+    expect(projectMetricValue(sred, 'credit', 0.5)).toBe((1900 + 200) * 0.5); // 1050
+  });
+  it('a non-SR&ED project contributes no labor credit', () => {
+    const unc: ProjectSummary = { projectId: 'u', name: 'U', color: '#000', isSred: false, hours: 50, laborAmount: 1000, vendorAmount: 0, sredVendorAmount: 0, amount: 1000 };
+    expect(projectMetricValue(unc, 'credit', 0.5)).toBe(0);
   });
 });
 

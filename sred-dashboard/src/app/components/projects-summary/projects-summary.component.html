@@ -26,24 +26,24 @@
     </div>
   }
 
-  <!-- Per-project dollar share -->
-  <div class="bg-white rounded-2xl shadow ring-1 ring-gray-100 p-6">
-    <h2 class="text-lg font-bold text-ink mb-2">Cost share by project</h2>
-    @if (donut$ | async; as donut) {
+  <!-- Per-project share of the active metric -->
+  @if (donut$ | async; as donut) {
+    <div class="bg-white rounded-2xl shadow ring-1 ring-gray-100 p-6">
+      <h2 class="text-lg font-bold text-ink mb-2">{{ donut.metricLabel }} share by project</h2>
       @if (donut.empty) {
-        <p class="py-8 text-sm text-gray-400 text-center">No project cost to display for this period.</p>
+        <p class="py-8 text-sm text-gray-400 text-center">Nothing to display for this period.</p>
       } @else {
         <apx-chart
           [series]="donut.series"
           [labels]="donut.labels"
           [colors]="donut.colors"
           [chart]="chart"
-          [plotOptions]="plotOptions"
+          [plotOptions]="donut.plotOptions"
           [legend]="legend"
           [dataLabels]="dataLabels"
-          [tooltip]="tooltip"
+          [tooltip]="donut.tooltip"
         ></apx-chart>
       }
-    }
-  </div>
+    </div>
+  }
 </div>

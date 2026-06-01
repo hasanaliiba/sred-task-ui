@@ -4,7 +4,12 @@ import { provideHttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
 import { DashboardDataService } from './dashboard-data.service';
-import { DashboardSeed } from '../models';
+import { DashboardSeed, MonthlyHours } from '../models';
+
+/** Build MonthlyHours from a partial (unset months default to 0). */
+const mh = (over: Partial<MonthlyHours>): MonthlyHours => ({
+  m1: 0, m2: 0, m3: 0, m4: 0, m5: 0, m6: 0, m7: 0, m8: 0, m9: 0, m10: 0, m11: 0, m12: 0, ...over,
+});
 
 const SEED: DashboardSeed = {
   users: [
@@ -34,9 +39,9 @@ const SEED: DashboardSeed = {
         { id: 'sr', name: 'SRED Proj', color: '#0a0', isSred: true },
       ],
       timesheets: [
-        // e1 @ $30/h; e2 @ $20/h
-        { employeeId: 'e1', projectId: 'sr', hours: { q1: 100, q2: 0, q3: 0, q4: 0 } },
-        { employeeId: 'e2', projectId: 'unc', hours: { q1: 0, q2: 50, q3: 0, q4: 0 } },
+        // e1 @ $30/h (100h in Q1 via m1); e2 @ $20/h (50h in Q2 via m4)
+        { employeeId: 'e1', projectId: 'sr', hours: mh({ m1: 100 }) },
+        { employeeId: 'e2', projectId: 'unc', hours: mh({ m4: 50 }) },
       ],
       vendorInvoices: [
         { id: 'v1', invoiceDate: '2025-02-01', invoiceNumber: 'A', amount: 1000, vendorName: 'V', providerName: 'P', projectId: 'sr', description: '', isSred: true, province: 'ON', status: 'Completed' },
