@@ -1,0 +1,46 @@
+<!-- Mobile backdrop -->
+@if (navOpen) {
+  <div class="fixed inset-0 bg-black/40 z-30 lg:hidden" (click)="closeNav()"></div>
+}
+
+<!-- Sidebar (fixed; off-canvas on mobile) -->
+<aside
+  class="fixed z-40 inset-y-0 left-0 w-64 transition-transform duration-300 lg:translate-x-0"
+  [class.-translate-x-full]="!navOpen"
+  [class.translate-x-0]="navOpen"
+>
+  <app-sidebar (navigate)="closeNav()" (feedback)="feedbackOpen = true"></app-sidebar>
+</aside>
+
+<!-- Content column -->
+<div class="lg:ml-64 flex flex-col min-h-screen">
+  <header class="sticky top-0 z-20 bg-white/90 backdrop-blur border-b border-gray-200">
+    <div class="h-16 px-4 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3 min-w-0">
+        <button type="button" (click)="openNav()"
+          class="lg:hidden h-10 w-10 -ml-2 rounded-md hover:bg-gray-100 flex items-center justify-center"
+          aria-label="Open navigation">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        @if (client$ | async; as client) {
+          <div class="min-w-0">
+            <h1 class="font-semibold text-ink leading-tight truncate">{{ client.name }}</h1>
+            <p class="text-xs text-gray-400">SR&amp;ED Projections HASAN</p>
+          </div>
+        }
+      </div>
+      <div class="flex items-center gap-3 text-sm">
+        @if (client$ | async; as client) {
+          <span class="hidden md:inline text-xs bg-gray-100 rounded-full px-3 py-1 text-gray-600">{{ client.timeZone }}</span>
+        }
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 p-4">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<!-- Feedback modal (opened from the sidebar) -->
+<app-feedback-modal [open]="feedbackOpen" (close)="feedbackOpen = false"></app-feedback-modal>

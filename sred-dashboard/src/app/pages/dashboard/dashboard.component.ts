@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 
-import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { ClientHeaderComponent } from '../../components/client-header/client-header.component';
 import { PeriodSelectorComponent } from '../../components/period-selector/period-selector.component';
 import { EmployeeGridComponent } from '../../components/employee-grid/employee-grid.component';
@@ -14,15 +13,16 @@ import { ProjectsSummaryComponent } from '../../components/projects-summary/proj
 import { VendorInvoicesComponent } from '../../components/vendor-invoices/vendor-invoices.component';
 import { ExpenditureSummaryComponent } from '../../components/expenditure-summary/expenditure-summary.component';
 import { YearProjectionComponent } from '../../components/year-projection/year-projection.component';
-import { FeedbackButtonComponent } from '../../components/feedback-button/feedback-button.component';
 import { RevealDirective } from '../../shared';
 
-/** Dashboard shell (Req 1–6 + features A–H). Each section is a focused, reactive component. */
+/**
+ * Analytics page (Phase 2). Rendered inside the client shell's <router-outlet>.
+ * P2.2 trims this to charts/KPIs only (CRUD moves to the Manage pages in P2.3).
+ */
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    NavbarComponent,
     ClientHeaderComponent,
     PeriodSelectorComponent,
     EmployeeGridComponent,
@@ -36,7 +36,6 @@ import { RevealDirective } from '../../shared';
     VendorInvoicesComponent,
     ExpenditureSummaryComponent,
     YearProjectionComponent,
-    FeedbackButtonComponent,
     RevealDirective,
   ],
   templateUrl: './dashboard.component.html',

@@ -46,7 +46,7 @@ export class LoginComponent {
       this.error = 'Invalid username or password.';
       return;
     }
-    this.router.navigate([user.role === 'admin' ? '/admin/feedback' : '/dashboard']);
+    this.router.navigate([user.role === 'admin' ? '/admin/feedback' : '/analytics']);
   }
 
   /** Convenience for the demo credential chips — fills and submits. */
