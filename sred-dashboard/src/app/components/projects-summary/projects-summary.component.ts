@@ -22,6 +22,30 @@ const METRIC_LABEL: Record<Metric, string> = { hours: 'Hours', expenditure: 'Exp
 const formatterFor = (metric: Metric) =>
   metric === 'hours' ? (v: number) => `${Math.round(v).toLocaleString()} h` : (v: number) => money.format(v);
 
+/** Largest N slices kept individually; the remainder is grouped into a single "Other". */
+const MAX_SLICES = 7;
+const OTHER_COLOR = '#9ca3af';
+
+interface Slice {
+  name: string;
+  value: number;
+  color: string;
+}
+
+/**
+ * Declutter the donut: drop zero-value slices, then if there are more than MAX_SLICES,
+ * keep the largest (MAX_SLICES − 1) and roll the rest up into one "Other" slice.
+ */
+function groupSlices(slices: Slice[]): Slice[] {
+  const visible = slices.filter((s) => s.value > 0).sort((a, b) => b.value - a.value);
+  if (visible.length <= MAX_SLICES) {
+    return visible;
+  }
+  const kept = visible.slice(0, MAX_SLICES - 1);
+  const otherValue = visible.slice(MAX_SLICES - 1).reduce((sum, s) => sum + s.value, 0);
+  return [...kept, { name: 'Other', value: otherValue, color: OTHER_COLOR }];
+}
+
 /**
  * All-projects summary (Req 5): a grand-totals strip (count-up) plus a donut of each
  * project's share of the ACTIVE metric (hours / expenditure / credit), with the grand
@@ -43,7 +67,10 @@ export class ProjectsSummaryComponent {
     map(([projects, metric, client]) => {
       const rate = client?.sredCreditRate ?? 0;
       const fmt = formatterFor(metric);
-      const series = projects.map((p) => Math.round(projectMetricValue(p, metric, rate))) as ApexNonAxisChartSeries;
+      const slices = groupSlices(
+        projects.map((p) => ({ name: p.name, value: Math.round(projectMetricValue(p, metric, rate)), color: p.color })),
+      );
+      const series = slices.map((s) => s.value) as ApexNonAxisChartSeries;
       const plotOptions: ApexPlotOptions = {
         pie: {
           donut: {
@@ -64,8 +91,8 @@ export class ProjectsSummaryComponent {
         empty: series.length === 0 || series.every((v) => v === 0),
         metricLabel: METRIC_LABEL[metric],
         series,
-        labels: projects.map((p) => p.name),
-        colors: projects.map((p) => p.color),
+        labels: slices.map((s) => s.name),
+        colors: slices.map((s) => s.color),
         plotOptions,
         tooltip: { y: { formatter: fmt } } as ApexTooltip,
       };

@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { AsyncPipe, DatePipe } from '@angular/common';
 
-import { AdminNavbarComponent } from '../../components/navbar/admin-navbar.component';
 import { DashboardDataService } from '../../services/dashboard-data.service';
 
 /**
@@ -12,7 +11,7 @@ import { DashboardDataService } from '../../services/dashboard-data.service';
 @Component({
   selector: 'app-admin-settings',
   standalone: true,
-  imports: [AsyncPipe, DatePipe, AdminNavbarComponent],
+  imports: [AsyncPipe, DatePipe],
   templateUrl: './admin-settings.component.html',
 })
 export class AdminSettingsComponent {

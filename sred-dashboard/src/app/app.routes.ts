@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { authGuard, adminGuard } from './core/guards';
 import { LoginComponent } from './pages/login/login.component';
 import { ClientShellComponent } from './layouts/client-shell.component';
+import { AdminShellComponent } from './layouts/admin-shell.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { EmployeesPageComponent } from './pages/employees/employees-page.component';
 import { ProjectsPageComponent } from './pages/projects/projects-page.component';
@@ -27,9 +28,17 @@ export const routes: Routes = [
     ],
   },
 
-  // Admin area.
-  { path: 'admin/feedback', component: AdminFeedbackComponent, canActivate: [adminGuard] },
-  { path: 'admin/settings', component: AdminSettingsComponent, canActivate: [adminGuard] },
+  // Admin area: admin sidebar shell + routed admin pages.
+  {
+    path: 'admin',
+    component: AdminShellComponent,
+    canActivate: [adminGuard],
+    children: [
+      { path: 'feedback', component: AdminFeedbackComponent },
+      { path: 'settings', component: AdminSettingsComponent },
+      { path: '', pathMatch: 'full', redirectTo: 'feedback' },
+    ],
+  },
 
   { path: '**', redirectTo: 'login' },
 ];

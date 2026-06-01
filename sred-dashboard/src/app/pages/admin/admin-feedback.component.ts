@@ -3,7 +3,6 @@ import { AsyncPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { AdminNavbarComponent } from '../../components/navbar/admin-navbar.component';
 import { DashboardDataService } from '../../services/dashboard-data.service';
 import { Feedback } from '../../models';
 
@@ -13,7 +12,7 @@ type SortKey = 'newest' | 'oldest' | 'highest' | 'lowest';
 @Component({
   selector: 'app-admin-feedback',
   standalone: true,
-  imports: [AsyncPipe, DatePipe, DecimalPipe, AdminNavbarComponent],
+  imports: [AsyncPipe, DatePipe, DecimalPipe],
   templateUrl: './admin-feedback.component.html',
 })
 export class AdminFeedbackComponent {
