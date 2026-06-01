@@ -1,0 +1,31 @@
+@if (vm$ | async; as vm) {
+  <div
+    class="inline-flex items-center gap-2 text-sm rounded-xl px-2 py-1 border"
+    [class.border-brand-300]="vm.isCustom"
+    [class.bg-brand-50]="vm.isCustom"
+    [class.border-gray-200]="!vm.isCustom"
+  >
+    <span class="font-medium text-gray-500">Range</span>
+    <label class="sr-only" for="range-from">From month</label>
+    <select
+      id="range-from"
+      class="rounded-lg border border-gray-200 bg-white px-2 py-1 text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-400"
+      (change)="setFrom(+$any($event.target).value, vm.to)"
+    >
+      @for (m of months; track m.value) {
+        <option [value]="m.value" [selected]="m.value === vm.from">{{ m.label }}</option>
+      }
+    </select>
+    <span class="text-gray-400">→</span>
+    <label class="sr-only" for="range-to">To month</label>
+    <select
+      id="range-to"
+      class="rounded-lg border border-gray-200 bg-white px-2 py-1 text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-400"
+      (change)="setTo(vm.from, +$any($event.target).value)"
+    >
+      @for (m of months; track m.value) {
+        <option [value]="m.value" [selected]="m.value === vm.to">{{ m.label }}</option>
+      }
+    </select>
+  </div>
+}

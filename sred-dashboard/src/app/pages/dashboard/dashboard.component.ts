@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { ClientHeaderComponent } from '../../components/client-header/client-header.component';
 import { PeriodSelectorComponent } from '../../components/period-selector/period-selector.component';
+import { DateRangePickerComponent } from '../../components/date-range-picker/date-range-picker.component';
 import { MetricToggleComponent } from '../../components/metric-toggle/metric-toggle.component';
 import { SummaryTilesComponent } from '../../components/summary-tiles/summary-tiles.component';
 import { EmployeeHoursChartComponent } from '../../components/employee-hours-chart/employee-hours-chart.component';
@@ -23,6 +24,7 @@ import { RevealDirective } from '../../shared';
   imports: [
     ClientHeaderComponent,
     PeriodSelectorComponent,
+    DateRangePickerComponent,
     MetricToggleComponent,
     SummaryTilesComponent,
     EmployeeHoursChartComponent,

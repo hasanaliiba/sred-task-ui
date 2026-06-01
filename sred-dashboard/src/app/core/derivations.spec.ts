@@ -9,6 +9,7 @@ import {
   fractionElapsed,
   hourlyRate,
   invoiceInPeriod,
+  monthsOf,
   periodHours,
   periodMetricTotal,
   projectMetricValue,
@@ -85,6 +86,21 @@ describe('derivations — period math', () => {
     expect(periodHours(h, 'M2')).toBe(0);
     expect(periodHours(h, 'M4')).toBe(200);
     expect(periodHours(h, 'M10')).toBe(400);
+  });
+
+  it('resolves a custom month range (inclusive, order-independent, clamped)', () => {
+    expect(monthsOf({ from: 2, to: 4 })).toEqual(['m2', 'm3', 'm4']);
+    expect(monthsOf({ from: 5, to: 5 })).toEqual(['m5']);
+    expect(monthsOf({ from: 6, to: 2 })).toEqual(['m2', 'm3', 'm4', 'm5', 'm6']); // swapped ends
+    expect(monthsOf({ from: 0, to: 99 }).length).toBe(12); // clamped to 1..12
+    expect(monthsOf('Q2')).toEqual(['m4', 'm5', 'm6']); // named periods still work
+  });
+
+  it('sums a custom range via periodHours and filters invoices by it', () => {
+    expect(periodHours(h, { from: 1, to: 4 })).toBe(300); // m1 (100) + m4 (200)
+    const inv = { invoiceDate: '2025-08-01' } as any; // August → m8
+    expect(invoiceInPeriod(inv, { from: 7, to: 9 })).toBeTrue();
+    expect(invoiceInPeriod(inv, { from: 1, to: 6 })).toBeFalse();
   });
 
   it('maps dates to quarters and filters invoices by period', () => {

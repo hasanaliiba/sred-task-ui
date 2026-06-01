@@ -4,6 +4,7 @@ import type {
   Employee,
   Metric,
   MonthlyHours,
+  NamedPeriod,
   Period,
   Project,
   TimesheetEntry,
@@ -32,8 +33,8 @@ type MonthKey = keyof MonthlyHours;
 
 const M = (...n: number[]): MonthKey[] => n.map((i) => `m${i}` as MonthKey);
 
-/** Which months make up each period (months drive everything; quarters = groups of 3). */
-const MONTHS_IN_PERIOD: Record<Period, MonthKey[]> = {
+/** Which months make up each NAMED period (months drive everything; quarters = groups of 3). */
+const MONTHS_IN_PERIOD: Record<NamedPeriod, MonthKey[]> = {
   Q1: M(1, 2, 3),
   Q2: M(4, 5, 6),
   Q3: M(7, 8, 9),
@@ -60,9 +61,23 @@ export function hourlyRate(employee: Employee, standardAnnualHours: number): num
   return salary / standardAnnualHours;
 }
 
+/**
+ * The set of months a period covers. Named periods use the fixed table; a custom
+ * range expands to its inclusive months (order-independent, clamped to 1..12).
+ * This is the single place period selection turns into months.
+ */
+export function monthsOf(period: Period): MonthKey[] {
+  if (typeof period === 'string') {
+    return MONTHS_IN_PERIOD[period];
+  }
+  const lo = Math.max(1, Math.min(period.from, period.to));
+  const hi = Math.min(12, Math.max(period.from, period.to));
+  return M(...Array.from({ length: hi - lo + 1 }, (_, i) => lo + i));
+}
+
 /** Hours within the selected period (sum of the period's months). */
 export function periodHours(hours: MonthlyHours, period: Period): number {
-  return MONTHS_IN_PERIOD[period].reduce((sum, m) => sum + hours[m], 0);
+  return monthsOf(period).reduce((sum, m) => sum + hours[m], 0);
 }
 
 /** Map an ISO date to its fiscal quarter key (calendar quarters). */
@@ -81,7 +96,7 @@ export function monthOfDate(isoDate: string): MonthKey {
 
 /** Whether an invoice (by its date's month) falls within the selected period. */
 export function invoiceInPeriod(invoice: VendorInvoice, period: Period): boolean {
-  return MONTHS_IN_PERIOD[period].includes(monthOfDate(invoice.invoiceDate));
+  return monthsOf(period).includes(monthOfDate(invoice.invoiceDate));
 }
 
 /** Share of the fiscal year elapsed at asOfDate, clamped to (0, 1]. */
