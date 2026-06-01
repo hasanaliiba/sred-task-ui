@@ -1,4 +1,4 @@
-<!-- Feature B: global period selector — sticky under the shell top bar (replaced by tiles in P2.5) -->
+<!-- Feature B: global period selector — sticky under the shell top bar (becomes tiles in P2.5) -->
 <div class="sticky top-16 z-10 bg-gray-50/90 backdrop-blur border-b border-gray-200">
   <div class="max-w-7xl mx-auto px-4 py-3">
     <app-period-selector></app-period-selector>
@@ -6,40 +6,35 @@
 </div>
 
 <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
-  <!-- Req 1: client information header -->
-  <section id="overview" appReveal class="scroll-mt-36">
+  <!-- Client header (Req 1) -->
+  <section appReveal>
     <app-client-header></app-client-header>
   </section>
 
-  <!-- Req 3 + Feature C/H: employee salary grid + hours chart -->
-  <section id="employees" appReveal class="scroll-mt-36 space-y-6">
-    <app-employee-grid></app-employee-grid>
+  <!-- Year projection — headline KPIs + gauge (Req 6) -->
+  <section appReveal>
+    <app-year-projection></app-year-projection>
+  </section>
+
+  <!-- Employee charts (Feature H) -->
+  <section appReveal class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <app-employee-hours-chart></app-employee-hours-chart>
     <app-employee-hour-and-cost-chart></app-employee-hour-and-cost-chart>
   </section>
 
-  <!-- Feature D + H: teams table + team hours chart -->
-  <section id="teams" appReveal class="scroll-mt-36 space-y-6">
+  <!-- Teams (Feature D + H) -->
+  <section appReveal class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <app-teams-table></app-teams-table>
     <app-team-hours-chart></app-team-hours-chart>
   </section>
 
-  <!-- Req 4 + Feature F: per-project hours & cost + project management -->
-  <section id="projects" appReveal class="scroll-mt-36 space-y-6">
-    <app-project-manager></app-project-manager>
+  <!-- Per-project chart (Req 4) -->
+  <section appReveal>
     <app-project-chart></app-project-chart>
-    <!-- Req 5: all-projects summary + grand totals -->
+  </section>
+
+  <!-- All-projects summary: grand totals + cost-share donut (Req 5) -->
+  <section appReveal>
     <app-projects-summary></app-projects-summary>
-  </section>
-
-  <!-- Feature E: vendor invoices + government assistance & SR&ED credit -->
-  <section id="expenses" appReveal class="scroll-mt-36 space-y-6">
-    <app-vendor-invoices></app-vendor-invoices>
-    <app-expenditure-summary></app-expenditure-summary>
-  </section>
-
-  <!-- Req 6: year projection -->
-  <section id="projection" appReveal class="scroll-mt-36">
-    <app-year-projection></app-year-projection>
   </section>
 </main>

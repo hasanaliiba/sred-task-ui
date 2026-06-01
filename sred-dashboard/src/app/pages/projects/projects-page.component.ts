@@ -1,15 +1,19 @@
 import { Component } from '@angular/core';
 
-/** Projects management page (Manage group). CRUD content moves here in P2.3. */
+import { ProjectManagerComponent } from '../../components/project-manager/project-manager.component';
+
+/** Projects management page (Manage group): project list + CRUD (cascade on delete). */
 @Component({
   selector: 'app-projects-page',
   standalone: true,
+  imports: [ProjectManagerComponent],
   template: `
-    <div class="max-w-7xl mx-auto px-4 py-8">
-      <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-8">
+    <div class="max-w-7xl mx-auto px-4 py-8 space-y-4">
+      <header>
         <h1 class="text-2xl font-bold text-ink">Projects</h1>
-        <p class="text-gray-500 mt-1">Project list + add/edit/remove (with cascade) move here in P2.3.</p>
-      </div>
+        <p class="text-sm text-gray-400">Add, edit, and remove projects · removing one cascades to its hours and invoices.</p>
+      </header>
+      <app-project-manager></app-project-manager>
     </div>
   `,
 })
