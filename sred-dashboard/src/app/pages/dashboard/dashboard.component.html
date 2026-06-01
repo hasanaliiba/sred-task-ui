@@ -1,11 +1,13 @@
-<!-- Metric toggle (drives Analytics) + period selector — sticky under the shell top bar -->
-<div class="sticky top-14 lg:top-0 z-10 bg-gray-50/90 backdrop-blur border-b border-gray-200">
-  <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
-    <app-metric-toggle></app-metric-toggle>
-    <div class="flex flex-wrap items-center gap-3">
-      <app-period-selector></app-period-selector>
+<!-- Sticky combined control: metric toggle + month range + metric-aware period tiles.
+     The tiles ARE the period selector (they show each period's value and set the period
+     on click); this whole block stays pinned at the top while the page scrolls. -->
+<div class="sticky top-14 lg:top-0 z-20 bg-gray-50/95 backdrop-blur border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 py-4 space-y-3">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <app-metric-toggle></app-metric-toggle>
       <app-date-range-picker></app-date-range-picker>
     </div>
+    <app-summary-tiles></app-summary-tiles>
   </div>
 </div>
 
@@ -13,11 +15,6 @@
   <!-- Client header (Req 1) -->
   <section appReveal>
     <app-client-header></app-client-header>
-  </section>
-
-  <!-- Metric-aware period tiles — quick-pick by quarter or month (P2.5) -->
-  <section appReveal>
-    <app-summary-tiles></app-summary-tiles>
   </section>
 
   <!-- Year projection — headline KPIs + gauge (Req 6) -->
