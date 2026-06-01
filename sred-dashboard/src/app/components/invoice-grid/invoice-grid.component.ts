@@ -15,12 +15,12 @@ import { PaginatorComponent } from '../paginator/paginator.component';
  * expenditure and each invoice rolls into its project's totals.
  */
 @Component({
-  selector: 'app-vendor-invoices',
+  selector: 'app-invoice-grid',
   standalone: true,
   imports: [AsyncPipe, CurrencyPipe, DatePipe, VendorFormComponent, PaginatorComponent],
-  templateUrl: './vendor-invoices.component.html',
+  templateUrl: './invoice-grid.component.html',
 })
-export class VendorInvoicesComponent {
+export class InvoiceGridComponent {
   private readonly data = inject(DashboardDataService);
 
   readonly pageSize = 10;

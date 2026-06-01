@@ -14,12 +14,12 @@ import { PaginatorComponent } from '../paginator/paginator.component';
  * (~10/page). Removing a project cascades to its timesheet hours and vendor invoices.
  */
 @Component({
-  selector: 'app-project-manager',
+  selector: 'app-project-grid',
   standalone: true,
   imports: [AsyncPipe, CurrencyPipe, DecimalPipe, ProjectFormComponent, PaginatorComponent],
-  templateUrl: './project-manager.component.html',
+  templateUrl: './project-grid.component.html',
 })
-export class ProjectManagerComponent {
+export class ProjectGridComponent {
   private readonly data = inject(DashboardDataService);
 
   readonly pageSize = 10;
