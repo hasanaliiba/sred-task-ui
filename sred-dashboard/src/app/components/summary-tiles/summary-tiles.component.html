@@ -1,0 +1,72 @@
+@if (vm$ | async; as vm) {
+  <div class="bg-white rounded-2xl shadow ring-1 ring-gray-100 p-6">
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+      <h2 class="text-lg font-bold text-ink">{{ vm.metricLabel }} by period</h2>
+
+      <!-- Quarter / Month view toggle (local) -->
+      <div class="inline-flex items-center gap-1 bg-gray-100 rounded-xl p-1 text-sm" role="group" aria-label="Tile view">
+        <button
+          type="button"
+          (click)="setViewMode('quarter')"
+          [attr.aria-pressed]="vm.mode === 'quarter'"
+          class="px-3 py-1 rounded-lg font-medium transition-colors"
+          [class.bg-brand-600]="vm.mode === 'quarter'"
+          [class.text-white]="vm.mode === 'quarter'"
+          [class.shadow]="vm.mode === 'quarter'"
+          [class.text-gray-600]="vm.mode !== 'quarter'"
+          [class.hover:bg-gray-200]="vm.mode !== 'quarter'"
+        >
+          By quarter
+        </button>
+        <button
+          type="button"
+          (click)="setViewMode('month')"
+          [attr.aria-pressed]="vm.mode === 'month'"
+          class="px-3 py-1 rounded-lg font-medium transition-colors"
+          [class.bg-brand-600]="vm.mode === 'month'"
+          [class.text-white]="vm.mode === 'month'"
+          [class.shadow]="vm.mode === 'month'"
+          [class.text-gray-600]="vm.mode !== 'month'"
+          [class.hover:bg-gray-200]="vm.mode !== 'month'"
+        >
+          By month
+        </button>
+      </div>
+    </div>
+
+    <div
+      class="grid gap-3"
+      [class.grid-cols-2]="vm.mode === 'quarter'"
+      [class.sm:grid-cols-3]="true"
+      [class.lg:grid-cols-5]="vm.mode === 'quarter'"
+      [class.lg:grid-cols-6]="vm.mode === 'month'"
+    >
+      @for (tile of vm.tiles; track tile.period) {
+        <button
+          type="button"
+          (click)="select(tile.period)"
+          [attr.aria-pressed]="tile.active"
+          class="text-left rounded-xl border p-4 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-400"
+          [class.border-brand-600]="tile.active"
+          [class.bg-brand-50]="tile.active"
+          [class.ring-1]="tile.active"
+          [class.ring-brand-200]="tile.active"
+          [class.border-gray-200]="!tile.active"
+          [class.hover:border-brand-300]="!tile.active"
+          [class.hover:bg-gray-50]="!tile.active"
+        >
+          <p class="text-xs font-medium uppercase tracking-wide" [class.text-brand-700]="tile.active" [class.text-gray-500]="!tile.active">
+            {{ tile.label }}
+          </p>
+          <p class="mt-1 text-lg font-extrabold text-ink tabular-nums">
+            @if (vm.isCurrency) {
+              {{ tile.value | currency: 'USD' : 'symbol' : '1.0-0' }}
+            } @else {
+              {{ tile.value | number: '1.0-0' }}<span class="text-sm font-semibold text-gray-400"> h</span>
+            }
+          </p>
+        </button>
+      }
+    </div>
+  </div>
+}

@@ -41,6 +41,9 @@ const MONTHS_IN_PERIOD: Record<Period, MonthKey[]> = {
   H1: M(1, 2, 3, 4, 5, 6),
   H2: M(7, 8, 9, 10, 11, 12),
   FY: M(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
+  // Individual months (each resolves to its single month) — drive the by-month tiles.
+  M1: M(1), M2: M(2), M3: M(3), M4: M(4), M5: M(5), M6: M(6),
+  M7: M(7), M8: M(8), M9: M(9), M10: M(10), M11: M(11), M12: M(12),
 };
 
 /** Salary actually used for the hourly rate: confirmed takes precedence over expected. */
@@ -151,6 +154,25 @@ export function projectMetricValue(summary: ProjectSummary, metric: Metric, cred
     case 'credit': {
       const sredLabor = summary.isSred ? summary.laborAmount : 0;
       return (sredLabor + summary.sredVendorAmount) * creditRate;
+    }
+  }
+}
+
+/**
+ * Total of the active metric for a period, across all projects (drives the summary tiles).
+ * Credit mirrors the cost-share donut: sum of per-project SR&ED credit (government
+ * assistance is an annual figure, so it is intentionally not subtracted per-period here).
+ */
+export function periodMetricTotal(ws: ClientWorkspace, period: Period, metric: Metric): number {
+  const summaries = buildProjectSummaries(ws, period);
+  switch (metric) {
+    case 'hours':
+      return summaries.reduce((sum, s) => sum + s.hours, 0);
+    case 'expenditure':
+      return summaries.reduce((sum, s) => sum + s.amount, 0);
+    case 'credit': {
+      const rate = ws.client.sredCreditRate;
+      return summaries.reduce((sum, s) => sum + projectMetricValue(s, 'credit', rate), 0);
     }
   }
 }

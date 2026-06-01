@@ -10,6 +10,7 @@ import {
   hourlyRate,
   invoiceInPeriod,
   periodHours,
+  periodMetricTotal,
   projectMetricValue,
   quarterOfDate,
 } from './derivations';
@@ -77,6 +78,13 @@ describe('derivations — period math', () => {
     expect(periodHours(h, 'H1')).toBe(300);
     expect(periodHours(h, 'H2')).toBe(700);
     expect(periodHours(h, 'FY')).toBe(1000);
+  });
+
+  it('resolves individual month periods (M1..M12)', () => {
+    expect(periodHours(h, 'M1')).toBe(100);
+    expect(periodHours(h, 'M2')).toBe(0);
+    expect(periodHours(h, 'M4')).toBe(200);
+    expect(periodHours(h, 'M10')).toBe(400);
   });
 
   it('maps dates to quarters and filters invoices by period', () => {
@@ -158,6 +166,26 @@ describe('derivations — project metric value', () => {
   it('a non-SR&ED project contributes no labor credit', () => {
     const unc: ProjectSummary = { projectId: 'u', name: 'U', color: '#000', isSred: false, hours: 50, laborAmount: 1000, vendorAmount: 0, sredVendorAmount: 0, amount: 1000 };
     expect(projectMetricValue(unc, 'credit', 0.5)).toBe(0);
+  });
+});
+
+describe('derivations — period metric total (drives the tiles)', () => {
+  // Worked example: 80h all in m1 (so Q1 = M1 = 80, other periods = 0), $1,900 labor, SR&ED, rate 0.5.
+  it('totals hours / expenditure / credit for a period', () => {
+    const ws = workedExampleWorkspace();
+    expect(periodMetricTotal(ws, 'FY', 'hours')).toBe(80);
+    expect(periodMetricTotal(ws, 'Q1', 'hours')).toBe(80);
+    expect(periodMetricTotal(ws, 'M1', 'hours')).toBe(80);
+    expect(periodMetricTotal(ws, 'Q2', 'hours')).toBe(0);
+    expect(periodMetricTotal(ws, 'FY', 'expenditure')).toBe(1900);
+    expect(periodMetricTotal(ws, 'FY', 'credit')).toBe(950); // 1900 × 0.5
+  });
+
+  it('credit total mirrors the per-project credit sum (no government-assistance offset)', () => {
+    const ws = workedExampleWorkspace();
+    const summaries = buildProjectSummaries(ws, 'FY');
+    const byHand = summaries.reduce((s, p) => s + projectMetricValue(p, 'credit', ws.client.sredCreditRate), 0);
+    expect(periodMetricTotal(ws, 'FY', 'credit')).toBe(byHand);
   });
 });
 

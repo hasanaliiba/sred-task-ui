@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ClientHeaderComponent } from '../../components/client-header/client-header.component';
 import { PeriodSelectorComponent } from '../../components/period-selector/period-selector.component';
 import { MetricToggleComponent } from '../../components/metric-toggle/metric-toggle.component';
+import { SummaryTilesComponent } from '../../components/summary-tiles/summary-tiles.component';
 import { EmployeeHoursChartComponent } from '../../components/employee-hours-chart/employee-hours-chart.component';
 import { EmployeeHourAndCostChartComponent } from '../../components/employee-hour-and-cost-chart/employee-hour-and-cost-chart.component';
 import { TeamsTableComponent } from '../../components/teams-table/teams-table.component';
@@ -23,6 +24,7 @@ import { RevealDirective } from '../../shared';
     ClientHeaderComponent,
     PeriodSelectorComponent,
     MetricToggleComponent,
+    SummaryTilesComponent,
     EmployeeHoursChartComponent,
     EmployeeHourAndCostChartComponent,
     TeamsTableComponent,
