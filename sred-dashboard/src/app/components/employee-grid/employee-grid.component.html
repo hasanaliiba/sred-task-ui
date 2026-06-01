@@ -13,8 +13,8 @@
     </button>
   </div>
 
-  @if (employees$ | async; as employees) {
-    @if (employees.length === 0) {
+  @if (vm$ | async; as vm) {
+    @if (vm.total === 0) {
       <p class="px-6 py-8 text-sm text-gray-400 text-center">No employees yet. Add one to get started.</p>
     } @else {
       <div class="overflow-x-auto">
@@ -33,7 +33,7 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100">
-            @for (row of employees; track row.employee.id) {
+            @for (row of vm.rows; track row.employee.id) {
               <tr class="hover:bg-gray-50 transition-colors">
                 <td class="px-6 py-3 font-medium whitespace-nowrap">
                   <button type="button" (click)="openDetail(row.employee.id)"
@@ -79,6 +79,7 @@
           </tbody>
         </table>
       </div>
+      <app-paginator [total]="vm.total" [pageSize]="vm.pageSize" [page]="vm.page" (pageChange)="setPage($event)"></app-paginator>
     }
   } @else {
     <div class="px-6 py-6 space-y-3 animate-pulse" aria-hidden="true">

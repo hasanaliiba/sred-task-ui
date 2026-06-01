@@ -29,7 +29,13 @@
         { "id": "e-sophia", "name": "Sophia Tremblay", "province": "QC", "startDate": "2019-02-11", "endDate": null, "confirmedSalary": null, "expectedSalary": 110000, "isSpecialEmployee": true, "teamId": "t-mobile" },
         { "id": "e-liam", "name": "Liam Chen", "province": "ON", "startDate": "2018-11-05", "endDate": null, "confirmedSalary": 130000, "expectedSalary": null, "isSpecialEmployee": false, "teamId": "t-render" },
         { "id": "e-olivia", "name": "Olivia Singh", "province": "AB", "startDate": "2023-01-09", "endDate": null, "confirmedSalary": null, "expectedSalary": 72000, "isSpecialEmployee": false, "teamId": null },
-        { "id": "e-noah", "name": "Noah Patel", "province": "ON", "startDate": "2020-08-17", "endDate": null, "confirmedSalary": null, "expectedSalary": 95000, "isSpecialEmployee": true, "teamId": "t-mobile" }
+        { "id": "e-noah", "name": "Noah Patel", "province": "ON", "startDate": "2020-08-17", "endDate": null, "confirmedSalary": null, "expectedSalary": 95000, "isSpecialEmployee": true, "teamId": "t-mobile" },
+        { "id": "e-emma", "name": "Emma Wright", "province": "ON", "startDate": "2022-05-02", "endDate": null, "confirmedSalary": null, "expectedSalary": 84000, "isSpecialEmployee": false, "teamId": "t-render" },
+        { "id": "e-lucas", "name": "Lucas Moreau", "province": "QC", "startDate": "2021-04-19", "endDate": null, "confirmedSalary": 70000, "expectedSalary": null, "isSpecialEmployee": false, "teamId": "t-mobile" },
+        { "id": "e-ava", "name": "Ava Robinson", "province": "BC", "startDate": "2023-06-12", "endDate": null, "confirmedSalary": null, "expectedSalary": 64000, "isSpecialEmployee": false, "teamId": null },
+        { "id": "e-ethan", "name": "Ethan Brooks", "province": "ON", "startDate": "2019-09-23", "endDate": null, "confirmedSalary": 120000, "expectedSalary": null, "isSpecialEmployee": true, "teamId": "t-render" },
+        { "id": "e-mia", "name": "Mia Fontaine", "province": "QC", "startDate": "2022-11-07", "endDate": null, "confirmedSalary": null, "expectedSalary": 58000, "isSpecialEmployee": false, "teamId": "t-mobile" },
+        { "id": "e-james", "name": "James Carter", "province": "AB", "startDate": "2020-02-14", "endDate": null, "confirmedSalary": null, "expectedSalary": 102000, "isSpecialEmployee": false, "teamId": null }
       ],
       "projects": [
         { "id": "p-unclaimed", "name": "Unclaimed Work", "color": "#6c757d", "isSred": false },
@@ -37,7 +43,13 @@
         { "id": "p-api", "name": "API Performance", "color": "#dc3545", "isSred": true },
         { "id": "p-anim", "name": "Animations Project", "color": "#007bff", "isSred": true },
         { "id": "p-mobile", "name": "Mobile App", "color": "#17a2b8", "isSred": true },
-        { "id": "p-data", "name": "Data Pipeline", "color": "#fd7e14", "isSred": true }
+        { "id": "p-data", "name": "Data Pipeline", "color": "#fd7e14", "isSred": true },
+        { "id": "p-search", "name": "Search Service", "color": "#6f42c1", "isSred": true },
+        { "id": "p-billing", "name": "Billing", "color": "#e83e8c", "isSred": true },
+        { "id": "p-notif", "name": "Notifications", "color": "#20c997", "isSred": true },
+        { "id": "p-auth", "name": "Auth Service", "color": "#6610f2", "isSred": true },
+        { "id": "p-infra", "name": "Infrastructure", "color": "#856404", "isSred": true },
+        { "id": "p-docs", "name": "Docs Portal", "color": "#1e7e34", "isSred": false }
       ],
       "timesheets": [
         { "employeeId": "e-anne", "projectId": "p-render", "hours": { "q1": 400, "q2": 420, "q3": 410, "q4": 200 } },
@@ -60,12 +72,40 @@
         { "employeeId": "e-olivia", "projectId": "p-unclaimed", "hours": { "q1": 90, "q2": 80, "q3": 80, "q4": 40 } },
         { "employeeId": "e-noah", "projectId": "p-api", "hours": { "q1": 300, "q2": 310, "q3": 300, "q4": 150 } },
         { "employeeId": "e-noah", "projectId": "p-mobile", "hours": { "q1": 130, "q2": 140, "q3": 130, "q4": 70 } },
-        { "employeeId": "e-noah", "projectId": "p-unclaimed", "hours": { "q1": 60, "q2": 50, "q3": 50, "q4": 30 } }
+        { "employeeId": "e-noah", "projectId": "p-unclaimed", "hours": { "q1": 60, "q2": 50, "q3": 50, "q4": 30 } },
+        { "employeeId": "e-emma", "projectId": "p-render", "hours": { "q1": 300, "q2": 320, "q3": 300, "q4": 150 } },
+        { "employeeId": "e-emma", "projectId": "p-unclaimed", "hours": { "q1": 70, "q2": 60, "q3": 60, "q4": 30 } },
+        { "employeeId": "e-lucas", "projectId": "p-mobile", "hours": { "q1": 280, "q2": 300, "q3": 290, "q4": 140 } },
+        { "employeeId": "e-lucas", "projectId": "p-unclaimed", "hours": { "q1": 80, "q2": 70, "q3": 70, "q4": 40 } },
+        { "employeeId": "e-ava", "projectId": "p-data", "hours": { "q1": 260, "q2": 280, "q3": 270, "q4": 130 } },
+        { "employeeId": "e-ava", "projectId": "p-unclaimed", "hours": { "q1": 90, "q2": 80, "q3": 70, "q4": 40 } },
+        { "employeeId": "e-ethan", "projectId": "p-render", "hours": { "q1": 300, "q2": 310, "q3": 300, "q4": 150 } },
+        { "employeeId": "e-ethan", "projectId": "p-api", "hours": { "q1": 120, "q2": 130, "q3": 120, "q4": 60 } },
+        { "employeeId": "e-mia", "projectId": "p-mobile", "hours": { "q1": 320, "q2": 330, "q3": 320, "q4": 160 } },
+        { "employeeId": "e-mia", "projectId": "p-unclaimed", "hours": { "q1": 60, "q2": 50, "q3": 50, "q4": 30 } },
+        { "employeeId": "e-james", "projectId": "p-api", "hours": { "q1": 300, "q2": 320, "q3": 300, "q4": 150 } },
+        { "employeeId": "e-james", "projectId": "p-anim", "hours": { "q1": 140, "q2": 150, "q3": 140, "q4": 70 } },
+        { "employeeId": "e-james", "projectId": "p-unclaimed", "hours": { "q1": 50, "q2": 40, "q3": 40, "q4": 20 } },
+        { "employeeId": "e-james", "projectId": "p-search", "hours": { "q1": 150, "q2": 160, "q3": 150, "q4": 80 } },
+        { "employeeId": "e-emma", "projectId": "p-billing", "hours": { "q1": 120, "q2": 130, "q3": 120, "q4": 60 } },
+        { "employeeId": "e-lucas", "projectId": "p-notif", "hours": { "q1": 110, "q2": 120, "q3": 110, "q4": 55 } },
+        { "employeeId": "e-ava", "projectId": "p-auth", "hours": { "q1": 130, "q2": 140, "q3": 130, "q4": 65 } },
+        { "employeeId": "e-ethan", "projectId": "p-infra", "hours": { "q1": 100, "q2": 110, "q3": 100, "q4": 50 } },
+        { "employeeId": "e-mia", "projectId": "p-docs", "hours": { "q1": 90, "q2": 80, "q3": 80, "q4": 40 } }
       ],
       "vendorInvoices": [
         { "id": "afi-vi-1", "invoiceDate": "2025-03-15", "invoiceNumber": "INV-1001", "amount": 4000.05, "vendorName": "Testing Co", "providerName": "Node Experts", "projectId": "p-render", "description": "Automated test harness build-out", "isSred": true, "province": "ON", "status": "In Progress" },
         { "id": "afi-vi-2", "invoiceDate": "2025-07-22", "invoiceNumber": "INV-1002", "amount": 12500, "vendorName": "Cloud Infra Inc", "providerName": "Server Pros", "projectId": "p-api", "description": "Load-testing infrastructure", "isSred": true, "province": "BC", "status": "Completed" },
-        { "id": "afi-vi-3", "invoiceDate": "2025-10-05", "invoiceNumber": "INV-1003", "amount": 3200, "vendorName": "Design Studio", "providerName": "UX Labs", "projectId": "p-anim", "description": "Marketing animation assets", "isSred": false, "province": "ON", "status": "In Progress" }
+        { "id": "afi-vi-3", "invoiceDate": "2025-10-05", "invoiceNumber": "INV-1003", "amount": 3200, "vendorName": "Design Studio", "providerName": "UX Labs", "projectId": "p-anim", "description": "Marketing animation assets", "isSred": false, "province": "ON", "status": "In Progress" },
+        { "id": "afi-vi-4", "invoiceDate": "2025-02-08", "invoiceNumber": "INV-1004", "amount": 5400, "vendorName": "DataLabs", "providerName": "ETL Co", "projectId": "p-data", "description": "Pipeline tuning", "isSred": true, "province": "ON", "status": "Completed" },
+        { "id": "afi-vi-5", "invoiceDate": "2025-04-30", "invoiceNumber": "INV-1005", "amount": 9800, "vendorName": "GPU Cloud", "providerName": "Render Farm", "projectId": "p-render", "description": "Render compute", "isSred": true, "province": "BC", "status": "Completed" },
+        { "id": "afi-vi-6", "invoiceDate": "2025-05-19", "invoiceNumber": "INV-1006", "amount": 2100, "vendorName": "Legal Partners", "providerName": "Patents LLP", "projectId": "p-unclaimed", "description": "Filing fees", "isSred": false, "province": "ON", "status": "Completed" },
+        { "id": "afi-vi-7", "invoiceDate": "2025-06-11", "invoiceNumber": "INV-1007", "amount": 7300, "vendorName": "API Tools Inc", "providerName": "Perf Co", "projectId": "p-api", "description": "Profiling licenses", "isSred": true, "province": "ON", "status": "In Progress" },
+        { "id": "afi-vi-8", "invoiceDate": "2025-08-03", "invoiceNumber": "INV-1008", "amount": 4600, "vendorName": "Motion Studio", "providerName": "FX Labs", "projectId": "p-anim", "description": "Animation contractors", "isSred": true, "province": "QC", "status": "In Progress" },
+        { "id": "afi-vi-9", "invoiceDate": "2025-09-14", "invoiceNumber": "INV-1009", "amount": 3900, "vendorName": "Mobile QA", "providerName": "TestPros", "projectId": "p-mobile", "description": "Device test lab", "isSred": true, "province": "ON", "status": "Completed" },
+        { "id": "afi-vi-10", "invoiceDate": "2025-10-21", "invoiceNumber": "INV-1010", "amount": 2750, "vendorName": "Cloud Infra Inc", "providerName": "Server Pros", "projectId": "p-data", "description": "Storage", "isSred": true, "province": "BC", "status": "In Progress" },
+        { "id": "afi-vi-11", "invoiceDate": "2025-11-02", "invoiceNumber": "INV-1011", "amount": 1850, "vendorName": "Design Studio", "providerName": "UX Labs", "projectId": "p-anim", "description": "Icon set", "isSred": false, "province": "ON", "status": "In Progress" },
+        { "id": "afi-vi-12", "invoiceDate": "2025-11-09", "invoiceNumber": "INV-1012", "amount": 6200, "vendorName": "Render Farm", "providerName": "GPU Cloud", "projectId": "p-render", "description": "Batch rendering", "isSred": true, "province": "BC", "status": "In Progress" }
       ],
       "governmentAssistanceTotal": 8000
     },

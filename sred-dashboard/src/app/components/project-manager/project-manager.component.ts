@@ -1,24 +1,44 @@
 import { Component, inject } from '@angular/core';
 import { AsyncPipe, CurrencyPipe, DecimalPipe } from '@angular/common';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { DashboardDataService } from '../../services/dashboard-data.service';
 import { Project, ProjectSummary } from '../../models';
 import { ProjectFormComponent } from '../project-form/project-form.component';
+import { PaginatorComponent } from '../paginator/paginator.component';
 
 /**
- * Project list + CRUD (Feature F). Lists projects with their period hours/$ and
- * supports add / edit / remove. Removing a project cascades (its timesheet hours
- * and vendor invoices are removed) — surfaced in the delete confirmation.
+ * Project list + CRUD (Feature F). Lists projects with their period hours/$,
+ * supports add / edit / remove (cascade), and paginates the table client-side
+ * (~10/page). Removing a project cascades to its timesheet hours and vendor invoices.
  */
 @Component({
   selector: 'app-project-manager',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, DecimalPipe, ProjectFormComponent],
+  imports: [AsyncPipe, CurrencyPipe, DecimalPipe, ProjectFormComponent, PaginatorComponent],
   templateUrl: './project-manager.component.html',
 })
 export class ProjectManagerComponent {
   private readonly data = inject(DashboardDataService);
-  readonly projects$ = this.data.projectSummaries$;
+
+  readonly pageSize = 10;
+  private readonly page$ = new BehaviorSubject<number>(1);
+
+  /** Paged view: clamps the page to the project count and slices the rows. */
+  readonly vm$ = combineLatest([this.data.projectSummaries$, this.page$]).pipe(
+    map(([rows, page]) => {
+      const total = rows.length;
+      const pages = Math.max(1, Math.ceil(total / this.pageSize));
+      const current = Math.min(page, pages);
+      const start = (current - 1) * this.pageSize;
+      return { rows: rows.slice(start, start + this.pageSize), total, page: current, pageSize: this.pageSize };
+    }),
+  );
+
+  setPage(page: number): void {
+    this.page$.next(page);
+  }
 
   formOpen = false;
   editing: Project | null = null;

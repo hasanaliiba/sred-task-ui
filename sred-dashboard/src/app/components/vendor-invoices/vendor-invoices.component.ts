@@ -1,43 +1,59 @@
 import { Component, inject } from '@angular/core';
 import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
-import { combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { DashboardDataService } from '../../services/dashboard-data.service';
 import { Project, VendorInvoice } from '../../models';
 import { VendorFormComponent } from '../vendor-form/vendor-form.component';
+import { PaginatorComponent } from '../paginator/paginator.component';
 
 /**
  * Vendor invoices table + CRUD (Feature E). Lists the selected period's invoices
- * (with their project name), supports add / edit / remove, and shows the vendor
- * total. SR&ED-flagged invoices feed SR&ED expenditure (S19) and each invoice rolls
- * into its project's totals.
+ * (with their project name), supports add / edit / remove, shows the vendor total,
+ * and paginates the table client-side (~10/page). SR&ED-flagged invoices feed SR&ED
+ * expenditure and each invoice rolls into its project's totals.
  */
 @Component({
   selector: 'app-vendor-invoices',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, DatePipe, VendorFormComponent],
+  imports: [AsyncPipe, CurrencyPipe, DatePipe, VendorFormComponent, PaginatorComponent],
   templateUrl: './vendor-invoices.component.html',
 })
 export class VendorInvoicesComponent {
   private readonly data = inject(DashboardDataService);
 
-  /** Period-filtered invoices joined with project names + the vendor total + project list. */
-  readonly vm$ = combineLatest([this.data.vendorInvoices$, this.data.projectSummaries$]).pipe(
-    map(([invoices, summaries]) => {
+  readonly pageSize = 10;
+  private readonly page$ = new BehaviorSubject<number>(1);
+
+  /** Period-filtered invoices joined with project names + paged rows + the vendor total + project list. */
+  readonly vm$ = combineLatest([this.data.vendorInvoices$, this.data.projectSummaries$, this.page$]).pipe(
+    map(([invoices, summaries, page]) => {
       const nameById = new Map(summaries.map((s) => [s.projectId, s.name]));
+      const allRows = invoices.map((invoice) => ({
+        invoice,
+        projectName: nameById.get(invoice.projectId) ?? invoice.projectId,
+      }));
+      const count = allRows.length;
+      const pages = Math.max(1, Math.ceil(count / this.pageSize));
+      const current = Math.min(page, pages);
+      const start = (current - 1) * this.pageSize;
       return {
-        rows: invoices.map((invoice) => ({
-          invoice,
-          projectName: nameById.get(invoice.projectId) ?? invoice.projectId,
-        })),
-        total: invoices.reduce((sum, v) => sum + v.amount, 0),
+        rows: allRows.slice(start, start + this.pageSize),
+        count,
+        page: current,
+        pageSize: this.pageSize,
+        amountTotal: invoices.reduce((sum, v) => sum + v.amount, 0),
         projects: summaries.map(
           (s) => ({ id: s.projectId, name: s.name, color: s.color, isSred: s.isSred }) as Project,
         ),
       };
     }),
   );
+
+  setPage(page: number): void {
+    this.page$.next(page);
+  }
 
   formOpen = false;
   editing: VendorInvoice | null = null;
