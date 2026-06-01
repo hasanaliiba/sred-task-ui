@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SR&ED Dashboard — Phase 2 layout mockup</title>
+  <!--
+    THROWAWAY MOCKUP (P2.0). Static HTML, no Angular. Tailwind via CDN.
+    Shows the Phase 2 structure: left sidebar with an "Analytics" home + a nested
+    "Manage" group (Employees / Projects / Invoices CRUD pages), Feedback above Logout,
+    a global metric toggle, metric-aware quarter tiles, and a mixed-grid analytics page.
+    Charts are CSS/SVG placeholders; the real app keeps ApexCharts. Palette unchanged.
+  -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: {
+      brand:{50:'#e6f2ff',100:'#cce5ff',200:'#b8daff',300:'#80bdff',400:'#339bff',500:'#007bff',600:'#0069d9',700:'#0062cc',800:'#0056b3',900:'#004085'},
+      logo:'#00b7ff', sky:'#53c9e9', ink:'#324455',
+      success:{DEFAULT:'#28a745',dark:'#218838'}, danger:{DEFAULT:'#dc3545',dark:'#c82333'}, warning:{DEFAULT:'#ffc107',dark:'#e0a800'},
+    }}}};
+  </script>
+  <style>html{scroll-behavior:smooth}</style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+  <div id="backdrop" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" onclick="closeNav()"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed z-40 inset-y-0 left-0 w-64 bg-ink text-white flex flex-col -translate-x-full lg:translate-x-0 transition-transform duration-300">
+    <div class="h-16 flex items-center gap-3 px-5 shrink-0 border-b border-white/10">
+      <div class="h-9 w-9 rounded-lg bg-logo flex items-center justify-center font-bold">S</div>
+      <div class="leading-tight"><p class="font-semibold">SR&amp;ED</p><p class="text-xs text-white/50">Projections</p></div>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1 text-sm">
+      <!-- Home -->
+      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/15 text-white">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h12a1 1 0 001-1V10"/></svg>
+        Analytics
+      </a>
+
+      <!-- Nested "Manage" group -->
+      <div class="pt-3">
+        <p class="px-3 pb-1 text-[11px] uppercase tracking-wider text-white/40">Manage</p>
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 transition-colors">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5V4H2v16h5m10 0a5 5 0 00-10 0m10 0H7m5-9a3 3 0 100-6 3 3 0 000 6z"/></svg>
+          Employees
+        </a>
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 transition-colors">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+          Projects
+        </a>
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 transition-colors">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m-6 4h6m-6 4h4M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"/></svg>
+          Invoices
+        </a>
+      </div>
+    </nav>
+
+    <!-- Bottom: client · Feedback (above) · Logout -->
+    <div class="border-t border-white/10 p-3 text-sm space-y-1">
+      <div class="px-3 py-1"><p class="font-medium">Afiniti</p><p class="text-white/50 text-xs">xavier.ali@afiniti.io</p></div>
+      <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/10 transition-colors">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12a8 8 0 01-8 8H7l-4 3V12a8 8 0 018-8h2a8 8 0 018 8z"/></svg>
+        Feedback
+      </button>
+      <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        Log out
+      </button>
+    </div>
+  </aside>
+
+  <!-- Content -->
+  <div class="lg:ml-64 flex flex-col min-h-screen">
+    <header class="sticky top-0 z-20 bg-white/90 backdrop-blur border-b border-gray-200">
+      <div class="h-16 px-4 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3 min-w-0">
+          <button onclick="openNav()" class="lg:hidden h-10 w-10 -ml-2 rounded-md hover:bg-gray-100 flex items-center justify-center">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <div class="min-w-0"><h1 class="font-semibold text-ink leading-tight">Analytics</h1><p class="text-xs text-gray-400">Afiniti</p></div>
+        </div>
+        <!-- Global metric toggle -->
+        <div class="hidden sm:flex items-center gap-1 bg-gray-100 rounded-xl p-1 text-sm" title="Switches every figure on Analytics">
+          <button class="px-3 py-1 rounded-lg bg-brand-600 text-white shadow">Hours</button>
+          <button class="px-3 py-1 rounded-lg text-gray-600 hover:bg-gray-200">Expenditures</button>
+          <button class="px-3 py-1 rounded-lg text-gray-600 hover:bg-gray-200">Credits</button>
+        </div>
+        <div class="flex items-center gap-3 text-sm">
+          <span class="hidden md:inline text-xs bg-gray-100 rounded-full px-3 py-1 text-gray-600">EST</span>
+          <div class="h-8 w-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-semibold">XA</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 space-y-8">
+
+      <!-- ===== ANALYTICS (home) — KPIs + tiles + charts only ===== -->
+      <!-- period controls -->
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2 text-sm"><span class="text-gray-500">Showing</span><span class="font-semibold text-brand-700">Hours</span><span class="text-gray-400">· by quarter</span></div>
+        <div class="flex items-center gap-2 text-sm">
+          <select class="rounded-lg border border-gray-300 px-3 py-1.5 text-gray-700"><option>By quarter</option><option>By month</option></select>
+          <button class="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-1.5 text-gray-700 hover:bg-gray-50">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            Custom range…
+          </button>
+        </div>
+      </div>
+
+      <!-- metric-aware quarter tiles -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        <button class="rounded-2xl bg-white ring-1 ring-gray-200 p-4 text-center hover:ring-brand-300 transition"><p class="text-xl font-extrabold text-ink">0 h</p><p class="text-[11px] text-gray-400">Jan 1 – Mar 31</p><p class="text-xs font-medium text-gray-500 mt-1">Q1</p></button>
+        <button class="rounded-2xl bg-white ring-1 ring-gray-200 p-4 text-center hover:ring-brand-300 transition"><p class="text-xl font-extrabold text-ink">2,180 h</p><p class="text-[11px] text-gray-400">Apr 1 – Jun 30</p><p class="text-xs font-medium text-gray-500 mt-1">Q2</p></button>
+        <button class="rounded-2xl bg-white ring-1 ring-gray-200 p-4 text-center hover:ring-brand-300 transition"><p class="text-xl font-extrabold text-ink">2,400 h</p><p class="text-[11px] text-gray-400">Jul 1 – Sep 30</p><p class="text-xs font-medium text-gray-500 mt-1">Q3</p></button>
+        <button class="rounded-2xl bg-white ring-1 ring-gray-200 p-4 text-center hover:ring-brand-300 transition"><p class="text-xl font-extrabold text-ink">1,640 h</p><p class="text-[11px] text-gray-400">Oct 1 – Dec 31</p><p class="text-xs font-medium text-gray-500 mt-1">Q4</p></button>
+        <button class="rounded-2xl bg-white ring-2 ring-brand-600 p-4 text-center shadow-sm"><p class="text-xl font-extrabold text-brand-700">8,750 h</p><p class="text-[11px] text-gray-400">Jan 1 – Nov 15</p><p class="text-xs font-semibold text-brand-700 mt-1">Year to Date</p></button>
+      </div>
+
+      <!-- YTD vs Projected headline -->
+      <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-6 grid sm:grid-cols-2 gap-6">
+        <div><p class="text-sm text-gray-500">Current Year-to-Date · Hours</p><p class="text-4xl font-extrabold text-brand-700">8,750 <span class="text-2xl">h</span></p></div>
+        <div class="sm:border-l sm:border-gray-100 sm:pl-6"><p class="text-sm text-gray-500">Projected Full Year · Hours</p><p class="text-4xl font-extrabold text-ink">10,000 <span class="text-2xl">h</span></p></div>
+      </div>
+
+      <!-- charts grid (2-col) -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-6">
+          <h4 class="font-bold text-ink mb-4">Employee Hours · SR&amp;ED vs Unclaimed</h4>
+          <div class="flex items-end gap-4 h-40">
+            <div class="flex-1 flex flex-col justify-end"><div class="bg-brand-500 rounded-t" style="height:70%"></div><div class="bg-gray-300 rounded-b" style="height:18%"></div></div>
+            <div class="flex-1 flex flex-col justify-end"><div class="bg-brand-500 rounded-t" style="height:55%"></div><div class="bg-gray-300 rounded-b" style="height:10%"></div></div>
+            <div class="flex-1 flex flex-col justify-end"><div class="bg-brand-500 rounded-t" style="height:80%"></div><div class="bg-gray-300 rounded-b" style="height:12%"></div></div>
+            <div class="flex-1 flex flex-col justify-end"><div class="bg-brand-500 rounded-t" style="height:48%"></div><div class="bg-gray-300 rounded-b" style="height:20%"></div></div>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-6">
+          <h4 class="font-bold text-ink mb-4">Team Hours · SR&amp;ED vs Unclaimed</h4>
+          <div class="flex items-end gap-6 h-40">
+            <div class="flex-1 flex flex-col justify-end"><div class="bg-brand-500 rounded-t" style="height:75%"></div><div class="bg-gray-300 rounded-b" style="height:14%"></div></div>
+            <div class="flex-1 flex flex-col justify-end"><div class="bg-brand-500 rounded-t" style="height:60%"></div><div class="bg-gray-300 rounded-b" style="height:12%"></div></div>
+            <div class="flex-1 flex flex-col justify-end"><div class="bg-brand-500 rounded-t" style="height:40%"></div><div class="bg-gray-300 rounded-b" style="height:10%"></div></div>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-6">
+          <h4 class="font-bold text-ink mb-4">Hours &amp; Cost by Project</h4>
+          <div class="flex items-end gap-4 h-40">
+            <div class="flex-1 bg-brand-500 rounded-t" style="height:90%"></div><div class="flex-1 bg-brand-500 rounded-t" style="height:55%"></div><div class="flex-1 bg-brand-500 rounded-t" style="height:40%"></div><div class="flex-1 bg-brand-500 rounded-t" style="height:25%"></div>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-6">
+          <h4 class="font-bold text-ink mb-4">Cost share by project</h4>
+          <div class="flex items-center justify-center h-40">
+            <div class="h-32 w-32 rounded-full" style="background: conic-gradient(#007bff 0 52%, #28a745 52% 74%, #dc3545 74% 88%, #fd7e14 88% 100%);"><div class="h-full w-full grid place-items-center"><div class="h-16 w-16 bg-white rounded-full grid place-items-center text-xs font-bold text-ink">$606k</div></div></div>
+          </div>
+          <p class="text-center text-[11px] text-gray-400 mt-1">hover a slice → center + tooltip show $606,802 / $138,150 (formatted)</p>
+        </div>
+      </div>
+
+      <!-- projection + credit -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 grid sm:grid-cols-3 gap-4">
+          <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-5"><p class="text-xs uppercase text-gray-400">Hours</p><p class="text-2xl font-extrabold text-ink">8,750</p><p class="text-xs text-brand-700">→ 10,000 proj.</p></div>
+          <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-5"><p class="text-xs uppercase text-gray-400">Expenditure</p><p class="text-2xl font-extrabold text-ink">$437k</p><p class="text-xs text-brand-700">→ $500k proj.</p></div>
+          <div class="bg-gradient-to-br from-success to-success-dark text-white rounded-2xl shadow p-5"><p class="text-xs uppercase text-white/60">Credit</p><p class="text-2xl font-extrabold">$175k</p><p class="text-xs text-white/70">→ $200k proj.</p></div>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 p-6 flex flex-col items-center justify-center">
+          <div class="h-24 w-24 rounded-full grid place-items-center" style="background: conic-gradient(#007bff 0 88%, #e5e7eb 88% 100%);"><div class="h-16 w-16 bg-white rounded-full grid place-items-center font-bold text-ink text-sm">88%</div></div>
+          <p class="text-xs text-gray-400 mt-2">fiscal year elapsed</p>
+        </div>
+      </div>
+
+      <!-- ===== separator: a Manage page (separate route) ===== -->
+      <div class="pt-6 border-t-2 border-dashed border-gray-300">
+        <p class="text-xs uppercase tracking-wider text-gray-400 mb-3">↓ Example of a "Manage" page (separate route via the sidebar) — Employees / Projects / Invoices each look like this</p>
+      </div>
+
+      <!-- Employees CRUD page preview -->
+      <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+          <div><h3 class="font-bold text-ink">Employees</h3><p class="text-sm text-gray-400">Add, edit, and remove staff · click a name for SR&amp;ED detail</p></div>
+          <button class="text-sm text-white bg-brand-600 hover:bg-brand-700 rounded-lg px-4 py-2">+ Add employee</button>
+        </div>
+        <table class="w-full text-sm text-left">
+          <thead class="text-xs uppercase tracking-wide text-gray-500 bg-gray-50"><tr><th class="px-6 py-3">Name</th><th class="px-6 py-3">Team</th><th class="px-6 py-3">Province</th><th class="px-6 py-3 text-right">Hourly</th><th class="px-6 py-3 text-right">Actions</th></tr></thead>
+          <tbody class="divide-y divide-gray-100">
+            <tr class="hover:bg-gray-50"><td class="px-6 py-3 font-medium text-brand-700">Anne User</td><td class="px-6 py-3">Rendering</td><td class="px-6 py-3 text-gray-600">ON</td><td class="px-6 py-3 text-right font-semibold">$30.00</td><td class="px-6 py-3 text-right"><span class="text-xs text-brand-600">Edit</span> · <span class="text-xs text-danger">Delete</span></td></tr>
+            <tr class="hover:bg-gray-50"><td class="px-6 py-3 font-medium text-brand-700">Kaitlyn Holt</td><td class="px-6 py-3">Rendering</td><td class="px-6 py-3 text-gray-600">BC</td><td class="px-6 py-3 text-right font-semibold">$45.00</td><td class="px-6 py-3 text-right"><span class="text-xs text-brand-600">Edit</span> · <span class="text-xs text-danger">Delete</span></td></tr>
+            <tr class="hover:bg-gray-50"><td class="px-6 py-3 font-medium text-brand-700">Sophia Tremblay</td><td class="px-6 py-3">Mobile</td><td class="px-6 py-3 text-gray-600">QC</td><td class="px-6 py-3 text-right font-semibold">$55.00</td><td class="px-6 py-3 text-right"><span class="text-xs text-brand-600">Edit</span> · <span class="text-xs text-danger">Delete</span></td></tr>
+          </tbody>
+        </table>
+        <!-- pagination for 50+ rows -->
+        <div class="px-6 py-3 border-t border-gray-100 flex items-center justify-between text-sm text-gray-500">
+          <span>Showing <span class="font-medium text-gray-700">1–10</span> of <span class="font-medium text-gray-700">50</span></span>
+          <div class="flex items-center gap-1">
+            <button class="px-3 py-1 rounded-lg border border-gray-200 text-gray-400" disabled>Prev</button>
+            <button class="px-3 py-1 rounded-lg bg-brand-600 text-white">1</button>
+            <button class="px-3 py-1 rounded-lg hover:bg-gray-100">2</button>
+            <button class="px-3 py-1 rounded-lg hover:bg-gray-100">3</button>
+            <span class="px-1">…</span>
+            <button class="px-3 py-1 rounded-lg hover:bg-gray-100">5</button>
+            <button class="px-3 py-1 rounded-lg border border-gray-200 hover:bg-gray-50">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-center text-xs text-gray-400 pt-2">Layout mockup · same palette · charts are placeholders · Feedback now lives in the sidebar (no floating button)</p>
+    </main>
+  </div>
+
+  <script>
+    const sidebar=document.getElementById('sidebar'),backdrop=document.getElementById('backdrop');
+    function openNav(){sidebar.classList.remove('-translate-x-full');backdrop.classList.remove('hidden');}
+    function closeNav(){sidebar.classList.add('-translate-x-full');backdrop.classList.add('hidden');}
+  </script>
+</body>
+</html>
