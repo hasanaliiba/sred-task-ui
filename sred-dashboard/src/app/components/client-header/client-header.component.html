@@ -1,29 +1,31 @@
 @if (client$ | async; as client) {
-  <div class="bg-gradient-to-br from-ink to-brand-800 text-white rounded-2xl shadow-lg p-6 sm:p-8">
-    <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+  <div class="bg-gradient-to-br from-ink to-brand-800 text-white rounded-xl shadow-lg px-5 py-3">
+    <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
       <!-- Identity -->
       <div class="min-w-0">
-        <p class="text-xs uppercase tracking-wider text-white/50">Confidential Financials</p>
-        <h1 class="text-3xl sm:text-4xl font-extrabold leading-tight">{{ client.name }}</h1>
-        <p class="text-sm text-white/60 mt-1">SR&amp;ED Projections · {{ client.loggedInUser }}</p>
+        <div class="flex items-baseline gap-2">
+          <h1 class="text-xl font-extrabold leading-tight truncate">{{ client.name }}</h1>
+          <span class="text-[10px] uppercase tracking-wider text-white/40 shrink-0">Confidential</span>
+        </div>
+        <p class="text-xs text-white/60">SR&amp;ED Projections · {{ client.loggedInUser }}</p>
       </div>
 
-      <!-- Reporting meta -->
-      <dl class="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-4 shrink-0">
-        <div>
-          <dt class="text-xs uppercase tracking-wide text-white/50">Fiscal Year</dt>
-          <dd class="text-sm font-semibold mt-0.5">
+      <!-- Reporting meta (inline) -->
+      <dl class="flex flex-wrap items-center gap-x-6 gap-y-1 text-xs">
+        <div class="flex items-center gap-1.5">
+          <dt class="uppercase tracking-wide text-white/40">Fiscal Year</dt>
+          <dd class="font-semibold">
             {{ client.fiscalYearStart | date: 'MMM d, y' : 'UTC' }} –
             {{ client.fiscalYearEnd | date: 'MMM d, y' : 'UTC' }}
           </dd>
         </div>
-        <div>
-          <dt class="text-xs uppercase tracking-wide text-white/50">Data As Of</dt>
-          <dd class="text-sm font-semibold mt-0.5">{{ client.asOfDate | date: 'MMM d, y' : 'UTC' }}</dd>
+        <div class="flex items-center gap-1.5">
+          <dt class="uppercase tracking-wide text-white/40">Data As Of</dt>
+          <dd class="font-semibold">{{ client.asOfDate | date: 'MMM d, y' : 'UTC' }}</dd>
         </div>
-        <div>
-          <dt class="text-xs uppercase tracking-wide text-white/50">Time Zone</dt>
-          <dd class="text-sm font-semibold mt-0.5">{{ client.timeZone }}</dd>
+        <div class="flex items-center gap-1.5">
+          <dt class="uppercase tracking-wide text-white/40">Time Zone</dt>
+          <dd class="font-semibold">{{ client.timeZone }}</dd>
         </div>
       </dl>
     </div>

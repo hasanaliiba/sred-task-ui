@@ -1,8 +1,12 @@
-<!-- Sticky combined control: metric toggle + month range + metric-aware period tiles.
-     The tiles ARE the period selector (they show each period's value and set the period
-     on click); this whole block stays pinned at the top while the page scrolls. -->
-<div class="sticky top-14 lg:top-0 z-20 bg-gray-50/95 backdrop-blur border-b border-gray-200">
-  <div class="max-w-7xl mx-auto px-4 py-4 space-y-3">
+<!-- Compact client header — the first header; keeps the blue styling, scrolls away (Req 1) -->
+<div class="max-w-7xl mx-auto px-4 pt-5">
+  <app-client-header></app-client-header>
+</div>
+
+<!-- Sticky compact controls: metric toggle + month range + metric-aware period tiles.
+     The tiles ARE the period selector; this block stays pinned while the page scrolls. -->
+<div class="sticky top-14 lg:top-0 z-20 bg-gray-50/95 backdrop-blur border-b border-gray-200 mt-4">
+  <div class="max-w-7xl mx-auto px-4 py-2.5 space-y-2.5">
     <div class="flex flex-wrap items-center justify-between gap-3">
       <app-metric-toggle></app-metric-toggle>
       <app-date-range-picker></app-date-range-picker>
@@ -11,12 +15,7 @@
   </div>
 </div>
 
-<main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
-  <!-- Client header (Req 1) -->
-  <section appReveal>
-    <app-client-header></app-client-header>
-  </section>
-
+<main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
   <!-- Year projection — headline KPIs + gauge (Req 6) -->
   <section appReveal>
     <app-year-projection></app-year-projection>
@@ -28,9 +27,13 @@
     <app-employee-hour-and-cost-chart></app-employee-hour-and-cost-chart>
   </section>
 
-  <!-- Teams (Feature D + H) -->
-  <section appReveal class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <!-- Teams table — full width so the members list has horizontal room (Feature D + H) -->
+  <section appReveal>
     <app-teams-table></app-teams-table>
+  </section>
+
+  <!-- Team SR&ED vs Unclaimed hours chart -->
+  <section appReveal>
     <app-team-hours-chart></app-team-hours-chart>
   </section>
 
