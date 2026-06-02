@@ -90,6 +90,10 @@ export interface EmployeeDetail {
   unclaimedHours: number;
   totalHours: number;
   sredAllocation: number; // sredHours / totalHours (0 when no hours)
+  hourlyRate: number;
+  sredCost: number; // sredHours × hourlyRate
+  totalCost: number; // totalHours × hourlyRate
+  credit: number; // sredCost × client.sredCreditRate
 }
 
 /** SR&ED expenditure + credit for the selected period (Feature E). */

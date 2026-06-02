@@ -233,6 +233,11 @@ describe('derivations — employee detail', () => {
     expect(detail!.sredHours).toBe(10);
     expect(detail!.unclaimedHours).toBe(0);
     expect(detail!.sredAllocation).toBe(1);
+    // A: 10 SR&ED hours @ $100/h → cost $1,000; credit = 1000 × 0.5 = $500.
+    expect(detail!.hourlyRate).toBe(100);
+    expect(detail!.sredCost).toBe(1000);
+    expect(detail!.totalCost).toBe(1000);
+    expect(detail!.credit).toBe(500);
   });
 
   it('returns null for an unknown employee', () => {

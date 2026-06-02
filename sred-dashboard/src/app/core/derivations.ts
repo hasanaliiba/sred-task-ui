@@ -347,6 +347,8 @@ export function buildEmployeeDetail(
   const sredHours = perProject.filter((p) => p.isSred).reduce((s, p) => s + p.hours, 0);
   const unclaimedHours = perProject.filter((p) => !p.isSred).reduce((s, p) => s + p.hours, 0);
   const totalHours = sredHours + unclaimedHours;
+  const rate = hourlyRate(employee, ws.client.standardAnnualHours);
+  const sredCost = sredHours * rate;
   return {
     employee,
     perProject,
@@ -354,6 +356,10 @@ export function buildEmployeeDetail(
     unclaimedHours,
     totalHours,
     sredAllocation: totalHours > 0 ? sredHours / totalHours : 0,
+    hourlyRate: rate,
+    sredCost,
+    totalCost: totalHours * rate,
+    credit: sredCost * ws.client.sredCreditRate,
   };
 }
 

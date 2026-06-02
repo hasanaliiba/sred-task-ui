@@ -15,6 +15,10 @@ const DETAIL: EmployeeDetail = {
   unclaimedHours: 390,
   totalHours: 1820,
   sredAllocation: 1430 / 1820,
+  hourlyRate: 30,
+  sredCost: 42900,
+  totalCost: 54600,
+  credit: 21450,
 };
 
 class FakeDataService {

@@ -50,7 +50,7 @@
         }
       </div>
 
-      <!-- Summary -->
+      <!-- Summary: hours, then cost (expenses) + credit -->
       <dl class="mt-5 grid grid-cols-3 gap-3 text-center border-t border-gray-100 pt-4">
         <div>
           <dt class="text-xs text-gray-400">SR&amp;ED hours</dt>
@@ -63,6 +63,20 @@
         <div>
           <dt class="text-xs text-gray-400">Allocation</dt>
           <dd class="text-lg font-bold text-ink">{{ detail.sredAllocation | percent: '1.1-2' }}</dd>
+        </div>
+      </dl>
+      <dl class="mt-3 grid grid-cols-3 gap-3 text-center">
+        <div>
+          <dt class="text-xs text-gray-400">SR&amp;ED cost</dt>
+          <dd class="text-lg font-bold text-brand-700">{{ detail.sredCost | currency: 'USD' : 'symbol' : '1.0-0' }}</dd>
+        </div>
+        <div>
+          <dt class="text-xs text-gray-400">Total cost</dt>
+          <dd class="text-lg font-bold text-ink">{{ detail.totalCost | currency: 'USD' : 'symbol' : '1.0-0' }}</dd>
+        </div>
+        <div>
+          <dt class="text-xs text-gray-400">SR&amp;ED credit</dt>
+          <dd class="text-lg font-bold text-success-dark">{{ detail.credit | currency: 'USD' : 'symbol' : '1.0-0' }}</dd>
         </div>
       </dl>
     } @else {

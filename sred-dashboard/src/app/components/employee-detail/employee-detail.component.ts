@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
-import { AsyncPipe, DatePipe, DecimalPipe, PercentPipe } from '@angular/common';
+import { AsyncPipe, CurrencyPipe, DatePipe, DecimalPipe, PercentPipe } from '@angular/common';
 import { Observable, of } from 'rxjs';
 
 import { DashboardDataService } from '../../services/dashboard-data.service';
@@ -13,7 +13,7 @@ import { EmployeeDetail } from '../../models';
 @Component({
   selector: 'app-employee-detail',
   standalone: true,
-  imports: [AsyncPipe, DatePipe, DecimalPipe, PercentPipe],
+  imports: [AsyncPipe, CurrencyPipe, DatePipe, DecimalPipe, PercentPipe],
   templateUrl: './employee-detail.component.html',
 })
 export class EmployeeDetailComponent implements OnInit {
