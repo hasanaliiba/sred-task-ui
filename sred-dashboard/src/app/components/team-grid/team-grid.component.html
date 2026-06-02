@@ -1,0 +1,97 @@
+<div class="bg-white rounded-2xl shadow ring-1 ring-gray-100 overflow-hidden">
+  @if (vm$ | async; as vm) {
+    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
+      <div>
+        <h2 class="text-lg font-bold text-ink">Teams</h2>
+        <p class="text-sm text-gray-400">Manage teams and their members · SR&amp;ED vs Unclaimed hours for the full year.</p>
+      </div>
+      <button type="button" (click)="openAdd(vm.employees)"
+        class="shrink-0 text-sm text-white bg-brand-600 hover:bg-brand-700 rounded-lg px-4 py-2 transition-colors">
+        + Add team
+      </button>
+    </div>
+
+    @if (vm.total === 0) {
+      <p class="px-6 py-8 text-sm text-gray-400 text-center">No teams yet.</p>
+    } @else {
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+          <thead class="text-xs uppercase tracking-wide text-gray-500 bg-gray-50">
+            <tr>
+              <th class="px-6 py-3">Team</th>
+              <th class="px-6 py-3">Members</th>
+              <th class="px-6 py-3 text-right">SR&amp;ED Hours</th>
+              <th class="px-6 py-3 text-right">Unclaimed Hours</th>
+              <th class="px-6 py-3 text-right">Total Hours</th>
+              <th class="px-6 py-3 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            @for (team of vm.rows; track team.teamId) {
+              <tr class="hover:bg-gray-50 transition-colors align-top">
+                <td class="px-6 py-3 whitespace-nowrap">
+                  <span class="inline-flex items-center gap-2 font-medium text-gray-900">
+                    <span class="h-2.5 w-2.5 rounded-full" [style.background-color]="team.color"></span>
+                    {{ team.teamName }}
+                  </span>
+                </td>
+                <td class="px-6 py-3 text-gray-600">
+                  <span class="font-medium text-gray-900">{{ team.members.length }}</span>
+                  @if (team.members.length) {
+                    <span class="text-gray-400"> · {{ names(team.members) }}</span>
+                  }
+                </td>
+                <td class="px-6 py-3 text-right text-brand-700 font-medium">{{ team.teamSredHours | number }}</td>
+                <td class="px-6 py-3 text-right text-gray-500">{{ team.teamUnclaimedHours | number }}</td>
+                <td class="px-6 py-3 text-right font-semibold text-ink">{{ team.teamSredHours + team.teamUnclaimedHours | number }}</td>
+                <td class="px-6 py-3 text-right whitespace-nowrap">
+                  @if (team.teamId !== null) {
+                    <button type="button" (click)="openEdit(team, vm.employees)"
+                      class="text-xs text-brand-600 hover:bg-brand-50 rounded px-2 py-1 transition-colors">Edit</button>
+                    <button type="button" (click)="askDelete(team)"
+                      class="text-xs text-danger hover:bg-danger/10 rounded px-2 py-1 transition-colors">Delete</button>
+                  } @else {
+                    <span class="text-xs text-gray-300">—</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <app-paginator [total]="vm.total" [pageSize]="vm.pageSize" [page]="vm.page" (pageChange)="setPage($event)"></app-paginator>
+    }
+  } @else {
+    <div class="px-6 py-6 space-y-3 animate-pulse" aria-hidden="true">
+      <div class="h-4 w-1/3 bg-gray-100 rounded"></div>
+      <div class="h-9 bg-gray-100 rounded"></div>
+      <div class="h-9 bg-gray-100 rounded"></div>
+    </div>
+  }
+</div>
+
+<!-- Add / edit modal -->
+@if (formOpen) {
+  <app-team-form [team]="editing" [employees]="allEmployees" [memberIds]="editingMemberIds"
+    (save)="onSave($event)" (cancel)="closeForm()"></app-team-form>
+}
+
+<!-- Delete confirmation (members are unassigned, not deleted) -->
+@if (pendingDelete; as team) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/40" (click)="cancelDelete()"></div>
+    <div class="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl p-6" role="alertdialog" aria-modal="true">
+      <h3 class="text-base font-bold text-ink">Remove team?</h3>
+      <p class="text-sm text-gray-500 mt-2">
+        Removing <span class="font-medium text-gray-700">{{ team.teamName }}</span> unassigns its
+        {{ team.members.length }} member{{ team.members.length === 1 ? '' : 's' }} (they stay, with no team).
+      </p>
+      <div class="flex justify-end gap-3 mt-5">
+        <button type="button" (click)="cancelDelete()"
+          class="text-sm text-gray-600 hover:bg-gray-100 rounded-lg px-4 py-2 transition-colors">Cancel</button>
+        <button type="button" (click)="confirmDelete()"
+          class="text-sm text-white bg-danger hover:bg-danger-dark rounded-lg px-4 py-2 transition-colors">Remove</button>
+      </div>
+    </div>
+  </div>
+}

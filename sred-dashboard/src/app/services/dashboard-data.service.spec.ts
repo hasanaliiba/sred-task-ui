@@ -273,4 +273,37 @@ describe('DashboardDataService', () => {
     expect(exp?.creditableBase).toBe(0);
     expect(exp?.creditAmount).toBe(0);
   });
+
+  it('adds, updates, and removes a team (removal unassigns its members, not deletes them)', async () => {
+    flushSeed();
+    service.setActiveClient('acme');
+
+    service.addTeam({ id: 't2', name: 'Team Two', color: '#111' });
+    let teams = await firstValueFrom(service.teams$);
+    expect(teams.map((t) => t.id)).toContain('t2');
+
+    service.updateTeam({ id: 't1', name: 'Renamed', color: '#000' });
+    teams = await firstValueFrom(service.teams$);
+    expect(teams.find((t) => t.id === 't1')?.name).toBe('Renamed');
+
+    // e1 is on t1; removing t1 unassigns e1 but keeps the employee.
+    service.removeTeam('t1');
+    teams = await firstValueFrom(service.teams$);
+    expect(teams.find((t) => t.id === 't1')).toBeUndefined();
+    const employees = await firstValueFrom(service.employees$);
+    const e1 = employees.find((e) => e.employee.id === 'e1');
+    expect(e1).toBeTruthy();
+    expect(e1?.employee.teamId).toBeNull();
+  });
+
+  it('assigns team members: chosen join the team; previously-on-team but unchosen are unassigned', async () => {
+    flushSeed();
+    service.setActiveClient('acme');
+
+    // t1 currently has e1. Assign only e2 → e2 joins t1, e1 is unassigned.
+    service.assignTeamMembers('t1', ['e2']);
+    const employees = await firstValueFrom(service.employees$);
+    expect(employees.find((e) => e.employee.id === 'e2')?.employee.teamId).toBe('t1');
+    expect(employees.find((e) => e.employee.id === 'e1')?.employee.teamId).toBeNull();
+  });
 });

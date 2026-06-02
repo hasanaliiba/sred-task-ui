@@ -230,6 +230,45 @@ export class DashboardDataService {
     }));
   }
 
+  // ---- Team CRUD (immutable; membership is tracked via employee.teamId) ----
+
+  addTeam(team: Team): void {
+    this.mutateActiveWorkspace((ws) => ({ ...ws, teams: [...ws.teams, team] }));
+  }
+
+  updateTeam(team: Team): void {
+    this.mutateActiveWorkspace((ws) => ({
+      ...ws,
+      teams: ws.teams.map((t) => (t.id === team.id ? team : t)),
+    }));
+  }
+
+  /** Removes a team and unassigns its members (employees stay; their teamId → null). */
+  removeTeam(teamId: string): void {
+    this.mutateActiveWorkspace((ws) => ({
+      ...ws,
+      teams: ws.teams.filter((t) => t.id !== teamId),
+      employees: ws.employees.map((e) => (e.teamId === teamId ? { ...e, teamId: null } : e)),
+    }));
+  }
+
+  /**
+   * Sets a team's membership: chosen employees get this teamId; any employee that was
+   * on this team but is no longer chosen is unassigned (teamId → null). Employees on
+   * other teams are untouched unless chosen here (then moved to this team).
+   */
+  assignTeamMembers(teamId: string, memberIds: string[]): void {
+    const chosen = new Set(memberIds);
+    this.mutateActiveWorkspace((ws) => ({
+      ...ws,
+      employees: ws.employees.map((e) => {
+        if (chosen.has(e.id)) return e.teamId === teamId ? e : { ...e, teamId };
+        if (e.teamId === teamId) return { ...e, teamId: null };
+        return e;
+      }),
+    }));
+  }
+
   // ---- Project CRUD (immutable, cascade on remove; Feature F) --------------
 
   addProject(project: Project): void {
