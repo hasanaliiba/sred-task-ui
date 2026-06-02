@@ -10,6 +10,7 @@ import { TeamHoursChartComponent } from '../../components/team-hours-chart/team-
 import { TeamHourAndCostChartComponent } from '../../components/team-hour-and-cost-chart/team-hour-and-cost-chart.component';
 import { ProjectChartComponent } from '../../components/project-chart/project-chart.component';
 import { ProjectsSummaryComponent } from '../../components/projects-summary/projects-summary.component';
+import { ExpenditureSummaryComponent } from '../../components/expenditure-summary/expenditure-summary.component';
 import { YearProjectionComponent } from '../../components/year-projection/year-projection.component';
 import { RevealDirective } from '../../shared';
 
@@ -31,6 +32,7 @@ import { RevealDirective } from '../../shared';
     TeamHourAndCostChartComponent,
     ProjectChartComponent,
     ProjectsSummaryComponent,
+    ExpenditureSummaryComponent,
     YearProjectionComponent,
     RevealDirective,
   ],
