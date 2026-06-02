@@ -7,6 +7,7 @@ import { SummaryTilesComponent } from '../../components/summary-tiles/summary-ti
 import { EmployeeHoursChartComponent } from '../../components/employee-hours-chart/employee-hours-chart.component';
 import { EmployeeHourAndCostChartComponent } from '../../components/employee-hour-and-cost-chart/employee-hour-and-cost-chart.component';
 import { TeamHoursChartComponent } from '../../components/team-hours-chart/team-hours-chart.component';
+import { TeamHourAndCostChartComponent } from '../../components/team-hour-and-cost-chart/team-hour-and-cost-chart.component';
 import { ProjectChartComponent } from '../../components/project-chart/project-chart.component';
 import { ProjectsSummaryComponent } from '../../components/projects-summary/projects-summary.component';
 import { YearProjectionComponent } from '../../components/year-projection/year-projection.component';
@@ -27,6 +28,7 @@ import { RevealDirective } from '../../shared';
     EmployeeHoursChartComponent,
     EmployeeHourAndCostChartComponent,
     TeamHoursChartComponent,
+    TeamHourAndCostChartComponent,
     ProjectChartComponent,
     ProjectsSummaryComponent,
     YearProjectionComponent,

@@ -5,6 +5,7 @@ import {
   buildGrandTotals,
   buildProjection,
   buildProjectSummaries,
+  buildTeamCostBreakdown,
   effectiveSalary,
   fractionElapsed,
   hourlyRate,
@@ -202,6 +203,25 @@ describe('derivations — period metric total (drives the tiles)', () => {
     const summaries = buildProjectSummaries(ws, 'FY');
     const byHand = summaries.reduce((s, p) => s + projectMetricValue(p, 'credit', ws.client.sredCreditRate), 0);
     expect(periodMetricTotal(ws, 'FY', 'credit')).toBe(byHand);
+  });
+});
+
+describe('derivations — team cost breakdown', () => {
+  it('aggregates SR&ED hours and cost per team, with an Unassigned group', () => {
+    const ws = workedExampleWorkspace(); // A 10h@$100, B 20h@$20, C 50h@$10 on SR&ED project 'p'
+    ws.teams = [{ id: 'tm', name: 'Team', color: '#000' }];
+    ws.employees[0].teamId = 'tm'; // A → team
+    ws.employees[1].teamId = 'tm'; // B → team
+    // C stays unassigned (teamId null)
+
+    const rows = buildTeamCostBreakdown(ws, 'FY');
+    const team = rows.find((r) => r.teamId === 'tm')!;
+    expect(team.sredHours).toBe(30); // 10 + 20
+    expect(team.sredCost).toBe(1400); // 1000 + 400
+
+    const unassigned = rows.find((r) => r.teamId === null)!;
+    expect(unassigned.sredHours).toBe(50);
+    expect(unassigned.sredCost).toBe(500);
   });
 });
 

@@ -19,6 +19,7 @@ import type {
   HoursSplit,
   ProjectSummary,
   Projection,
+  TeamCost,
   TeamHoursBreakdown,
 } from '../models';
 
@@ -266,6 +267,36 @@ export function buildEmployeeCostBreakdown(ws: ClientWorkspace, period: Period):
     const rate = hourlyRate(employee, std);
     return { id: employee.id, name: employee.name, hours, hourlyRate: rate, amount: hours * rate };
   });
+}
+
+/** Per-team SR&ED hours + SR&ED labor cost for the period (employee costs grouped by team). */
+export function buildTeamCostBreakdown(ws: ClientWorkspace, period: Period): TeamCost[] {
+  const costs = buildEmployeeCostBreakdown(ws, period);
+  const teamOf = new Map(ws.employees.map((e) => [e.id, e.teamId]));
+  const acc = new Map<string | null, { hours: number; cost: number }>();
+  for (const c of costs) {
+    const teamId = teamOf.get(c.id) ?? null;
+    const cur = acc.get(teamId) ?? { hours: 0, cost: 0 };
+    acc.set(teamId, { hours: cur.hours + c.hours, cost: cur.cost + c.amount });
+  }
+  const rows: TeamCost[] = ws.teams.map((t) => ({
+    teamId: t.id,
+    teamName: t.name,
+    color: t.color,
+    sredHours: acc.get(t.id)?.hours ?? 0,
+    sredCost: acc.get(t.id)?.cost ?? 0,
+  }));
+  const unassigned = acc.get(null);
+  if (unassigned && (unassigned.hours > 0 || unassigned.cost > 0)) {
+    rows.push({
+      teamId: null,
+      teamName: 'Unassigned',
+      color: '#9ca3af',
+      sredHours: unassigned.hours,
+      sredCost: unassigned.cost,
+    });
+  }
+  return rows;
 }
 
 /** Teams with members and aggregated hours, plus an "Unassigned" group (Feature D & H). */

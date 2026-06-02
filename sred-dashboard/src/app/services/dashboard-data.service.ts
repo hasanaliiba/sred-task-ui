@@ -21,6 +21,7 @@ import {
   ProjectSummary,
   Projection,
   Team,
+  TeamCost,
   TeamHoursBreakdown,
   User,
   VendorInvoice,
@@ -34,6 +35,7 @@ import {
   buildGrandTotals,
   buildProjection,
   buildProjectSummaries,
+  buildTeamCostBreakdown,
   buildTeamHoursBreakdown,
 } from '../core/derivations';
 
@@ -159,6 +161,11 @@ export class DashboardDataService {
     this.activeWorkspace$,
     this.period$$,
   ]).pipe(map(([w, p]) => (w ? buildTeamHoursBreakdown(w, p) : [])));
+
+  readonly teamCostBreakdown$: Observable<TeamCost[]> = combineLatest([
+    this.activeWorkspace$,
+    this.period$$,
+  ]).pipe(map(([w, p]) => (w ? buildTeamCostBreakdown(w, p) : [])));
 
   /** Full fiscal-year team breakdown for the Teams management grid (period-independent). */
   readonly teamHoursBreakdownFull$: Observable<TeamHoursBreakdown[]> = this.activeWorkspace$.pipe(

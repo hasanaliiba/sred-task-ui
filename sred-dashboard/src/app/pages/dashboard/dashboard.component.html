@@ -24,9 +24,10 @@
     <app-employee-hour-and-cost-chart></app-employee-hour-and-cost-chart>
   </section>
 
-  <!-- Team SR&ED vs Unclaimed hours chart (the teams roster grid lives on /teams) -->
-  <section appReveal>
+  <!-- Team charts: SR&ED-vs-Unclaimed hours + SR&ED hours & cost (roster grid lives on /teams) -->
+  <section appReveal class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <app-team-hours-chart></app-team-hours-chart>
+    <app-team-hour-and-cost-chart></app-team-hour-and-cost-chart>
   </section>
 
   <!-- Per-project chart (Req 4) -->
