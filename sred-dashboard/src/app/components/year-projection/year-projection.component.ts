@@ -33,14 +33,18 @@ export class YearProjectionComponent {
     }),
   );
 
-  readonly chart: ApexChart = { type: 'radialBar', height: 200, fontFamily: 'inherit' };
+  // Semicircle gauge (apexcharts "basic gauge"): half the vertical footprint of a full radial.
+  readonly chart: ApexChart = { type: 'radialBar', height: 170, offsetY: 6, fontFamily: 'inherit' };
   readonly gaugeLabels = ['Year elapsed'];
   readonly plotOptions: ApexPlotOptions = {
     radialBar: {
-      hollow: { size: '58%' },
+      startAngle: -90,
+      endAngle: 90,
+      hollow: { size: '55%' },
+      track: { background: '#e6f2ff', strokeWidth: '100%' },
       dataLabels: {
-        name: { fontSize: '12px', offsetY: 18 },
-        value: { fontSize: '22px', fontWeight: 700, offsetY: -16, formatter: (v) => `${v}%` },
+        name: { show: true, fontSize: '11px', offsetY: 22, color: '#94a3b8' },
+        value: { fontSize: '24px', fontWeight: 700, offsetY: -10, formatter: (v) => `${v}%` },
       },
     },
   };
