@@ -151,6 +151,16 @@ describe('derivations — projection (linear run-rate)', () => {
     expect(p.projectedHours * p.fractionElapsed).toBeCloseTo(p.ytdHours, 5);
     expect(p.remainingHours).toBeCloseTo(80, 5);
   });
+
+  it('is SR&ED-only: unclaimed hours and labor are excluded from the projection', () => {
+    const ws = workedExampleWorkspace('2025-07-02');
+    // Add an Unclaimed project with 90h by employee A ($100/h) — must NOT appear in the projection.
+    ws.projects.push({ id: 'unc', name: 'Unclaimed', color: '#999', isSred: false });
+    ws.timesheets.push({ employeeId: 'a', projectId: 'unc', hours: months({ m1: 90 }) });
+    const p = buildProjection(ws);
+    expect(p.ytdHours).toBe(80); // still only the 80 SR&ED hours (not 170)
+    expect(p.ytdAmount).toBe(1900); // SR&ED labor only (the 90h × $100 unclaimed is excluded)
+  });
 });
 
 describe('derivations — employee cost breakdown (SR&ED only)', () => {

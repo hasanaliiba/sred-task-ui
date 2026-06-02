@@ -488,18 +488,19 @@ export function buildExpenditureSummary(ws: ClientWorkspace, period: Period): Ex
 /** Full-year projection via linear run-rate (Req 6). Always FY-based, period-independent. */
 export function buildProjection(ws: ClientWorkspace): Projection {
   const fy = buildProjectSummaries(ws, 'FY');
-  const totals = buildGrandTotals(fy);
   const expenditure = buildExpenditureSummary(ws, 'FY');
-  // SR&ED-relevant expenditure (labor + SR&ED vendor only) — non-SR&ED vendor excluded.
-  const sredExp = fy.reduce((sum, p) => sum + sredExpenditure(p), 0);
+  // The projection is SR&ED-only — unclaimed hours/labor are excluded entirely.
+  // Hours: only hours on SR&ED projects. Expenditure: SR&ED labor + SR&ED vendor.
+  const sredHours = fy.filter((p) => p.isSred).reduce((sum, p) => sum + p.hours, 0);
+  const sredExp = expenditure.totalSredExpenditure;
   const fraction = fractionElapsed(ws.client);
   const project = (ytd: number) => ytd / fraction;
 
   return {
     fractionElapsed: fraction,
-    ytdHours: totals.totalHours,
-    projectedHours: project(totals.totalHours),
-    remainingHours: project(totals.totalHours) - totals.totalHours,
+    ytdHours: sredHours,
+    projectedHours: project(sredHours),
+    remainingHours: project(sredHours) - sredHours,
     ytdAmount: sredExp,
     projectedAmount: project(sredExp),
     remainingAmount: project(sredExp) - sredExp,

@@ -9,7 +9,7 @@
             Linear run-rate from fiscal-year start to
             <span class="font-medium text-gray-700">{{ vm.client?.asOfDate | date: 'mediumDate' : 'UTC' }}</span>.
             About <span class="font-medium text-gray-700">{{ vm.pct }}%</span> of the year has elapsed;
-            full-year figures assume the same pace continues.
+            full-year figures assume the same pace continues. <span class="text-gray-400">SR&amp;ED-eligible work only.</span>
           </p>
         </div>
         <div class="flex justify-center">
@@ -27,7 +27,7 @@
       <div class="grid sm:grid-cols-3 gap-4">
         <!-- Hours -->
         <div class="bg-white rounded-xl shadow ring-1 ring-gray-100 p-5">
-          <p class="text-xs uppercase tracking-wide text-gray-400">Hours</p>
+          <p class="text-xs uppercase tracking-wide text-gray-400">SR&amp;ED hours</p>
           <p class="text-2xl font-extrabold text-ink mt-1" [appCountUp]="p.ytdHours" [countUpSuffix]="' h'"></p>
           <p class="text-xs text-gray-400">year to date</p>
           <div class="mt-3 pt-3 border-t border-gray-100">
@@ -39,7 +39,7 @@
 
         <!-- Amount -->
         <div class="bg-white rounded-xl shadow ring-1 ring-gray-100 p-5">
-          <p class="text-xs uppercase tracking-wide text-gray-400">Expenditure</p>
+          <p class="text-xs uppercase tracking-wide text-gray-400">SR&amp;ED expenditure</p>
           <p class="text-2xl font-extrabold text-ink mt-1" [appCountUp]="p.ytdAmount" countUpPrefix="$"></p>
           <p class="text-xs text-gray-400">year to date</p>
           <div class="mt-3 pt-3 border-t border-gray-100">
