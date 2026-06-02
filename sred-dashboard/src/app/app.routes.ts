@@ -6,6 +6,7 @@ import { ClientShellComponent } from './layouts/client-shell.component';
 import { AdminShellComponent } from './layouts/admin-shell.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { EmployeesPageComponent } from './pages/employees/employees-page.component';
+import { TeamsPageComponent } from './pages/teams/teams-page.component';
 import { ProjectsPageComponent } from './pages/projects/projects-page.component';
 import { InvoicesPageComponent } from './pages/invoices/invoices-page.component';
 import { AdminFeedbackComponent } from './pages/admin/admin-feedback.component';
@@ -22,6 +23,7 @@ export const routes: Routes = [
     children: [
       { path: 'analytics', component: DashboardComponent },
       { path: 'employees', component: EmployeesPageComponent },
+      { path: 'teams', component: TeamsPageComponent },
       { path: 'projects', component: ProjectsPageComponent },
       { path: 'invoices', component: InvoicesPageComponent },
       { path: '', pathMatch: 'full', redirectTo: 'analytics' },

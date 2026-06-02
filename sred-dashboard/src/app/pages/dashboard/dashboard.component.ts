@@ -6,7 +6,6 @@ import { MetricToggleComponent } from '../../components/metric-toggle/metric-tog
 import { SummaryTilesComponent } from '../../components/summary-tiles/summary-tiles.component';
 import { EmployeeHoursChartComponent } from '../../components/employee-hours-chart/employee-hours-chart.component';
 import { EmployeeHourAndCostChartComponent } from '../../components/employee-hour-and-cost-chart/employee-hour-and-cost-chart.component';
-import { TeamsTableComponent } from '../../components/teams-table/teams-table.component';
 import { TeamHoursChartComponent } from '../../components/team-hours-chart/team-hours-chart.component';
 import { ProjectChartComponent } from '../../components/project-chart/project-chart.component';
 import { ProjectsSummaryComponent } from '../../components/projects-summary/projects-summary.component';
@@ -27,7 +26,6 @@ import { RevealDirective } from '../../shared';
     SummaryTilesComponent,
     EmployeeHoursChartComponent,
     EmployeeHourAndCostChartComponent,
-    TeamsTableComponent,
     TeamHoursChartComponent,
     ProjectChartComponent,
     ProjectsSummaryComponent,

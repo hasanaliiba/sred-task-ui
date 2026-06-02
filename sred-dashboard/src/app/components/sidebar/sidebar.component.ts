@@ -30,6 +30,7 @@ export class SidebarComponent {
 
   readonly manage = [
     { path: '/employees', label: 'Employees' },
+    { path: '/teams', label: 'Teams' },
     { path: '/projects', label: 'Projects' },
     { path: '/invoices', label: 'Invoices' },
   ];
