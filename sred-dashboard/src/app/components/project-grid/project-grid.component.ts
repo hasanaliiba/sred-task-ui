@@ -8,6 +8,7 @@ import { Project, ProjectSummary } from '../../models';
 import { ProjectFormComponent } from '../project-form/project-form.component';
 import { ProjectDetailComponent } from '../project-detail/project-detail.component';
 import { PaginatorComponent } from '../paginator/paginator.component';
+import { sredExpenditure } from '../../core/derivations';
 
 /**
  * Project list + CRUD (Feature F). Lists projects with their period hours/$,
@@ -23,6 +24,8 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 export class ProjectGridComponent {
   private readonly data = inject(DashboardDataService);
 
+  /** Amount column = SR&ED-relevant expenditure (labor + SR&ED vendor only). */
+  readonly sredExpenditure = sredExpenditure;
   readonly pageSize = 10;
   private readonly page$ = new BehaviorSubject<number>(1);
   private readonly search$ = new BehaviorSubject<string>('');

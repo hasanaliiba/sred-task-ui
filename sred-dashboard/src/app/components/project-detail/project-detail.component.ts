@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 
 import { DashboardDataService } from '../../services/dashboard-data.service';
 import { ProjectContributor, ProjectSummary } from '../../models';
-import { projectMetricValue } from '../../core/derivations';
+import { projectMetricValue, sredExpenditure } from '../../core/derivations';
 
 /**
  * Read-only per-project detail modal (full year). Shows the project's hours and a
@@ -23,6 +23,9 @@ export class ProjectDetailComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
 
   private readonly data = inject(DashboardDataService);
+
+  /** Total cost shown = labor + SR&ED vendor only (non-SR&ED vendor excluded). */
+  readonly sredExpenditure = sredExpenditure;
 
   /** SR&ED credit for this project, using the active client's credit rate. */
   credit$: Observable<number> = of(0);

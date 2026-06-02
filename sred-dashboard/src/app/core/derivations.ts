@@ -163,13 +163,23 @@ export function buildProjectSummaries(ws: ClientWorkspace, period: Period): Proj
   });
 }
 
+/**
+ * Expenditure counted in the SR&ED-focused views: labor (all) + **SR&ED-flagged vendor
+ * only**. Non-SR&ED vendor invoices are excluded everywhere this is used (donut, tiles,
+ * project chart/grid/modal, projection). The blue grand-totals strip is the only place
+ * that still shows the true total — `ProjectSummary.amount` (labor + ALL vendor).
+ */
+export function sredExpenditure(summary: ProjectSummary): number {
+  return summary.laborAmount + summary.sredVendorAmount;
+}
+
 /** The value of a project under the active metric (hours / $ expenditure / SR&ED credit). */
 export function projectMetricValue(summary: ProjectSummary, metric: Metric, creditRate: number): number {
   switch (metric) {
     case 'hours':
       return summary.hours;
     case 'expenditure':
-      return summary.amount;
+      return sredExpenditure(summary);
     case 'credit': {
       const sredLabor = summary.isSred ? summary.laborAmount : 0;
       return (sredLabor + summary.sredVendorAmount) * creditRate;
@@ -188,7 +198,7 @@ export function periodMetricTotal(ws: ClientWorkspace, period: Period, metric: M
     case 'hours':
       return summaries.reduce((sum, s) => sum + s.hours, 0);
     case 'expenditure':
-      return summaries.reduce((sum, s) => sum + s.amount, 0);
+      return summaries.reduce((sum, s) => sum + sredExpenditure(s), 0);
     case 'credit': {
       const rate = ws.client.sredCreditRate;
       return summaries.reduce((sum, s) => sum + projectMetricValue(s, 'credit', rate), 0);
@@ -480,6 +490,8 @@ export function buildProjection(ws: ClientWorkspace): Projection {
   const fy = buildProjectSummaries(ws, 'FY');
   const totals = buildGrandTotals(fy);
   const expenditure = buildExpenditureSummary(ws, 'FY');
+  // SR&ED-relevant expenditure (labor + SR&ED vendor only) — non-SR&ED vendor excluded.
+  const sredExp = fy.reduce((sum, p) => sum + sredExpenditure(p), 0);
   const fraction = fractionElapsed(ws.client);
   const project = (ytd: number) => ytd / fraction;
 
@@ -488,9 +500,9 @@ export function buildProjection(ws: ClientWorkspace): Projection {
     ytdHours: totals.totalHours,
     projectedHours: project(totals.totalHours),
     remainingHours: project(totals.totalHours) - totals.totalHours,
-    ytdAmount: totals.totalAmount,
-    projectedAmount: project(totals.totalAmount),
-    remainingAmount: project(totals.totalAmount) - totals.totalAmount,
+    ytdAmount: sredExp,
+    projectedAmount: project(sredExp),
+    remainingAmount: project(sredExp) - sredExp,
     ytdCredit: expenditure.creditAmount,
     projectedCredit: project(expenditure.creditAmount),
   };

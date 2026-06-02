@@ -16,6 +16,7 @@ import {
 } from 'ng-apexcharts';
 
 import { DashboardDataService } from '../../services/dashboard-data.service';
+import { sredExpenditure } from '../../core/derivations';
 
 const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 });
 const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
@@ -42,7 +43,7 @@ export class ProjectChartComponent {
       empty: projects.length === 0,
       series: [
         { name: 'Hours', type: 'column', data: projects.map((p) => p.hours) },
-        { name: 'Amount', type: 'line', data: projects.map((p) => Math.round(p.amount)) },
+        { name: 'Amount', type: 'line', data: projects.map((p) => Math.round(sredExpenditure(p))) },
       ] as ApexAxisChartSeries,
       xaxis: { categories: projects.map((p) => p.name) } as ApexXAxis,
     })),

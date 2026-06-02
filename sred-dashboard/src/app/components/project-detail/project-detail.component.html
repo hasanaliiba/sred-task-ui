@@ -58,12 +58,12 @@
         <dd class="text-lg font-bold text-ink">{{ summary.laborAmount | currency: 'USD' : 'symbol' : '1.0-0' }}</dd>
       </div>
       <div>
-        <dt class="text-xs text-gray-400">Vendor cost</dt>
-        <dd class="text-lg font-bold text-ink">{{ summary.vendorAmount | currency: 'USD' : 'symbol' : '1.0-0' }}</dd>
+        <dt class="text-xs text-gray-400">SR&amp;ED vendor</dt>
+        <dd class="text-lg font-bold text-ink">{{ summary.sredVendorAmount | currency: 'USD' : 'symbol' : '1.0-0' }}</dd>
       </div>
       <div>
         <dt class="text-xs text-gray-400">Total cost</dt>
-        <dd class="text-lg font-bold text-ink">{{ summary.amount | currency: 'USD' : 'symbol' : '1.0-0' }}</dd>
+        <dd class="text-lg font-bold text-ink">{{ sredExpenditure(summary) | currency: 'USD' : 'symbol' : '1.0-0' }}</dd>
       </div>
     </dl>
 

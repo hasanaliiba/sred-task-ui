@@ -17,6 +17,7 @@ import {
   periodMetricTotal,
   projectMetricValue,
   quarterOfDate,
+  sredExpenditure,
 } from './derivations';
 import { ProjectSummary } from '../models';
 
@@ -185,6 +186,15 @@ describe('derivations — project metric value', () => {
   it('a non-SR&ED project contributes no labor credit', () => {
     const unc: ProjectSummary = { projectId: 'u', name: 'U', color: '#000', isSred: false, hours: 50, laborAmount: 1000, vendorAmount: 0, sredVendorAmount: 0, amount: 1000 };
     expect(projectMetricValue(unc, 'credit', 0.5)).toBe(0);
+  });
+
+  it('expenditure excludes non-SR&ED vendor invoices (labor + SR&ED vendor only)', () => {
+    // labor 1000, vendor 500 of which only 200 is SR&ED → 300 non-SR&ED vendor excluded.
+    const p: ProjectSummary = { projectId: 'p', name: 'P', color: '#000', isSred: true, hours: 40, laborAmount: 1000, vendorAmount: 500, sredVendorAmount: 200, amount: 1500 };
+    expect(sredExpenditure(p)).toBe(1200); // 1000 + 200 (not 1500)
+    expect(projectMetricValue(p, 'expenditure', 0.5)).toBe(1200);
+    // `amount` (the blue strip's value) still includes all vendor.
+    expect(p.amount).toBe(1500);
   });
 });
 
