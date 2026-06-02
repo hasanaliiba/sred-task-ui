@@ -14,7 +14,9 @@ import { ClientHeaderComponent } from '../../components/client-header/client-hea
   imports: [InvoiceGridComponent, ExpenditureSummaryComponent, ClientHeaderComponent],
   template: `
     <div class="max-w-7xl mx-auto px-4 py-8 space-y-6">
-      <app-client-header></app-client-header>
+      <div class="sticky top-14 lg:top-0 z-20 bg-gray-50/95 backdrop-blur py-2">
+        <app-client-header></app-client-header>
+      </div>
       <header>
         <h1 class="text-2xl font-bold text-ink">Invoices &amp; Credit</h1>
         <p class="text-sm text-gray-400">Vendor invoices, government assistance, and the resulting SR&amp;ED credit.</p>

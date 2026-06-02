@@ -1,12 +1,9 @@
-<!-- Compact client header — the first header; keeps the blue styling, scrolls away (Req 1) -->
-<div class="max-w-7xl mx-auto px-4 pt-5">
-  <app-client-header></app-client-header>
-</div>
-
-<!-- Sticky compact controls: metric toggle + month range + metric-aware period tiles.
-     The tiles ARE the period selector; this block stays pinned while the page scrolls. -->
-<div class="sticky top-14 lg:top-0 z-20 bg-gray-50/95 backdrop-blur border-b border-gray-200 mt-4">
-  <div class="max-w-7xl mx-auto px-4 py-2.5 space-y-2.5">
+<!-- Sticky top: client header + period/metric controls pinned together (Req 1).
+     The compact blue header sits above the metric toggle, month range, and the
+     metric-aware period tiles (the tiles ARE the period selector). -->
+<div class="sticky top-14 lg:top-0 z-20 bg-gray-50/95 backdrop-blur border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 py-3 space-y-3">
+    <app-client-header></app-client-header>
     <div class="flex flex-wrap items-center justify-between gap-3">
       <app-metric-toggle></app-metric-toggle>
       <app-date-range-picker></app-date-range-picker>
