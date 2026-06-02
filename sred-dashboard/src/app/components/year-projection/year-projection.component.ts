@@ -44,7 +44,7 @@ export class YearProjectionComponent {
       track: { background: '#e6f2ff', strokeWidth: '100%' },
       dataLabels: {
         name: { show: true, fontSize: '11px', offsetY: 22, color: '#94a3b8' },
-        value: { fontSize: '24px', fontWeight: 700, offsetY: -10, formatter: (v) => `${v}%` },
+        value: { fontSize: '24px', fontWeight: 700, offsetY: -10, color: '#324455', formatter: (v) => `${v}%` },
       },
     },
   };
