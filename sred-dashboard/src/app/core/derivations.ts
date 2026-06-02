@@ -13,6 +13,7 @@ import type {
 import type {
   EmployeeCost,
   EmployeeDetail,
+  EmployeeProjectHours,
   EmployeeRow,
   ExpenditureSummary,
   GrandTotals,
@@ -312,6 +313,8 @@ export function buildTeamDetail(ws: ClientWorkspace, teamId: string | null, peri
   let unclaimedHours = 0;
   let sredCost = 0;
   let totalCost = 0;
+  // Team's hours per project: sum each member's per-project lines into one map.
+  const byProject = new Map<string, EmployeeProjectHours>();
   for (const e of members) {
     const split = splitForEmployee(ws, e, period);
     const rate = hourlyRate(e, std);
@@ -319,6 +322,14 @@ export function buildTeamDetail(ws: ClientWorkspace, teamId: string | null, peri
     unclaimedHours += split.unclaimedHours;
     sredCost += split.sredHours * rate;
     totalCost += split.totalHours * rate;
+    for (const line of projectHoursForEmployee(ws, e.id, period)) {
+      const existing = byProject.get(line.projectId);
+      if (existing) {
+        existing.hours += line.hours;
+      } else {
+        byProject.set(line.projectId, { ...line });
+      }
+    }
   }
   const totalHours = sredHours + unclaimedHours;
   return {
@@ -332,6 +343,7 @@ export function buildTeamDetail(ws: ClientWorkspace, teamId: string | null, peri
     sredCost,
     totalCost,
     credit: sredCost * ws.client.sredCreditRate,
+    perProject: [...byProject.values()].filter((l) => l.hours > 0).sort((a, b) => b.hours - a.hours),
   };
 }
 

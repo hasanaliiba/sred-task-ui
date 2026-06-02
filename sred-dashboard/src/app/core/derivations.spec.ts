@@ -239,6 +239,10 @@ describe('derivations — team detail (modal)', () => {
     expect(tm.sredCost).toBe(1400); // 1000 + 400
     expect(tm.credit).toBe(700); // 1400 × 0.5
     expect(tm.sredAllocation).toBe(1);
+    // A + B both on project 'p' → one project line, hours summed.
+    expect(tm.perProject.length).toBe(1);
+    expect(tm.perProject[0].projectId).toBe('p');
+    expect(tm.perProject[0].hours).toBe(30);
 
     const unassigned = buildTeamDetail(ws, null, 'FY')!; // C only
     expect(unassigned.teamName).toBe('Unassigned');

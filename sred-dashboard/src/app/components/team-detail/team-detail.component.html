@@ -28,6 +28,27 @@
         </div>
       </div>
 
+      <!-- Per-project breakdown (team's hours per project, members summed) -->
+      <div class="mt-5">
+        <p class="text-xs uppercase tracking-wide text-gray-400 mb-2">Projects</p>
+        @if (detail.perProject.length === 0) {
+          <p class="text-sm text-gray-400">No hours logged.</p>
+        } @else {
+          <ul class="space-y-1.5 max-h-44 overflow-y-auto">
+            @for (p of detail.perProject; track p.projectId) {
+              <li class="flex items-center justify-between text-sm">
+                <span class="inline-flex items-center gap-2">
+                  <span class="h-2.5 w-2.5 rounded-full" [style.background-color]="p.color"></span>
+                  {{ p.name }}
+                  @if (!p.isSred) { <span class="text-[10px] uppercase text-gray-400">unclaimed</span> }
+                </span>
+                <span class="font-medium text-gray-700">{{ p.hours | number }}h</span>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+
       <!-- Summary: hours, then cost (expenses) + credit -->
       <dl class="mt-5 grid grid-cols-3 gap-3 text-center border-t border-gray-100 pt-4">
         <div>

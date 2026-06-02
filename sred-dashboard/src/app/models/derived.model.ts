@@ -75,6 +75,7 @@ export interface TeamDetail {
   sredCost: number; // Σ members' (SR&ED hours × hourly rate)
   totalCost: number; // Σ members' (total hours × hourly rate)
   credit: number; // sredCost × client.sredCreditRate
+  perProject: EmployeeProjectHours[]; // team's hours per project (members summed), desc
 }
 
 /** A team's members and aggregated hours split (Feature D & H). */
