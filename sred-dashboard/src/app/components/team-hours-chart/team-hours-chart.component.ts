@@ -45,7 +45,7 @@ export class TeamHoursChartComponent {
 
   readonly chart: ApexChart = {
     type: 'bar',
-    height: 320,
+    height: 360,
     stacked: true,
     toolbar: { show: false },
     zoom: { enabled: false },

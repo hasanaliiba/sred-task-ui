@@ -48,7 +48,7 @@ export class EmployeeHourAndCostChartComponent {
 
   readonly chart: ApexChart = {
     type: 'line',
-    height: 380,
+    height: 360,
     stacked: false,
     toolbar: { show: false },
     zoom: { enabled: false },

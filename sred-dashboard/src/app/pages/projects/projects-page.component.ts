@@ -13,10 +13,6 @@ import { ClientHeaderComponent } from '../../components/client-header/client-hea
       <div class="sticky top-14 lg:top-0 z-20 bg-gray-50/95 backdrop-blur py-2">
         <app-client-header></app-client-header>
       </div>
-      <header>
-        <h1 class="text-2xl font-bold text-ink">Projects</h1>
-        <p class="text-sm text-gray-400">Add, edit, and remove projects · removing one cascades to its hours and invoices.</p>
-      </header>
       <app-project-grid></app-project-grid>
     </div>
   `,

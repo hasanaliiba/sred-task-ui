@@ -17,10 +17,6 @@ import { ClientHeaderComponent } from '../../components/client-header/client-hea
       <div class="sticky top-14 lg:top-0 z-20 bg-gray-50/95 backdrop-blur py-2">
         <app-client-header></app-client-header>
       </div>
-      <header>
-        <h1 class="text-2xl font-bold text-ink">Invoices &amp; Credit</h1>
-        <p class="text-sm text-gray-400">Vendor invoices, government assistance, and the resulting SR&amp;ED credit.</p>
-      </header>
       <app-invoice-grid></app-invoice-grid>
       <app-expenditure-summary></app-expenditure-summary>
     </div>
