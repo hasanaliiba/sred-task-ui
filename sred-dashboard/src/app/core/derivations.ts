@@ -15,6 +15,7 @@ import type {
   EmployeeDetail,
   EmployeeProjectHours,
   EmployeeRow,
+  ProjectContributor,
   ExpenditureSummary,
   GrandTotals,
   HoursSplit,
@@ -193,6 +194,32 @@ export function periodMetricTotal(ws: ClientWorkspace, period: Period, metric: M
       return summaries.reduce((sum, s) => sum + projectMetricValue(s, 'credit', rate), 0);
     }
   }
+}
+
+/** Who worked on a project: each employee's hours on it (+ their team), desc by hours. */
+export function buildProjectContributors(
+  ws: ClientWorkspace,
+  projectId: string,
+  period: Period,
+): ProjectContributor[] {
+  const emps = employeeMap(ws);
+  const teamNames = new Map(ws.teams.map((t) => [t.id, t.name]));
+  const byEmployee = new Map<string, number>();
+  for (const t of ws.timesheets.filter((t) => t.projectId === projectId)) {
+    byEmployee.set(t.employeeId, (byEmployee.get(t.employeeId) ?? 0) + periodHours(t.hours, period));
+  }
+  return [...byEmployee.entries()]
+    .map(([employeeId, hours]) => {
+      const e = emps.get(employeeId);
+      return {
+        employeeId,
+        name: e?.name ?? employeeId,
+        teamName: e?.teamId ? teamNames.get(e.teamId) ?? null : null,
+        hours,
+      };
+    })
+    .filter((c) => c.hours > 0)
+    .sort((a, b) => b.hours - a.hours);
 }
 
 /** Grand totals across all project summaries (Req 5). */

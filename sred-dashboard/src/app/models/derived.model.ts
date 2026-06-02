@@ -20,6 +20,14 @@ export interface ProjectSummary {
   amount: number; // laborAmount + vendorAmount
 }
 
+/** An employee's hours on a single project (+ their team), for the project detail modal. */
+export interface ProjectContributor {
+  employeeId: string;
+  name: string;
+  teamName: string | null; // null = not on a team
+  hours: number;
+}
+
 /** Grand totals across all projects (Req 5). */
 export interface GrandTotals {
   totalHours: number;

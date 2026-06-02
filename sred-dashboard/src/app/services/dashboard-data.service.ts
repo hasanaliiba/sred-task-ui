@@ -18,6 +18,7 @@ import {
   HoursSplit,
   Metric,
   Period,
+  ProjectContributor,
   ProjectSummary,
   Projection,
   Team,
@@ -35,6 +36,7 @@ import {
   buildExpenditureSummary,
   buildGrandTotals,
   buildProjection,
+  buildProjectContributors,
   buildProjectSummaries,
   buildTeamCostBreakdown,
   buildTeamDetail,
@@ -221,6 +223,13 @@ export class DashboardDataService {
   teamDetailFull$(teamId: string | null): Observable<TeamDetail | null> {
     return this.activeWorkspace$.pipe(
       map((w) => (w ? buildTeamDetail(w, teamId, 'FY') : null)),
+    );
+  }
+
+  /** Contributors (employees + their team + hours) on a project — full fiscal year. */
+  projectContributorsFull$(projectId: string): Observable<ProjectContributor[]> {
+    return this.activeWorkspace$.pipe(
+      map((w) => (w ? buildProjectContributors(w, projectId, 'FY') : [])),
     );
   }
 

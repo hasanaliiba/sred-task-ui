@@ -21,6 +21,28 @@
       <button type="button" (click)="onClose()" class="text-gray-400 hover:text-gray-600 text-xl leading-none">&times;</button>
     </div>
 
+    <!-- Contributors (who logged hours on this project, + their team) -->
+    <div class="mt-5">
+      <p class="text-xs uppercase tracking-wide text-gray-400 mb-2">Contributors</p>
+      @if (contributors$ | async; as people) {
+        @if (people.length === 0) {
+          <p class="text-sm text-gray-400">No hours logged on this project.</p>
+        } @else {
+          <ul class="space-y-1.5 max-h-44 overflow-y-auto">
+            @for (c of people; track c.employeeId) {
+              <li class="flex items-center justify-between text-sm">
+                <span class="inline-flex items-center gap-2 min-w-0">
+                  <span class="truncate">{{ c.name }}</span>
+                  @if (c.teamName) { <span class="text-[10px] uppercase text-gray-400 shrink-0">{{ c.teamName }}</span> }
+                </span>
+                <span class="font-medium text-gray-700 shrink-0">{{ c.hours | number }}h</span>
+              </li>
+            }
+          </ul>
+        }
+      }
+    </div>
+
     <!-- Hours -->
     <dl class="mt-5 grid grid-cols-1 gap-3 text-center border-t border-gray-100 pt-4">
       <div>

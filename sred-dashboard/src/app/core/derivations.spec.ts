@@ -4,6 +4,7 @@ import {
   buildEmployeeDetail,
   buildGrandTotals,
   buildProjection,
+  buildProjectContributors,
   buildProjectSummaries,
   buildTeamCostBreakdown,
   buildTeamDetail,
@@ -223,6 +224,21 @@ describe('derivations — team cost breakdown', () => {
     const unassigned = rows.find((r) => r.teamId === null)!;
     expect(unassigned.sredHours).toBe(50);
     expect(unassigned.sredCost).toBe(500);
+  });
+});
+
+describe('derivations — project contributors (modal)', () => {
+  it('lists each employee’s hours on a project, desc, with their team', () => {
+    const ws = workedExampleWorkspace(); // A 10h, B 20h, C 50h all on project 'p'
+    ws.teams = [{ id: 'tm', name: 'Team', color: '#000' }];
+    ws.employees[0].teamId = 'tm'; // A on a team
+
+    const rows = buildProjectContributors(ws, 'p', 'FY');
+    expect(rows.map((r) => r.hours)).toEqual([50, 20, 10]); // sorted desc (C, B, A)
+    expect(rows[0].name).toBe('C');
+    const a = rows.find((r) => r.employeeId === 'a')!;
+    expect(a.teamName).toBe('Team');
+    expect(rows.find((r) => r.employeeId === 'b')!.teamName).toBeNull();
   });
 });
 

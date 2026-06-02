@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { DashboardDataService } from '../../services/dashboard-data.service';
-import { ProjectSummary } from '../../models';
+import { ProjectContributor, ProjectSummary } from '../../models';
 import { projectMetricValue } from '../../core/derivations';
 
 /**
@@ -26,11 +26,14 @@ export class ProjectDetailComponent implements OnInit {
 
   /** SR&ED credit for this project, using the active client's credit rate. */
   credit$: Observable<number> = of(0);
+  /** Employees (+ team) who logged hours on this project. */
+  contributors$: Observable<ProjectContributor[]> = of([]);
 
   ngOnInit(): void {
     this.credit$ = this.data.client$.pipe(
       map((c) => projectMetricValue(this.summary, 'credit', c?.sredCreditRate ?? 0)),
     );
+    this.contributors$ = this.data.projectContributorsFull$(this.summary.projectId);
   }
 
   onClose(): void {
