@@ -37,6 +37,7 @@ module.exports = {
         logo: '#00b7ff',   // deepskyblue
         sky: '#53c9e9',    // brand skyblue
         ink: '#324455',    // brand darkslategray (dark surfaces / headings)
+        navy: '#0a2540',   // deep brand navy (sidebar gradient top → brand-900 bottom)
         // Semantic (Bootstrap-derived).
         success: { DEFAULT: '#28a745', dark: '#218838' },
         danger: { DEFAULT: '#dc3545', dark: '#c82333' },
