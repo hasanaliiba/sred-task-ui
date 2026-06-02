@@ -67,9 +67,9 @@ jobs:
           cp dist/sred-dashboard/browser/index.html dist/sred-dashboard/browser/404.html
           touch dist/sred-dashboard/browser/.nojekyll
       - name: Configure Pages
+        # Pages must be enabled once in Settings → Pages → Source: "GitHub Actions".
+        # This step then reads that configuration (it does not create the site).
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
