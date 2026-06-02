@@ -63,6 +63,20 @@ export interface TeamCost {
   sredCost: number; // Σ members' (SR&ED hours × hourly rate)
 }
 
+/** A team's aggregated hours + cost + credit, shown in the team detail modal. */
+export interface TeamDetail {
+  teamId: string | null;
+  teamName: string;
+  color: string;
+  sredHours: number;
+  unclaimedHours: number;
+  totalHours: number;
+  sredAllocation: number; // sredHours / totalHours (0 when no hours)
+  sredCost: number; // Σ members' (SR&ED hours × hourly rate)
+  totalCost: number; // Σ members' (total hours × hourly rate)
+  credit: number; // sredCost × client.sredCreditRate
+}
+
 /** A team's members and aggregated hours split (Feature D & H). */
 export interface TeamHoursBreakdown {
   teamId: string | null; // null = the "Unassigned" group

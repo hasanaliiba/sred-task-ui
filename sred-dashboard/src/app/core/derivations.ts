@@ -20,6 +20,7 @@ import type {
   ProjectSummary,
   Projection,
   TeamCost,
+  TeamDetail,
   TeamHoursBreakdown,
 } from '../models';
 
@@ -297,6 +298,41 @@ export function buildTeamCostBreakdown(ws: ClientWorkspace, period: Period): Tea
     });
   }
   return rows;
+}
+
+/** A single team's aggregated hours + cost + credit for the detail modal (teamId null = Unassigned). */
+export function buildTeamDetail(ws: ClientWorkspace, teamId: string | null, period: Period): TeamDetail | null {
+  const team = ws.teams.find((t) => t.id === teamId) ?? null;
+  if (teamId !== null && !team) {
+    return null;
+  }
+  const std = ws.client.standardAnnualHours;
+  const members = ws.employees.filter((e) => e.teamId === teamId);
+  let sredHours = 0;
+  let unclaimedHours = 0;
+  let sredCost = 0;
+  let totalCost = 0;
+  for (const e of members) {
+    const split = splitForEmployee(ws, e, period);
+    const rate = hourlyRate(e, std);
+    sredHours += split.sredHours;
+    unclaimedHours += split.unclaimedHours;
+    sredCost += split.sredHours * rate;
+    totalCost += split.totalHours * rate;
+  }
+  const totalHours = sredHours + unclaimedHours;
+  return {
+    teamId,
+    teamName: team?.name ?? 'Unassigned',
+    color: team?.color ?? '#9ca3af',
+    sredHours,
+    unclaimedHours,
+    totalHours,
+    sredAllocation: totalHours > 0 ? sredHours / totalHours : 0,
+    sredCost,
+    totalCost,
+    credit: sredCost * ws.client.sredCreditRate,
+  };
 }
 
 /** Teams with members and aggregated hours, plus an "Unassigned" group (Feature D & H). */

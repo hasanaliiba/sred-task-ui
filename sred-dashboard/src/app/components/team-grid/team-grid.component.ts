@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { DashboardDataService } from '../../services/dashboard-data.service';
 import { Employee, HoursSplit, Team, TeamHoursBreakdown } from '../../models';
 import { TeamFormComponent } from '../team-form/team-form.component';
+import { TeamDetailComponent } from '../team-detail/team-detail.component';
 import { PaginatorComponent } from '../paginator/paginator.component';
 
 /**
@@ -17,7 +18,7 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 @Component({
   selector: 'app-team-grid',
   standalone: true,
-  imports: [AsyncPipe, DecimalPipe, TeamFormComponent, PaginatorComponent],
+  imports: [AsyncPipe, DecimalPipe, TeamFormComponent, TeamDetailComponent, PaginatorComponent],
   templateUrl: './team-grid.component.html',
 })
 export class TeamGridComponent {
@@ -57,6 +58,17 @@ export class TeamGridComponent {
   editingMemberIds: string[] = [];
   allEmployees: Employee[] = [];
   pendingDelete: TeamHoursBreakdown | null = null;
+  detailOpen = false;
+  detailTeamId: string | null = null;
+
+  openDetail(team: TeamHoursBreakdown): void {
+    this.detailTeamId = team.teamId;
+    this.detailOpen = true;
+  }
+
+  closeDetail(): void {
+    this.detailOpen = false;
+  }
 
   openAdd(employees: Employee[]): void {
     this.editing = null;

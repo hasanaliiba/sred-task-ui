@@ -22,6 +22,7 @@ import {
   Projection,
   Team,
   TeamCost,
+  TeamDetail,
   TeamHoursBreakdown,
   User,
   VendorInvoice,
@@ -36,6 +37,7 @@ import {
   buildProjection,
   buildProjectSummaries,
   buildTeamCostBreakdown,
+  buildTeamDetail,
   buildTeamHoursBreakdown,
 } from '../core/derivations';
 
@@ -212,6 +214,13 @@ export class DashboardDataService {
   employeeDetailFull$(employeeId: string): Observable<EmployeeDetail | null> {
     return this.activeWorkspace$.pipe(
       map((w) => (w ? buildEmployeeDetail(w, employeeId, 'FY') : null)),
+    );
+  }
+
+  /** Per-team detail for the modal — full fiscal year (teamId null = the Unassigned group). */
+  teamDetailFull$(teamId: string | null): Observable<TeamDetail | null> {
+    return this.activeWorkspace$.pipe(
+      map((w) => (w ? buildTeamDetail(w, teamId, 'FY') : null)),
     );
   }
 

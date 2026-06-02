@@ -6,6 +6,7 @@ import {
   buildProjection,
   buildProjectSummaries,
   buildTeamCostBreakdown,
+  buildTeamDetail,
   effectiveSalary,
   fractionElapsed,
   hourlyRate,
@@ -222,6 +223,29 @@ describe('derivations — team cost breakdown', () => {
     const unassigned = rows.find((r) => r.teamId === null)!;
     expect(unassigned.sredHours).toBe(50);
     expect(unassigned.sredCost).toBe(500);
+  });
+});
+
+describe('derivations — team detail (modal)', () => {
+  it('aggregates a team’s hours, cost, and credit (null = Unassigned)', () => {
+    const ws = workedExampleWorkspace(); // A 10h@$100, B 20h@$20, C 50h@$10 on SR&ED project 'p'
+    ws.teams = [{ id: 'tm', name: 'Team', color: '#000' }];
+    ws.employees[0].teamId = 'tm';
+    ws.employees[1].teamId = 'tm';
+
+    const tm = buildTeamDetail(ws, 'tm', 'FY')!;
+    expect(tm.sredHours).toBe(30); // 10 + 20
+    expect(tm.totalHours).toBe(30); // all SR&ED here
+    expect(tm.sredCost).toBe(1400); // 1000 + 400
+    expect(tm.credit).toBe(700); // 1400 × 0.5
+    expect(tm.sredAllocation).toBe(1);
+
+    const unassigned = buildTeamDetail(ws, null, 'FY')!; // C only
+    expect(unassigned.teamName).toBe('Unassigned');
+    expect(unassigned.sredCost).toBe(500);
+    expect(unassigned.credit).toBe(250);
+
+    expect(buildTeamDetail(ws, 'nope', 'FY')).toBeNull();
   });
 });
 
