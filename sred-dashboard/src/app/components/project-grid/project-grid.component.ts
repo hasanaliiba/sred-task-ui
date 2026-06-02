@@ -26,7 +26,7 @@ export class ProjectGridComponent {
   private readonly page$ = new BehaviorSubject<number>(1);
 
   /** Paged view: clamps the page to the project count and slices the rows. */
-  readonly vm$ = combineLatest([this.data.projectSummaries$, this.page$]).pipe(
+  readonly vm$ = combineLatest([this.data.projectSummariesFull$, this.page$]).pipe(
     map(([rows, page]) => {
       const total = rows.length;
       const pages = Math.max(1, Math.ceil(total / this.pageSize));

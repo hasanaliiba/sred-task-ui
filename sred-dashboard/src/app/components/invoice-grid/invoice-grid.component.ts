@@ -27,7 +27,7 @@ export class InvoiceGridComponent {
   private readonly page$ = new BehaviorSubject<number>(1);
 
   /** Period-filtered invoices joined with project names + paged rows + the vendor total + project list. */
-  readonly vm$ = combineLatest([this.data.vendorInvoices$, this.data.projectSummaries$, this.page$]).pipe(
+  readonly vm$ = combineLatest([this.data.vendorInvoicesAll$, this.data.projectSummariesFull$, this.page$]).pipe(
     map(([invoices, summaries, page]) => {
       const nameById = new Map(summaries.map((s) => [s.projectId, s.name]));
       const allRows = invoices.map((invoice) => ({

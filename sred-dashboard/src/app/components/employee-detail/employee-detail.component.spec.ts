@@ -18,7 +18,7 @@ const DETAIL: EmployeeDetail = {
 };
 
 class FakeDataService {
-  employeeDetail$ = jasmine.createSpy('employeeDetail$').and.returnValue(of(DETAIL));
+  employeeDetailFull$ = jasmine.createSpy('employeeDetailFull$').and.returnValue(of(DETAIL));
 }
 
 describe('EmployeeDetailComponent', () => {
@@ -37,7 +37,7 @@ describe('EmployeeDetailComponent', () => {
   });
 
   it('queries the service for the given employee id', () => {
-    expect(data.employeeDetail$).toHaveBeenCalledWith('e1');
+    expect(data.employeeDetailFull$).toHaveBeenCalledWith('e1');
   });
 
   it('renders the name, per-project hours, and SR&ED allocation', () => {

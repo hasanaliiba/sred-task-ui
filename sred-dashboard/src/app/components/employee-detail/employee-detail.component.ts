@@ -25,7 +25,7 @@ export class EmployeeDetailComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.employeeId) {
-      this.detail$ = this.data.employeeDetail$(this.employeeId);
+      this.detail$ = this.data.employeeDetailFull$(this.employeeId);
     }
   }
 

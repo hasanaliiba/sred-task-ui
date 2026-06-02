@@ -35,7 +35,6 @@ import {
   buildProjection,
   buildProjectSummaries,
   buildTeamHoursBreakdown,
-  invoiceInPeriod,
 } from '../core/derivations';
 
 const DATA_URL = 'assets/data/dashboard-data.json';
@@ -138,6 +137,14 @@ export class DashboardDataService {
     map((summaries) => buildGrandTotals(summaries)),
   );
 
+  /**
+   * Period-independent (full fiscal year) views for the Manage pages — record
+   * management shows the complete dataset; period slicing is an Analytics concern.
+   */
+  readonly projectSummariesFull$: Observable<ProjectSummary[]> = this.activeWorkspace$.pipe(
+    map((w) => (w ? buildProjectSummaries(w, 'FY') : [])),
+  );
+
   readonly employeeHoursBreakdown$: Observable<HoursSplit[]> = combineLatest([
     this.activeWorkspace$,
     this.period$$,
@@ -153,10 +160,15 @@ export class DashboardDataService {
     this.period$$,
   ]).pipe(map(([w, p]) => (w ? buildTeamHoursBreakdown(w, p) : [])));
 
-  readonly vendorInvoices$: Observable<VendorInvoice[]> = combineLatest([
-    this.activeWorkspace$,
-    this.period$$,
-  ]).pipe(map(([w, p]) => (w ? w.vendorInvoices.filter((v) => invoiceInPeriod(v, p)) : [])));
+  /** Full fiscal-year team breakdown for the Teams management grid (period-independent). */
+  readonly teamHoursBreakdownFull$: Observable<TeamHoursBreakdown[]> = this.activeWorkspace$.pipe(
+    map((w) => (w ? buildTeamHoursBreakdown(w, 'FY') : [])),
+  );
+
+  /** All vendor invoices for the Invoices management grid (every date, period-independent). */
+  readonly vendorInvoicesAll$: Observable<VendorInvoice[]> = this.activeWorkspace$.pipe(
+    map((w) => w?.vendorInvoices ?? []),
+  );
 
   readonly governmentAssistance$: Observable<number> = this.activeWorkspace$.pipe(
     map((w) => w?.governmentAssistanceTotal ?? 0),
@@ -189,10 +201,10 @@ export class DashboardDataService {
     this.feedback$$.next([...this.feedback$$.value, entry]);
   }
 
-  /** Per-employee detail for the modal, reactive to the selected period (Feature C). */
-  employeeDetail$(employeeId: string): Observable<EmployeeDetail | null> {
-    return combineLatest([this.activeWorkspace$, this.period$$]).pipe(
-      map(([w, p]) => (w ? buildEmployeeDetail(w, employeeId, p) : null)),
+  /** Per-employee detail for the modal — full fiscal year (period-independent; Manage view). */
+  employeeDetailFull$(employeeId: string): Observable<EmployeeDetail | null> {
+    return this.activeWorkspace$.pipe(
+      map((w) => (w ? buildEmployeeDetail(w, employeeId, 'FY') : null)),
     );
   }
 

@@ -22,7 +22,7 @@ const TEAMS: TeamHoursBreakdown[] = [
 ];
 
 class FakeDataService {
-  teamHoursBreakdown$ = of(TEAMS);
+  teamHoursBreakdownFull$ = of(TEAMS);
 }
 
 describe('TeamsTableComponent', () => {

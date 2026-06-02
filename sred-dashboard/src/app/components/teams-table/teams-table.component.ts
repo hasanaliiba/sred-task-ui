@@ -17,7 +17,7 @@ import { HoursSplit } from '../../models';
 })
 export class TeamsTableComponent {
   private readonly data = inject(DashboardDataService);
-  readonly teams$ = this.data.teamHoursBreakdown$;
+  readonly teams$ = this.data.teamHoursBreakdownFull$;
 
   /** Joined member names for display (string interpolation — safe to call in template). */
   names(members: HoursSplit[]): string {
