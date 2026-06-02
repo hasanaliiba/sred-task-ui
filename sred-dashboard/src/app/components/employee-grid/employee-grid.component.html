@@ -4,13 +4,18 @@
       <h2 class="text-lg font-bold text-ink">Staff Salary</h2>
       <p class="text-sm text-gray-400">Annual salary and equivalent hourly rate per employee · add, edit, or remove staff · click a name for the SR&amp;ED breakdown.</p>
     </div>
-    <button
-      type="button"
-      (click)="openAdd()"
-      class="shrink-0 text-sm text-white bg-brand-600 hover:bg-brand-700 rounded-lg px-4 py-2 transition-colors"
-    >
-      + Add employee
-    </button>
+    <div class="flex items-center gap-2 shrink-0">
+      <input type="search" (input)="setSearch($any($event.target).value)" placeholder="Search employees…"
+        aria-label="Search employees"
+        class="w-40 sm:w-56 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-300 focus:border-brand-500 outline-none" />
+      <button
+        type="button"
+        (click)="openAdd()"
+        class="text-sm text-white bg-brand-600 hover:bg-brand-700 rounded-lg px-4 py-2 transition-colors"
+      >
+        + Add employee
+      </button>
+    </div>
   </div>
 
   @if (vm$ | async; as vm) {

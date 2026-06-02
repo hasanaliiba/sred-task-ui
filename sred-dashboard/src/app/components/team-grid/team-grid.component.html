@@ -5,10 +5,15 @@
         <h2 class="text-lg font-bold text-ink">Teams</h2>
         <p class="text-sm text-gray-400">Add, edit, or remove teams and assign members · SR&amp;ED vs Unclaimed hours (full year) · removing a team unassigns its members.</p>
       </div>
-      <button type="button" (click)="openAdd(vm.employees)"
-        class="shrink-0 text-sm text-white bg-brand-600 hover:bg-brand-700 rounded-lg px-4 py-2 transition-colors">
-        + Add team
-      </button>
+      <div class="flex items-center gap-2 shrink-0">
+        <input type="search" (input)="setSearch($any($event.target).value)" placeholder="Search teams…"
+          aria-label="Search teams"
+          class="w-40 sm:w-56 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-300 focus:border-brand-500 outline-none" />
+        <button type="button" (click)="openAdd(vm.employees)"
+          class="text-sm text-white bg-brand-600 hover:bg-brand-700 rounded-lg px-4 py-2 transition-colors">
+          + Add team
+        </button>
+      </div>
     </div>
 
     @if (vm.total === 0) {

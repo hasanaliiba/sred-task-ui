@@ -26,16 +26,30 @@ export class TeamGridComponent {
 
   readonly pageSize = 10;
   private readonly page$ = new BehaviorSubject<number>(1);
+  private readonly search$ = new BehaviorSubject<string>('');
 
-  /** Team rows (full year) + the employee list for the member picker + paging. */
-  readonly vm$ = combineLatest([this.data.teamHoursBreakdownFull$, this.data.employees$, this.page$]).pipe(
-    map(([teams, employeeRows, page]) => {
-      const total = teams.length;
+  /** Team rows (full year), filtered by team or member name + the employee list + paging. */
+  readonly vm$ = combineLatest([
+    this.data.teamHoursBreakdownFull$,
+    this.data.employees$,
+    this.search$,
+    this.page$,
+  ]).pipe(
+    map(([teams, employeeRows, search, page]) => {
+      const q = search.trim().toLowerCase();
+      const filtered = q
+        ? teams.filter(
+            (t) =>
+              t.teamName.toLowerCase().includes(q) ||
+              t.members.some((m) => m.name.toLowerCase().includes(q)),
+          )
+        : teams;
+      const total = filtered.length;
       const pages = Math.max(1, Math.ceil(total / this.pageSize));
       const current = Math.min(page, pages);
       const start = (current - 1) * this.pageSize;
       return {
-        rows: teams.slice(start, start + this.pageSize),
+        rows: filtered.slice(start, start + this.pageSize),
         total,
         page: current,
         pageSize: this.pageSize,
@@ -46,6 +60,11 @@ export class TeamGridComponent {
 
   setPage(page: number): void {
     this.page$.next(page);
+  }
+
+  setSearch(query: string): void {
+    this.search$.next(query);
+    this.page$.next(1);
   }
 
   /** Joined member names for display. */

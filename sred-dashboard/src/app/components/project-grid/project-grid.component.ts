@@ -25,20 +25,28 @@ export class ProjectGridComponent {
 
   readonly pageSize = 10;
   private readonly page$ = new BehaviorSubject<number>(1);
+  private readonly search$ = new BehaviorSubject<string>('');
 
-  /** Paged view: clamps the page to the project count and slices the rows. */
-  readonly vm$ = combineLatest([this.data.projectSummariesFull$, this.page$]).pipe(
-    map(([rows, page]) => {
-      const total = rows.length;
+  /** Paged view: filters by project name, clamps the page, and slices the rows. */
+  readonly vm$ = combineLatest([this.data.projectSummariesFull$, this.search$, this.page$]).pipe(
+    map(([rows, search, page]) => {
+      const q = search.trim().toLowerCase();
+      const filtered = q ? rows.filter((p) => p.name.toLowerCase().includes(q)) : rows;
+      const total = filtered.length;
       const pages = Math.max(1, Math.ceil(total / this.pageSize));
       const current = Math.min(page, pages);
       const start = (current - 1) * this.pageSize;
-      return { rows: rows.slice(start, start + this.pageSize), total, page: current, pageSize: this.pageSize };
+      return { rows: filtered.slice(start, start + this.pageSize), total, page: current, pageSize: this.pageSize };
     }),
   );
 
   setPage(page: number): void {
     this.page$.next(page);
+  }
+
+  setSearch(query: string): void {
+    this.search$.next(query);
+    this.page$.next(1);
   }
 
   formOpen = false;

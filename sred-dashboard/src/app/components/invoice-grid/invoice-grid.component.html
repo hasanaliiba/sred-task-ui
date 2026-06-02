@@ -4,10 +4,15 @@
       <h2 class="text-lg font-bold text-ink">Vendor Invoices</h2>
       <p class="text-sm text-gray-400">Non-labor vendor expenses (full year) · add, edit, or remove · SR&amp;ED invoices add to the credit.</p>
     </div>
-    <button type="button" (click)="openAdd()"
-      class="shrink-0 text-sm text-white bg-brand-600 hover:bg-brand-700 rounded-lg px-4 py-2 transition-colors">
-      + Add invoice
-    </button>
+    <div class="flex items-center gap-2 shrink-0">
+      <input type="search" (input)="setSearch($any($event.target).value)" placeholder="Search invoices…"
+        aria-label="Search invoices"
+        class="w-40 sm:w-56 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-300 focus:border-brand-500 outline-none" />
+      <button type="button" (click)="openAdd()"
+        class="text-sm text-white bg-brand-600 hover:bg-brand-700 rounded-lg px-4 py-2 transition-colors">
+        + Add invoice
+      </button>
+    </div>
   </div>
 
   @if (vm$ | async; as vm) {

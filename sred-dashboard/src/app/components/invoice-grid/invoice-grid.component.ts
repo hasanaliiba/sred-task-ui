@@ -25,25 +25,40 @@ export class InvoiceGridComponent {
 
   readonly pageSize = 10;
   private readonly page$ = new BehaviorSubject<number>(1);
+  private readonly search$ = new BehaviorSubject<string>('');
 
-  /** Period-filtered invoices joined with project names + paged rows + the vendor total + project list. */
-  readonly vm$ = combineLatest([this.data.vendorInvoicesAll$, this.data.projectSummariesFull$, this.page$]).pipe(
-    map(([invoices, summaries, page]) => {
+  /** Invoices joined with project names, filtered by search, paged, + the (filtered) vendor total + project list. */
+  readonly vm$ = combineLatest([
+    this.data.vendorInvoicesAll$,
+    this.data.projectSummariesFull$,
+    this.search$,
+    this.page$,
+  ]).pipe(
+    map(([invoices, summaries, search, page]) => {
       const nameById = new Map(summaries.map((s) => [s.projectId, s.name]));
-      const allRows = invoices.map((invoice) => ({
+      const rows = invoices.map((invoice) => ({
         invoice,
         projectName: nameById.get(invoice.projectId) ?? invoice.projectId,
       }));
-      const count = allRows.length;
+      const q = search.trim().toLowerCase();
+      const filtered = q
+        ? rows.filter(
+            (r) =>
+              r.invoice.vendorName.toLowerCase().includes(q) ||
+              r.invoice.invoiceNumber.toLowerCase().includes(q) ||
+              r.projectName.toLowerCase().includes(q),
+          )
+        : rows;
+      const count = filtered.length;
       const pages = Math.max(1, Math.ceil(count / this.pageSize));
       const current = Math.min(page, pages);
       const start = (current - 1) * this.pageSize;
       return {
-        rows: allRows.slice(start, start + this.pageSize),
+        rows: filtered.slice(start, start + this.pageSize),
         count,
         page: current,
         pageSize: this.pageSize,
-        amountTotal: invoices.reduce((sum, v) => sum + v.amount, 0),
+        amountTotal: filtered.reduce((sum, r) => sum + r.invoice.amount, 0),
         projects: summaries.map(
           (s) => ({ id: s.projectId, name: s.name, color: s.color, isSred: s.isSred }) as Project,
         ),
@@ -53,6 +68,11 @@ export class InvoiceGridComponent {
 
   setPage(page: number): void {
     this.page$.next(page);
+  }
+
+  setSearch(query: string): void {
+    this.search$.next(query);
+    this.page$.next(1);
   }
 
   formOpen = false;
