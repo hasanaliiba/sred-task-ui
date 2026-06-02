@@ -12,7 +12,13 @@ html {
 }
 
 body {
-  @apply bg-gray-50 text-gray-900 antialiased;
+  @apply bg-gray-50 text-gray-900 antialiased font-sans;
+}
+
+/* Financial figures: tabular (monospaced) digits so columns align and count-ups don't jiggle. */
+table,
+[appCountUp] {
+  font-variant-numeric: tabular-nums;
 }
 
 /* Respect users who prefer reduced motion: disable non-essential animation. */

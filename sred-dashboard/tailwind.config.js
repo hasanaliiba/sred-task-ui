@@ -11,6 +11,14 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        // Inter is the UI typeface; keep a system fallback for the FOUT window.
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+      },
+      boxShadow: {
+        // Soft, low-alpha card elevation (replaces Tailwind's default `shadow`).
+        DEFAULT: '0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.08)',
+      },
       colors: {
         // Primary — royalblue (#007bff family).
         brand: {

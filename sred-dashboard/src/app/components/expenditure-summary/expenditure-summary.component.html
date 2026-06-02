@@ -2,7 +2,7 @@
   @if (vm.exp; as exp) {
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- Breakdown -->
-      <div class="bg-white rounded-2xl shadow ring-1 ring-gray-100 p-6">
+      <div class="bg-white rounded-xl shadow ring-1 ring-gray-100 p-6">
         <h2 class="text-lg font-bold text-ink mb-1">SR&amp;ED Credit</h2>
         <p class="text-sm text-gray-400 mb-4">How the estimated credit is calculated (selected period).</p>
 
@@ -52,7 +52,7 @@
       </div>
 
       <!-- Headline credit -->
-      <div class="bg-gradient-to-br from-success to-success-dark text-white rounded-2xl shadow-lg p-6 flex flex-col justify-center">
+      <div class="bg-gradient-to-br from-success to-success-dark text-white rounded-xl shadow-lg p-6 flex flex-col justify-center">
         <p class="text-sm text-white/70">Estimated SR&amp;ED credit</p>
         <p class="text-4xl font-extrabold mt-1" [appCountUp]="exp.creditAmount" countUpPrefix="$"></p>
         <p class="text-xs text-white/70 mt-3">
