@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { DashboardDataService } from '../../services/dashboard-data.service';
 import { Project, ProjectSummary } from '../../models';
 import { ProjectFormComponent } from '../project-form/project-form.component';
+import { ProjectDetailComponent } from '../project-detail/project-detail.component';
 import { PaginatorComponent } from '../paginator/paginator.component';
 
 /**
@@ -16,7 +17,7 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 @Component({
   selector: 'app-project-grid',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, DecimalPipe, ProjectFormComponent, PaginatorComponent],
+  imports: [AsyncPipe, CurrencyPipe, DecimalPipe, ProjectFormComponent, ProjectDetailComponent, PaginatorComponent],
   templateUrl: './project-grid.component.html',
 })
 export class ProjectGridComponent {
@@ -43,6 +44,15 @@ export class ProjectGridComponent {
   formOpen = false;
   editing: Project | null = null;
   pendingDelete: ProjectSummary | null = null;
+  detailSummary: ProjectSummary | null = null;
+
+  openDetail(summary: ProjectSummary): void {
+    this.detailSummary = summary;
+  }
+
+  closeDetail(): void {
+    this.detailSummary = null;
+  }
 
   openAdd(): void {
     this.editing = null;

@@ -29,10 +29,11 @@
             @for (p of vm.rows; track p.projectId) {
               <tr class="hover:bg-gray-50 transition-colors">
                 <td class="px-6 py-3 whitespace-nowrap">
-                  <span class="inline-flex items-center gap-2 font-medium text-gray-900">
+                  <button type="button" (click)="openDetail(p)"
+                    class="inline-flex items-center gap-2 font-medium text-gray-900 hover:text-brand-600 transition-colors">
                     <span class="h-2.5 w-2.5 rounded-full" [style.background-color]="p.color"></span>
                     {{ p.name }}
-                  </span>
+                  </button>
                 </td>
                 <td class="px-6 py-3">
                   @if (p.isSred) {
@@ -64,6 +65,11 @@
     </div>
   }
 </div>
+
+<!-- Read-only detail modal (click a project name) -->
+@if (detailSummary; as s) {
+  <app-project-detail [summary]="s" (close)="closeDetail()"></app-project-detail>
+}
 
 <!-- Add / edit modal -->
 @if (formOpen) {
