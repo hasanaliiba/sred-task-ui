@@ -5,8 +5,11 @@
 
 <!-- Sidebar (fixed; off-canvas on mobile) -->
 <aside
-  class="fixed z-40 w-16 transition-transform duration-300 lg:translate-x-0"
-  [ngClass]="(floating$ | async) ? 'inset-y-3 left-3 rounded-2xl shadow-2xl ring-1 ring-white/10 overflow-hidden' : 'inset-y-0 left-0'"
+  class="group fixed z-40 lg:hover:w-56 transition-[width,transform] duration-300 lg:translate-x-0 overflow-hidden"
+  [class.w-16]="!(pinned$ | async)"
+  [class.w-56]="pinned$ | async"
+  [class.is-pinned]="pinned$ | async"
+  [ngClass]="(floating$ | async) ? 'inset-y-3 left-3 rounded-2xl shadow-2xl ring-1 ring-white/10' : 'inset-y-0 left-0'"
   [class.-translate-x-full]="!navOpen"
   [class.translate-x-0]="navOpen"
 >
@@ -14,7 +17,15 @@
 </aside>
 
 <!-- Content column -->
-<div class="flex flex-col min-h-screen" [ngClass]="(floating$ | async) ? 'lg:ml-20' : 'lg:ml-16'">
+<div
+  class="flex flex-col min-h-screen transition-[margin] duration-300"
+  [ngClass]="{
+    'lg:ml-16': !(pinned$ | async) && !(floating$ | async),
+    'lg:ml-20': !(pinned$ | async) && (floating$ | async),
+    'lg:ml-56': (pinned$ | async) && !(floating$ | async),
+    'lg:ml-60': (pinned$ | async) && (floating$ | async)
+  }"
+>
   <header class="sticky top-0 z-20 bg-white/90 backdrop-blur border-b border-gray-200">
     <div class="h-16 px-4 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3 min-w-0">

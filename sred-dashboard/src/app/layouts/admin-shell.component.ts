@@ -17,8 +17,11 @@ import { UiPreferencesService } from '../services/ui-preferences.service';
   templateUrl: './admin-shell.component.html',
 })
 export class AdminShellComponent {
+  private readonly ui = inject(UiPreferencesService);
   /** Sidebar style preference (floating vs flush) — set from admin Settings. */
-  readonly floating$ = inject(UiPreferencesService).floatingSidebar$;
+  readonly floating$ = this.ui.floatingSidebar$;
+  /** Sidebar pinned-open vs collapsed icon rail — toggled from the sidebar. */
+  readonly pinned$ = this.ui.sidebarPinned$;
   navOpen = false;
 
   openNav(): void {

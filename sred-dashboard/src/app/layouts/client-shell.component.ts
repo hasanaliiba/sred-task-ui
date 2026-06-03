@@ -20,8 +20,11 @@ import { UiPreferencesService } from '../services/ui-preferences.service';
   templateUrl: './client-shell.component.html',
 })
 export class ClientShellComponent {
+  private readonly ui = inject(UiPreferencesService);
   /** Sidebar style preference (floating vs flush) — set from admin Settings. */
-  readonly floating$ = inject(UiPreferencesService).floatingSidebar$;
+  readonly floating$ = this.ui.floatingSidebar$;
+  /** Sidebar pinned-open vs collapsed icon rail — toggled from the sidebar. */
+  readonly pinned$ = this.ui.sidebarPinned$;
   navOpen = false;
   feedbackOpen = false;
 

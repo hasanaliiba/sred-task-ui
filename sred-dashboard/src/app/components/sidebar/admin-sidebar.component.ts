@@ -3,6 +3,7 @@ import { AsyncPipe } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 import { AuthService } from '../../services/auth.service';
+import { UiPreferencesService } from '../../services/ui-preferences.service';
 import { initials } from '../../shared';
 
 /**
@@ -20,12 +21,19 @@ import { initials } from '../../shared';
 export class AdminSidebarComponent {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly ui = inject(UiPreferencesService);
 
   @Output() navigate = new EventEmitter<void>();
 
   readonly currentUser$ = this.auth.currentUser$;
+  /** Pinned-open state (held); also drives the collapse/expand button icon + label. */
+  readonly pinned$ = this.ui.sidebarPinned$;
   /** Initials for the profile-chip avatar (template helper). */
   readonly initials = initials;
+
+  togglePinned(): void {
+    this.ui.toggleSidebarPinned();
+  }
 
   // Heroicons (outline) path data per item — rendered as inline SVGs in the template.
   readonly links = [
