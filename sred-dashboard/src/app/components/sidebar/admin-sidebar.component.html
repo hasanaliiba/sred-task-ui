@@ -1,11 +1,7 @@
 <div class="h-full bg-gradient-to-b from-navy to-brand-900 text-white flex flex-col">
   <!-- Brand -->
-  <div class="h-16 flex items-center gap-3 px-5 shrink-0 border-b border-white/10">
-    <div class="h-9 w-9 rounded-lg bg-logo flex items-center justify-center font-bold">S</div>
-    <div class="leading-tight">
-      <p class="font-semibold">SR&amp;ED</p>
-      <p class="text-xs text-white/50">Admin</p>
-    </div>
+  <div class="h-16 flex items-center px-5 shrink-0 border-b border-white/10">
+    <img src="assets/images/logo.svg" alt="SR&amp;ED Dashboard logo" class="h-9 w-9 rounded-lg" />
   </div>
 
   <!-- Nav -->
@@ -22,9 +18,12 @@
   <!-- Bottom: signed-in admin · Log out -->
   <div class="border-t border-white/10 p-3 text-sm space-y-1">
     @if (currentUser$ | async; as user) {
-      <div class="px-3 py-1">
-        <p class="font-medium truncate">{{ user.displayName }}</p>
-        <p class="text-white/50 text-xs">Administrator</p>
+      <div class="flex items-center gap-3 px-3 py-2">
+        <span class="h-8 w-8 shrink-0 rounded-full bg-white/15 flex items-center justify-center text-xs font-semibold">{{ initials(user.displayName) }}</span>
+        <div class="min-w-0 leading-tight">
+          <p class="font-medium truncate">{{ user.displayName }}</p>
+          <p class="text-white/50 text-xs">Administrator</p>
+        </div>
       </div>
     }
     <button type="button" (click)="logout()"

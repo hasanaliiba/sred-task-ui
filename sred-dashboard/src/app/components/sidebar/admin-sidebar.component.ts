@@ -3,6 +3,7 @@ import { AsyncPipe } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 import { AuthService } from '../../services/auth.service';
+import { initials } from '../../shared';
 
 /**
  * Admin sidebar (Phase 2) — the admin counterpart of the client SidebarComponent.
@@ -23,6 +24,8 @@ export class AdminSidebarComponent {
   @Output() navigate = new EventEmitter<void>();
 
   readonly currentUser$ = this.auth.currentUser$;
+  /** Initials for the profile-chip avatar (template helper). */
+  readonly initials = initials;
 
   // Heroicons (outline) path data per item — rendered as inline SVGs in the template.
   readonly links = [
