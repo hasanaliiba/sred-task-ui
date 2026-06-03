@@ -190,9 +190,10 @@ export class DashboardDataService {
     this.period$$,
   ]).pipe(map(([w, p]) => (w ? buildExpenditureSummary(w, p) : null)));
 
-  readonly projection$: Observable<Projection | null> = this.activeWorkspace$.pipe(
-    map((w) => (w ? buildProjection(w) : null)),
-  );
+  readonly projection$: Observable<Projection | null> = combineLatest([
+    this.activeWorkspace$,
+    this.period$$,
+  ]).pipe(map(([w, p]) => (w ? buildProjection(w, p) : null)));
 
   /** Appends a feedback entry tagged to the active client (Feature G). No-op if no active client. */
   addFeedback(message: string, rating: number): void {

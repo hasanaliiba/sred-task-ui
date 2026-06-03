@@ -137,29 +137,39 @@ describe('derivations — PDF worked example (80h, $1,900)', () => {
   });
 });
 
-describe('derivations — projection (linear run-rate)', () => {
-  it('fractionElapsed is ~0.5 at mid-year', () => {
+describe('derivations — projection (period-scaled run-rate, SR&ED-only)', () => {
+  // Worked example: 80 SR&ED hours, $1,900 labor — all in m1 (Q1).
+  it('fractionElapsed (utility) is ~0.5 at mid-year', () => {
     const ws = workedExampleWorkspace('2025-07-02');
     expect(fractionElapsed(ws.client)).toBeCloseTo(0.5, 2);
   });
 
-  it('projects full year as ytd / fractionElapsed, and projected × fraction ≈ ytd', () => {
-    const ws = workedExampleWorkspace('2025-07-02');
-    const p = buildProjection(ws);
-    expect(p.ytdHours).toBe(80);
-    expect(p.projectedHours).toBeCloseTo(160, 5);
-    expect(p.projectedHours * p.fractionElapsed).toBeCloseTo(p.ytdHours, 5);
-    expect(p.remainingHours).toBeCloseTo(80, 5);
+  it('scales the period to a full year by its share of the year', () => {
+    const ws = workedExampleWorkspace();
+    // Q1 = 3/12 = 25% → project ×4.
+    const q1 = buildProjection(ws, 'Q1');
+    expect(q1.fractionElapsed).toBeCloseTo(0.25, 5);
+    expect(q1.ytdHours).toBe(80);
+    expect(q1.projectedHours).toBeCloseTo(320, 5);
+    expect(q1.ytdAmount).toBe(1900);
+    expect(q1.projectedAmount).toBeCloseTo(7600, 5);
+    // FY = 100% → projected = ytd (no extrapolation).
+    const fy = buildProjection(ws, 'FY');
+    expect(fy.fractionElapsed).toBe(1);
+    expect(fy.ytdHours).toBe(80);
+    expect(fy.projectedHours).toBe(80);
+    // Q2 has no hours.
+    expect(buildProjection(ws, 'Q2').ytdHours).toBe(0);
   });
 
   it('is SR&ED-only: unclaimed hours and labor are excluded from the projection', () => {
-    const ws = workedExampleWorkspace('2025-07-02');
+    const ws = workedExampleWorkspace();
     // Add an Unclaimed project with 90h by employee A ($100/h) — must NOT appear in the projection.
     ws.projects.push({ id: 'unc', name: 'Unclaimed', color: '#999', isSred: false });
     ws.timesheets.push({ employeeId: 'a', projectId: 'unc', hours: months({ m1: 90 }) });
-    const p = buildProjection(ws);
-    expect(p.ytdHours).toBe(80); // still only the 80 SR&ED hours (not 170)
-    expect(p.ytdAmount).toBe(1900); // SR&ED labor only (the 90h × $100 unclaimed is excluded)
+    const q1 = buildProjection(ws, 'Q1');
+    expect(q1.ytdHours).toBe(80); // still only the 80 SR&ED hours (not 170)
+    expect(q1.ytdAmount).toBe(1900); // SR&ED labor only (the 90h × $100 unclaimed is excluded)
   });
 });
 

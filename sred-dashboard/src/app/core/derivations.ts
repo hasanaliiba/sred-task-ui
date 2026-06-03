@@ -485,15 +485,19 @@ export function buildExpenditureSummary(ws: ClientWorkspace, period: Period): Ex
   };
 }
 
-/** Full-year projection via linear run-rate (Req 6). Always FY-based, period-independent. */
-export function buildProjection(ws: ClientWorkspace): Projection {
-  const fy = buildProjectSummaries(ws, 'FY');
-  const expenditure = buildExpenditureSummary(ws, 'FY');
-  // The projection is SR&ED-only — unclaimed hours/labor are excluded entirely.
+/**
+ * SR&ED-only run-rate projection for the SELECTED period (Req 6). The period's SR&ED
+ * figures are scaled to a full year by the period's share of the year
+ * (`monthsOf(period).length / 12` — Q1 → 0.25, H1 → 0.5, FY → 1, a single month → 1/12).
+ * Unclaimed hours/labor are excluded entirely.
+ */
+export function buildProjection(ws: ClientWorkspace, period: Period): Projection {
+  const summaries = buildProjectSummaries(ws, period);
+  const expenditure = buildExpenditureSummary(ws, period);
   // Hours: only hours on SR&ED projects. Expenditure: SR&ED labor + SR&ED vendor.
-  const sredHours = fy.filter((p) => p.isSred).reduce((sum, p) => sum + p.hours, 0);
+  const sredHours = summaries.filter((p) => p.isSred).reduce((sum, p) => sum + p.hours, 0);
   const sredExp = expenditure.totalSredExpenditure;
-  const fraction = fractionElapsed(ws.client);
+  const fraction = Math.min(1, monthsOf(period).length / 12);
   const project = (ytd: number) => ytd / fraction;
 
   return {
