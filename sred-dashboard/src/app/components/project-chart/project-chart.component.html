@@ -1,7 +1,7 @@
 <div class="bg-white rounded-xl shadow ring-1 ring-gray-100 p-6">
   <div class="mb-2">
     <h2 class="text-lg font-bold text-ink">Hours &amp; Cost by Project</h2>
-    <p class="text-sm text-gray-400">Hours worked and the monetary amount (labor + vendor) per project, for the selected period.</p>
+    <p class="text-sm text-gray-400">Each column is a project, stacked by employee hours; the project's total cost is under its name. Hover a block for that employee's hours + cost.</p>
   </div>
 
   @if (vm$ | async; as vm) {
@@ -9,13 +9,12 @@
       <p class="py-8 text-sm text-gray-400 text-center">No projects to display.</p>
     } @else {
       <apx-chart
+        class="block min-h-[420px]"
         [series]="vm.series"
         [chart]="chart"
         [xaxis]="vm.xaxis"
         [yaxis]="yaxis"
-        [colors]="colors"
-        [stroke]="stroke"
-        [markers]="markers"
+        [colors]="vm.colors"
         [plotOptions]="plotOptions"
         [dataLabels]="dataLabels"
         [legend]="legend"

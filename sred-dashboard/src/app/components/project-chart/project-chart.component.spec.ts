@@ -3,15 +3,27 @@ import { of, firstValueFrom } from 'rxjs';
 
 import { ProjectChartComponent } from './project-chart.component';
 import { DashboardDataService } from '../../services/dashboard-data.service';
-import { ProjectSummary } from '../../models';
+import { ProjectEmployeeStacks } from '../../models';
 
-const SUMMARIES: ProjectSummary[] = [
-  { projectId: 'p1', name: 'Rendering System', color: '#28a745', isSred: true, hours: 80, laborAmount: 1900, vendorAmount: 0, sredVendorAmount: 0, amount: 1900 },
-  { projectId: 'p2', name: 'API Performance', color: '#dc3545', isSred: true, hours: 200, laborAmount: 9000, vendorAmount: 1000, sredVendorAmount: 1000, amount: 10000 },
-];
+// Two projects, two employees: Anne 80h/$1,900 on Rendering; Bob 200h/$9,000 on API.
+const STACKS: ProjectEmployeeStacks = {
+  projects: [
+    { id: 'p1', name: 'Rendering System', totalHours: 80, totalAmount: 1900 },
+    { id: 'p2', name: 'API Performance', totalHours: 200, totalAmount: 9000 },
+  ],
+  employees: ['Anne', 'Bob'],
+  hours: [
+    [80, 0],
+    [0, 200],
+  ],
+  amounts: [
+    [1900, 0],
+    [0, 9000],
+  ],
+};
 
 class FakeDataService {
-  projectSummaries$ = of(SUMMARIES);
+  projectEmployeeStacks$ = of(STACKS);
 }
 
 describe('ProjectChartComponent', () => {
@@ -25,20 +37,25 @@ describe('ProjectChartComponent', () => {
     component = TestBed.createComponent(ProjectChartComponent).componentInstance;
   });
 
-  it('maps projects into hours (column) + amount (line) series with a data-driven xaxis', async () => {
+  it('builds one stacked column series per employee (hours)', async () => {
     const vm = await firstValueFrom(component.vm$);
     expect(vm.empty).toBeFalse();
-    expect(vm.xaxis.categories).toEqual(['Rendering System', 'API Performance']);
-    expect(vm.series[0].name).toBe('Hours');
-    expect((vm.series[0] as { type: string }).type).toBe('column');
-    expect(vm.series[0].data).toEqual([80, 200]);
-    expect(vm.series[1].name).toBe('Amount');
-    expect((vm.series[1] as { type: string }).type).toBe('line');
-    expect(vm.series[1].data).toEqual([1900, 10000]);
+    expect(vm.series.length).toBe(2); // one per employee, no total-cost line
+    expect(vm.series[0].name).toBe('Anne');
+    expect(vm.series[0].data).toEqual([80, 0]);
+    expect(vm.series[1].name).toBe('Bob');
+    expect(vm.series[1].data).toEqual([0, 200]);
   });
 
-  it('uses a dual y-axis (hours left, amount right)', () => {
-    expect(component.yaxis.length).toBe(2);
-    expect(component.yaxis[1].opposite).toBeTrue();
+  it('labels the x-axis with project name + total cost (two lines)', async () => {
+    const vm = await firstValueFrom(component.vm$);
+    expect(vm.xaxis.categories[0]).toEqual(['Rendering System', '$1,900']);
+    expect(vm.xaxis.categories[1]).toEqual(['API Performance', '$9,000']);
+  });
+
+  it('uses a single hours y-axis and a per-segment (non-shared) tooltip', () => {
+    expect(component.yaxis.title?.text).toBe('Hours');
+    expect(component.tooltip.shared).toBeFalse();
+    expect(component.tooltip.intersect).toBeTrue();
   });
 });

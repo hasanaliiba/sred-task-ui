@@ -156,3 +156,15 @@ export interface Projection {
   ytdCredit: number;
   projectedCredit: number;
 }
+
+/**
+ * Per-project employee-hour stacks (Req 4 chart). Each project is a column stacked by
+ * employee (hours); `amounts` mirrors `hours` as labor cost (hours × rate) for tooltips.
+ * Indexing: hours[employeeIndex][projectIndex].
+ */
+export interface ProjectEmployeeStacks {
+  projects: { id: string; name: string; totalHours: number; totalAmount: number }[];
+  employees: string[]; // series names — employees with logged hours in the period
+  hours: number[][];
+  amounts: number[][];
+}

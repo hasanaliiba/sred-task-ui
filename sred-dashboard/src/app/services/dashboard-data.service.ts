@@ -20,6 +20,7 @@ import {
   Period,
   ProjectContributor,
   ProjectSummary,
+  ProjectEmployeeStacks,
   Projection,
   Team,
   TeamCost,
@@ -38,6 +39,7 @@ import {
   buildProjection,
   buildProjectContributors,
   buildProjectSummaries,
+  buildProjectEmployeeStacks,
   buildTeamCostBreakdown,
   buildTeamDetail,
   buildTeamHoursBreakdown,
@@ -142,6 +144,12 @@ export class DashboardDataService {
   readonly grandTotals$: Observable<GrandTotals> = this.projectSummaries$.pipe(
     map((summaries) => buildGrandTotals(summaries)),
   );
+
+  /** Per-project employee-hour stacks for the Req 4 chart (period-reactive). */
+  readonly projectEmployeeStacks$: Observable<ProjectEmployeeStacks> = combineLatest([
+    this.activeWorkspace$,
+    this.period$$,
+  ]).pipe(map(([w, p]) => (w ? buildProjectEmployeeStacks(w, p) : { projects: [], employees: [], hours: [], amounts: [] })));
 
   /**
    * Period-independent (full fiscal year) views for the Manage pages — record

@@ -1,13 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import {
   NgApexchartsModule,
   ApexAxisChartSeries,
   ApexChart,
+  ApexXAxis,
   ApexYAxis,
-  ApexStroke,
-  ApexMarkers,
   ApexPlotOptions,
   ApexDataLabels,
   ApexLegend,
@@ -15,19 +14,17 @@ import {
 } from 'ng-apexcharts';
 
 import { DashboardDataService } from '../../services/dashboard-data.service';
-import { stableXaxis } from '../../shared';
-import { sredExpenditure } from '../../core/derivations';
+import { ProjectEmployeeStacks } from '../../models';
 
-const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 });
 const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 
+/** Distinct, accessible-ish series colours cycled across employees. */
+const PALETTE = ['#5b8def', '#00b7ff', '#28a745', '#fd7e14', '#6f42c1', '#e83e8c', '#20c997', '#f59e0b', '#14b8a6', '#ef4444', '#8b5cf6', '#0ea5e9'];
+
 /**
- * Per-project chart (Req 4): hours worked and the monetary amount per project for
- * the selected period. Dual-axis combo — hours as columns (left), total $ (labor +
- * vendor) as a line (right). Reproduces the PDF example (80h → $1,900) for that project.
- *
- * Chart inputs are referentially stable (xaxis + series in the view-model) per the
- * S12 freeze lesson.
+ * Per-project hours & cost (Req 4): a stacked column per project, stacked by employee
+ * (hours). Hovering an individual block shows just that employee's hours + cost; the
+ * x-axis label is the project name + its total labor cost.
  */
 @Component({
   selector: 'app-project-chart',
@@ -37,50 +34,59 @@ const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD
 })
 export class ProjectChartComponent {
   private readonly data = inject(DashboardDataService);
+  /** Latest stacks — read by the (stable) custom tooltip below. */
+  private latest: ProjectEmployeeStacks | null = null;
 
-  private readonly xaxisFor = stableXaxis();
-  readonly vm$ = this.data.projectSummaries$.pipe(
-    map((projects) => {
-      const categories = projects.map((p) => p.name);
-      return {
-        empty: projects.length === 0,
-        series: [
-          { name: 'Hours', type: 'column', data: projects.map((p) => p.hours) },
-          { name: 'Amount', type: 'line', data: projects.map((p) => Math.round(sredExpenditure(p))) },
-        ] as ApexAxisChartSeries,
-        xaxis: this.xaxisFor(categories),
-      };
-    }),
+  readonly vm$ = this.data.projectEmployeeStacks$.pipe(
+    tap((s) => (this.latest = s)),
+    map((s) => ({
+      empty: s.projects.length === 0,
+      series: s.employees.map((name, i) => ({
+        name,
+        data: s.hours[i].map((h) => Math.round(h)),
+      })) as ApexAxisChartSeries,
+      // Two-line x-axis label: project name + its total cost.
+      xaxis: { categories: s.projects.map((p) => [p.name, money.format(p.totalAmount)]) } as ApexXAxis,
+      colors: s.employees.map((_, i) => PALETTE[i % PALETTE.length]),
+    })),
   );
 
   readonly chart: ApexChart = {
-    type: 'line',
-    height: 400,
-    stacked: false,
+    type: 'bar',
+    height: 420,
+    stacked: true,
     toolbar: { show: false },
     zoom: { enabled: false },
     selection: { enabled: false },
     animations: { enabled: true },
     fontFamily: 'inherit',
   };
-  readonly colors = ['#007bff', '#fd7e14']; // hours (brand) vs amount (orange)
-  readonly stroke: ApexStroke = { width: [0, 3], curve: 'smooth' };
-  readonly markers: ApexMarkers = { size: [0, 4] };
-  readonly plotOptions: ApexPlotOptions = { bar: { columnWidth: '45%', borderRadius: 4 } };
+  readonly plotOptions: ApexPlotOptions = { bar: { columnWidth: '55%', borderRadius: 4 } };
   readonly dataLabels: ApexDataLabels = { enabled: false };
-  readonly legend: ApexLegend = { position: 'top', horizontalAlign: 'right' };
-  readonly yaxis: ApexYAxis[] = [
-    { seriesName: 'Hours', title: { text: 'Hours' } },
-    {
-      opposite: true,
-      seriesName: 'Amount',
-      title: { text: 'Amount ($)' },
-      labels: { formatter: (v) => `$${compact.format(v)}` },
-    },
-  ];
+  readonly legend: ApexLegend = { position: 'bottom', horizontalAlign: 'center' };
+  readonly yaxis: ApexYAxis = { title: { text: 'Hours' }, labels: { formatter: (v) => `${Math.round(v)}` } };
   readonly tooltip: ApexTooltip = {
-    shared: true,
-    intersect: false,
-    y: [{ formatter: (v) => `${v} h` }, { formatter: (v) => money.format(v) }],
+    // Per-block: hovering one employee's segment shows just that employee.
+    shared: false,
+    intersect: true,
+    custom: ({ seriesIndex, dataPointIndex }: { seriesIndex: number; dataPointIndex: number }) =>
+      this.renderTooltip(seriesIndex, dataPointIndex),
   };
+
+  private renderTooltip(seriesIndex: number, projectIndex: number): string {
+    const s = this.latest;
+    const name = s?.employees[seriesIndex];
+    const proj = s?.projects[projectIndex];
+    if (!s || !name || !proj) {
+      return '';
+    }
+    const hours = s.hours[seriesIndex]?.[projectIndex] ?? 0;
+    const amount = s.amounts[seriesIndex]?.[projectIndex] ?? 0;
+    return `<div class="px-3 py-2 text-xs">
+      <div class="font-semibold text-ink">${name}</div>
+      <div class="text-gray-400 mb-1.5">${proj.name}</div>
+      <div class="flex items-center justify-between gap-6"><span class="text-gray-500">Hours</span><span class="font-medium text-gray-800">${Math.round(hours)} h</span></div>
+      <div class="flex items-center justify-between gap-6"><span class="text-gray-500">Cost</span><span class="font-medium text-gray-800">${money.format(amount)}</span></div>
+    </div>`;
+  }
 }

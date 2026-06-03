@@ -16,6 +16,7 @@ import type {
   EmployeeProjectHours,
   EmployeeRow,
   ProjectContributor,
+  ProjectEmployeeStacks,
   ExpenditureSummary,
   GrandTotals,
   HoursSplit,
@@ -238,6 +239,53 @@ export function buildProjectContributors(
     })
     .filter((c) => c.hours > 0)
     .sort((a, b) => b.hours - a.hours);
+}
+
+/**
+ * Per-project employee-hour stacks (Req 4 chart). One column per project, stacked by
+ * employee (hours); `amounts` mirrors `hours` as labor cost. Only employees with logged
+ * hours in the period become series; project totals are the column sums.
+ */
+export function buildProjectEmployeeStacks(ws: ClientWorkspace, period: Period): ProjectEmployeeStacks {
+  const std = ws.client.standardAnnualHours;
+  const emps = employeeMap(ws);
+  const projects = ws.projects.map((p) => ({ id: p.id, name: p.name }));
+  const projIndex = new Map(projects.map((p, i) => [p.id, i]));
+
+  // employeeId → hours per project index (only positive entries)
+  const rows = new Map<string, number[]>();
+  for (const t of ws.timesheets) {
+    const j = projIndex.get(t.projectId);
+    if (j === undefined || !emps.has(t.employeeId)) continue;
+    const h = periodHours(t.hours, period);
+    if (h <= 0) continue;
+    if (!rows.has(t.employeeId)) rows.set(t.employeeId, projects.map(() => 0));
+    rows.get(t.employeeId)![j] += h;
+  }
+
+  const empIds = [...rows.keys()].sort((a, b) =>
+    (emps.get(a)?.name ?? '').localeCompare(emps.get(b)?.name ?? ''),
+  );
+  const employees: string[] = [];
+  const hours: number[][] = [];
+  const amounts: number[][] = [];
+  for (const id of empIds) {
+    const e = emps.get(id)!;
+    const rate = hourlyRate(e, std);
+    const hrow = rows.get(id)!;
+    employees.push(e.name);
+    hours.push(hrow);
+    amounts.push(hrow.map((h) => h * rate));
+  }
+
+  const projOut = projects.map((p, j) => ({
+    id: p.id,
+    name: p.name,
+    totalHours: hours.reduce((sum, r) => sum + r[j], 0),
+    totalAmount: amounts.reduce((sum, r) => sum + r[j], 0),
+  }));
+
+  return { projects: projOut, employees, hours, amounts };
 }
 
 /** Grand totals across all project summaries (Req 5). */

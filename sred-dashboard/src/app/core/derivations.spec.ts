@@ -5,6 +5,7 @@ import {
   buildGrandTotals,
   buildProjection,
   buildProjectContributors,
+  buildProjectEmployeeStacks,
   buildProjectSummaries,
   buildTeamCostBreakdown,
   buildTeamDetail,
@@ -286,6 +287,20 @@ describe('derivations — project contributors (modal)', () => {
     const c = rows.find((r) => r.employeeId === 'c')!;
     expect(c.hourlyRate).toBe(10);
     expect(c.cost).toBe(500);
+  });
+});
+
+describe('derivations — project employee stacks (Req 4 chart)', () => {
+  it('stacks each project by employee hours + labor cost (80h → $1,900)', () => {
+    const ws = workedExampleWorkspace(); // A 10h@$100, B 20h@$20, C 50h@$10 on project 'p'
+    const s = buildProjectEmployeeStacks(ws, 'FY');
+    const j = s.projects.findIndex((p) => p.id === 'p');
+    expect(j).toBeGreaterThanOrEqual(0);
+    expect(s.projects[j].totalHours).toBe(80);
+    expect(s.projects[j].totalAmount).toBe(1900);
+    expect(s.employees.length).toBe(3); // only employees with hours become series
+    expect(s.hours.reduce((acc, row) => acc + row[j], 0)).toBe(80);
+    expect(s.amounts.reduce((acc, row) => acc + row[j], 0)).toBe(1900);
   });
 });
 
