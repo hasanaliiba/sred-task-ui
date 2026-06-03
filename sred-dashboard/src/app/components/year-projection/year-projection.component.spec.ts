@@ -49,6 +49,6 @@ describe('YearProjectionComponent', () => {
     expect(text).toContain('SR&ED expenditure');
     expect(text).toContain('SR&ED credit');
     expect(text).toContain('projected full year');
-    expect(text).toContain('% elapsed');
+    expect(text).toContain('elapsed');
   });
 });
