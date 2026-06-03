@@ -71,6 +71,14 @@ export class RevealDirective implements AfterViewInit, OnDestroy {
     const el = this.host.nativeElement;
     this.renderer.setStyle(el, 'opacity', '1');
     this.renderer.setStyle(el, 'transform', 'translateY(0)');
+    // Once the entrance finishes, drop the transform + will-change. A lingering
+    // transform makes this element a containing block for position:fixed descendants,
+    // which would trap modals (fixed inset-0) inside the section instead of the viewport.
+    const stop = this.renderer.listen(el, 'transitionend', () => {
+      this.renderer.removeStyle(el, 'transform');
+      this.renderer.removeStyle(el, 'will-change');
+      stop();
+    });
   }
 
   private prefersReducedMotion(): boolean {
