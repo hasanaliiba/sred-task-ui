@@ -6,10 +6,10 @@
 <!-- Sidebar (fixed; off-canvas on mobile) -->
 <aside
   class="group fixed z-40 lg:hover:w-56 transition-[width,transform] duration-300 lg:translate-x-0 overflow-hidden"
-  [class.w-16]="!(pinned$ | async)"
-  [class.w-56]="pinned$ | async"
-  [class.is-pinned]="pinned$ | async"
-  [ngClass]="(floating$ | async) ? 'inset-y-3 left-3 rounded-2xl shadow-2xl ring-1 ring-white/10' : 'inset-y-0 left-0'"
+  [class.w-16]="!(pinned$ | async) && !navOpen"
+  [class.w-56]="(pinned$ | async) || navOpen"
+  [class.is-pinned]="(pinned$ | async) || navOpen"
+  [ngClass]="(floating$ | async) ? 'inset-y-0 left-0 lg:inset-y-3 lg:left-3 lg:rounded-2xl lg:shadow-2xl lg:ring-1 lg:ring-white/10' : 'inset-y-0 left-0'"
   [class.-translate-x-full]="!navOpen"
   [class.translate-x-0]="navOpen"
 >
