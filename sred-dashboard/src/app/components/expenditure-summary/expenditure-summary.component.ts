@@ -22,7 +22,13 @@ export class ExpenditureSummaryComponent {
   private readonly data = inject(DashboardDataService);
 
   readonly vm$ = combineLatest([this.data.expenditureSummary$, this.data.client$]).pipe(
-    map(([exp, client]) => ({ exp, rate: client?.sredCreditRate ?? 0 })),
+    map(([exp, client]) => {
+      const total = exp?.totalSredExpenditure ?? 0;
+      // Composition of the SR&ED expenditure (labor vs vendor) — drives the split bar.
+      const laborPct = exp && total > 0 ? Math.round((exp.sredLabor / total) * 100) : 0;
+      const vendorPct = total > 0 ? 100 - laborPct : 0;
+      return { exp, rate: client?.sredCreditRate ?? 0, laborPct, vendorPct };
+    }),
   );
 
   onAssistance(value: string): void {
