@@ -3,17 +3,15 @@ import { BehaviorSubject, of, firstValueFrom } from 'rxjs';
 
 import { ProjectsSummaryComponent } from './projects-summary.component';
 import { DashboardDataService } from '../../services/dashboard-data.service';
-import { Client, GrandTotals, Metric, ProjectSummary } from '../../models';
+import { Client, Metric, ProjectSummary } from '../../models';
 
 const SUMMARIES: ProjectSummary[] = [
   { projectId: 'p1', name: 'Rendering', color: '#28a745', isSred: true, hours: 80, laborAmount: 1900, vendorAmount: 0, sredVendorAmount: 0, amount: 1900 },
   { projectId: 'p2', name: 'API', color: '#dc3545', isSred: true, hours: 200, laborAmount: 9000, vendorAmount: 1000, sredVendorAmount: 1000, amount: 10000 },
 ];
-const TOTALS: GrandTotals = { totalHours: 280, totalLaborAmount: 10900, totalVendorAmount: 1000, totalAmount: 11900 };
 const CLIENT = { sredCreditRate: 0.5 } as Client;
 
 class FakeDataService {
-  grandTotals$ = of(TOTALS);
   projectSummaries$ = of(SUMMARIES);
   client$ = of(CLIENT);
   metric$ = new BehaviorSubject<Metric>('hours');
@@ -77,12 +75,5 @@ describe('ProjectsSummaryComponent', () => {
     const c = TestBed.createComponent(ProjectsSummaryComponent).componentInstance;
     const donut = await firstValueFrom(c.donut$);
     expect(donut.empty).toBeTrue();
-  });
-
-  it('renders the grand totals strip', () => {
-    fixture.detectChanges();
-    const text = fixture.nativeElement.textContent as string;
-    expect(text).toContain('Total hours');
-    expect(text).toContain('Total amount');
   });
 });

@@ -13,7 +13,6 @@ import {
 } from 'ng-apexcharts';
 
 import { DashboardDataService } from '../../services/dashboard-data.service';
-import { CountUpDirective } from '../../shared';
 import { Metric } from '../../models';
 import { projectMetricValue } from '../../core/derivations';
 
@@ -54,13 +53,11 @@ function groupSlices(slices: Slice[]): Slice[] {
 @Component({
   selector: 'app-projects-summary',
   standalone: true,
-  imports: [AsyncPipe, NgApexchartsModule, CountUpDirective],
+  imports: [AsyncPipe, NgApexchartsModule],
   templateUrl: './projects-summary.component.html',
 })
 export class ProjectsSummaryComponent {
   private readonly data = inject(DashboardDataService);
-
-  readonly totals$ = this.data.grandTotals$;
 
   /** Donut view-model — metric-aware series + formatters (all stable per emission). */
   readonly donut$ = combineLatest([this.data.projectSummaries$, this.data.metric$, this.data.client$]).pipe(

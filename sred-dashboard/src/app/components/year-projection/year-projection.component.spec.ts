@@ -3,7 +3,7 @@ import { of, firstValueFrom } from 'rxjs';
 
 import { YearProjectionComponent } from './year-projection.component';
 import { DashboardDataService } from '../../services/dashboard-data.service';
-import { Client, Projection } from '../../models';
+import { Client, ExpenditureSummary, Projection } from '../../models';
 
 const PROJECTION: Projection = {
   fractionElapsed: 0.875,
@@ -12,10 +12,15 @@ const PROJECTION: Projection = {
   ytdCredit: 175000, projectedCredit: 200000,
 };
 const CLIENT = { asOfDate: '2025-11-15' } as Client;
+const EXPENDITURE = {
+  sredLabor: 437500, nonSredLabor: 0, sredVendor: 0,
+  totalSredExpenditure: 437500, governmentAssistance: 0, creditableBase: 437500, creditAmount: 175000,
+} as ExpenditureSummary;
 
 class FakeDataService {
   projection$ = of(PROJECTION);
   client$ = of(CLIENT);
+  expenditureSummary$ = of(EXPENDITURE);
 }
 
 describe('YearProjectionComponent', () => {
@@ -41,6 +46,7 @@ describe('YearProjectionComponent', () => {
     fixture.detectChanges();
     const text = fixture.nativeElement.textContent as string;
     expect(text).toContain('Year Projection');
-    expect(text).toContain('Projected full year');
+    expect(text).toContain('SR&ED credit');
+    expect(text).toContain('projected');
   });
 });
