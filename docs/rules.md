@@ -68,3 +68,25 @@ These rules bind any AI agent (including Claude) working on this project.
   tests honestly with the actual output — never claim success without verifying it.
 - **Verify before asserting completion.** Run the code/tests and confirm the result before saying
   something works.
+
+## Documentation Conventions — plan-phase vs implementation-sprints-phase
+
+Each phase keeps **two** companion docs in `docs/`. They describe the same work from two angles:
+
+- **`sred-dashboard-plan-phase-N.md` — the DESIGN / "what & why".**
+  The reference/spec. Written once, mostly frozen. Holds: **Context** (problem + intent), the
+  **decisions** made, high-level **sprint summaries**, critical files, and the overall verification
+  approach. Read this to understand *what we're building and why*. Best for explaining design rationale.
+
+- **`implementation-sprints-phase-N.md` — the EXECUTION / "how".**
+  The runbook/checklist, a living doc during the build. Holds: **how the plan runs** (the per-sprint
+  gate + Definition of Done), a **sprint map**, and each sprint broken out with **Feature · Goal · Depends
+  on · In scope · Out of scope · Files · Acceptance criteria · Verification · Practices**. Work against
+  this sprint by sprint so nothing is hand-waved or scope-crept.
+
+**One-liner:** the plan is the *blueprint*; the implementation-sprints is the *construction schedule with
+the inspection checklist*.
+
+**Why two (despite overlap):** for a solo build they share the sprint list, but the plan stays a scannable
+*design rationale* while the sprints doc carries the *operational teeth* — explicit out-of-scope, exact
+files, per-sprint exit criteria, and the stop-commit-confirm gate. Every phase (1, 2, 3…) keeps both.
