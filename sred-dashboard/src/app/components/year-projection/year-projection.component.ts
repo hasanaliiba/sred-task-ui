@@ -8,9 +8,8 @@ import { CountUpDirective } from '../../shared';
 
 /**
  * Year projection (Req 6). Three cards — SR&ED hours, expenditure, and credit — each
- * showing the projected full-year figure (headline) with a thin progress bar marking
- * how much is realized year-to-date (the fiscal-year share elapsed). Linear run-rate
- * from the data layer; SR&ED-eligible work only.
+ * showing the selected period's actual figure as the headline, with the projected
+ * full-year value (linear run-rate) as the secondary line. SR&ED-eligible work only.
  */
 @Component({
   selector: 'app-year-projection',

@@ -12,25 +12,25 @@
         <!-- SR&ED hours -->
         <div class="bg-white rounded-xl shadow ring-1 ring-gray-100 p-5">
           <p class="text-xs font-medium uppercase tracking-wide text-gray-400">SR&amp;ED hours</p>
-          <p class="mt-1 text-3xl font-extrabold text-ink tabular-nums leading-none" [appCountUp]="p.projectedHours" [countUpSuffix]="' h'"></p>
-          <p class="mt-1 text-xs text-gray-400">projected full year</p>
-          <p class="mt-3 text-xs text-gray-500">YTD <span class="font-semibold text-gray-700 tabular-nums">{{ p.ytdHours | number: '1.0-0' }} h</span></p>
+          <p class="mt-1 text-3xl font-extrabold text-ink tabular-nums leading-none" [appCountUp]="p.ytdHours" [countUpSuffix]="' h'"></p>
+          <p class="mt-1 text-xs text-gray-400">selected period</p>
+          <p class="mt-3 text-xs text-gray-500">Projected full year <span class="font-semibold text-gray-700 tabular-nums">{{ p.projectedHours | number: '1.0-0' }} h</span></p>
         </div>
 
         <!-- SR&ED expenditure -->
         <div class="bg-white rounded-xl shadow ring-1 ring-gray-100 p-5">
           <p class="text-xs font-medium uppercase tracking-wide text-gray-400">SR&amp;ED expenditure</p>
-          <p class="mt-1 text-3xl font-extrabold text-ink tabular-nums leading-none" [appCountUp]="p.projectedAmount" countUpPrefix="$"></p>
-          <p class="mt-1 text-xs text-gray-400">projected full year</p>
-          <p class="mt-3 text-xs text-gray-500">YTD <span class="font-semibold text-gray-700 tabular-nums">{{ p.ytdAmount | currency: 'USD' : 'symbol' : '1.0-0' }}</span></p>
+          <p class="mt-1 text-3xl font-extrabold text-ink tabular-nums leading-none" [appCountUp]="p.ytdAmount" countUpPrefix="$"></p>
+          <p class="mt-1 text-xs text-gray-400">selected period</p>
+          <p class="mt-3 text-xs text-gray-500">Projected full year <span class="font-semibold text-gray-700 tabular-nums">{{ p.projectedAmount | currency: 'USD' : 'symbol' : '1.0-0' }}</span></p>
         </div>
 
         <!-- SR&ED credit (emphasized, brand blue) -->
         <div class="bg-white rounded-xl p-5 shadow-lg shadow-brand-500/30 ring-1 ring-brand-500/20">
           <p class="text-xs font-medium uppercase tracking-wide text-brand-700/70">SR&amp;ED credit</p>
-          <p class="mt-1 text-3xl font-extrabold text-brand-600 tabular-nums leading-none" [appCountUp]="p.projectedCredit" countUpPrefix="$"></p>
-          <p class="mt-1 text-xs text-gray-400">projected full year</p>
-          <p class="mt-3 text-xs text-gray-500">YTD <span class="font-semibold text-brand-700 tabular-nums">{{ p.ytdCredit | currency: 'USD' : 'symbol' : '1.0-0' }}</span></p>
+          <p class="mt-1 text-3xl font-extrabold text-brand-600 tabular-nums leading-none" [appCountUp]="p.ytdCredit" countUpPrefix="$"></p>
+          <p class="mt-1 text-xs text-gray-400">selected period</p>
+          <p class="mt-3 text-xs text-gray-500">Projected full year <span class="font-semibold text-brand-700 tabular-nums">{{ p.projectedCredit | currency: 'USD' : 'symbol' : '1.0-0' }}</span></p>
         </div>
       </div>
     </div>

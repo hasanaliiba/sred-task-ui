@@ -48,7 +48,8 @@ describe('YearProjectionComponent', () => {
     expect(text).toContain('SR&ED hours');
     expect(text).toContain('SR&ED expenditure');
     expect(text).toContain('SR&ED credit');
-    expect(text).toContain('projected full year');
+    expect(text).toContain('selected period');
+    expect(text).toContain('Projected full year');
     expect(text).toContain('elapsed');
   });
 });
