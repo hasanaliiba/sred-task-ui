@@ -5,7 +5,6 @@ import {
   NgApexchartsModule,
   ApexAxisChartSeries,
   ApexChart,
-  ApexXAxis,
   ApexYAxis,
   ApexPlotOptions,
   ApexDataLabels,
@@ -14,6 +13,7 @@ import {
 } from 'ng-apexcharts';
 
 import { DashboardDataService } from '../../services/dashboard-data.service';
+import { stableXaxis } from '../../shared';
 
 /**
  * Employee hours chart (Feature H, screenshot pg. 4): a stacked bar per employee
@@ -31,19 +31,23 @@ export class EmployeeHoursChartComponent {
 
   /**
    * View-model: map the hours breakdown into ApexCharts series + a STABLE xaxis
-   * object. The xaxis must be part of the emitted vm (not produced by a method in
-   * the template): ng-apexcharts re-creates the whole chart whenever any non-series
-   * input reference changes, so a per-change-detection new object would loop forever.
+   * reference. xaxis comes from `stableXaxis()` so its reference only changes when the
+   * categories change (not on a period change) — that keeps ng-apexcharts on an in-place
+   * updateSeries instead of a full destroy + async re-render (which jumped page scroll).
    */
+  private readonly xaxisFor = stableXaxis();
   readonly vm$ = this.data.employeeHoursBreakdown$.pipe(
-    map((rows) => ({
-      categories: rows.map((r) => r.name),
-      series: [
-        { name: 'SR&ED', data: rows.map((r) => r.sredHours) },
-        { name: 'Unclaimed', data: rows.map((r) => r.unclaimedHours) },
-      ] as ApexAxisChartSeries,
-      xaxis: { categories: rows.map((r) => r.name) } as ApexXAxis,
-    })),
+    map((rows) => {
+      const categories = rows.map((r) => r.name);
+      return {
+        categories,
+        series: [
+          { name: 'SR&ED', data: rows.map((r) => r.sredHours) },
+          { name: 'Unclaimed', data: rows.map((r) => r.unclaimedHours) },
+        ] as ApexAxisChartSeries,
+        xaxis: this.xaxisFor(categories),
+      };
+    }),
   );
 
   readonly chart: ApexChart = {

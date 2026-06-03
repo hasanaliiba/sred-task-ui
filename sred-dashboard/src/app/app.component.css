@@ -1,0 +1,37 @@
+/* Top route-progress bar: a brand-coloured segment sliding across a faint track.
+   Shown by AppComponent during route navigation (indeterminate). */
+.route-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 100;
+  background: rgba(0, 123, 255, 0.15);
+  overflow: hidden;
+}
+
+.route-loader::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40%;
+  background: linear-gradient(90deg, #007bff, #00b7ff);
+  animation: route-loader-slide 0.9s ease-in-out infinite;
+}
+
+@keyframes route-loader-slide {
+  0% {
+    left: -40%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-loader::before {
+    animation-duration: 1.6s;
+  }
+}

@@ -5,7 +5,6 @@ import {
   NgApexchartsModule,
   ApexAxisChartSeries,
   ApexChart,
-  ApexXAxis,
   ApexYAxis,
   ApexStroke,
   ApexMarkers,
@@ -16,6 +15,7 @@ import {
 } from 'ng-apexcharts';
 
 import { DashboardDataService } from '../../services/dashboard-data.service';
+import { stableXaxis } from '../../shared';
 
 const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 });
 const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
@@ -35,15 +35,19 @@ const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD
 export class EmployeeHourAndCostChartComponent {
   private readonly data = inject(DashboardDataService);
 
+  private readonly xaxisFor = stableXaxis();
   readonly vm$ = this.data.employeeCostBreakdown$.pipe(
-    map((rows) => ({
-      empty: rows.length === 0,
-      series: [
-        { name: 'SR&ED hours', type: 'column', data: rows.map((r) => r.hours) },
-        { name: 'SR&ED cost', type: 'line', data: rows.map((r) => Math.round(r.amount)) },
-      ] as ApexAxisChartSeries,
-      xaxis: { categories: rows.map((r) => r.name) } as ApexXAxis,
-    })),
+    map((rows) => {
+      const categories = rows.map((r) => r.name);
+      return {
+        empty: rows.length === 0,
+        series: [
+          { name: 'SR&ED hours', type: 'column', data: rows.map((r) => r.hours) },
+          { name: 'SR&ED cost', type: 'line', data: rows.map((r) => Math.round(r.amount)) },
+        ] as ApexAxisChartSeries,
+        xaxis: this.xaxisFor(categories),
+      };
+    }),
   );
 
   readonly chart: ApexChart = {

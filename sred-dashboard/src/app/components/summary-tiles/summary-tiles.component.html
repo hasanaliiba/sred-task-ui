@@ -1,43 +1,56 @@
 @if (vm$ | async; as vm) {
-  <div class="bg-white rounded-xl shadow ring-1 ring-gray-100 p-4">
-    <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
-      <h2 class="text-sm font-bold text-ink">{{ vm.metricLabel }} by period</h2>
+  <div class="bg-white rounded-xl shadow ring-1 ring-gray-100 p-3">
+    <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 mb-2.5">
+      <!-- Primary data driver: the metric segmented control completes "____ by period". -->
+      <div class="flex items-center gap-2">
+        <app-metric-toggle></app-metric-toggle>
+        <span class="text-xs font-medium text-gray-400">by period</span>
+      </div>
 
-      <!-- Quarter / Month view toggle (local) -->
-      <div class="inline-flex items-center gap-1 bg-gray-100 rounded-xl p-1 text-sm" role="group" aria-label="Tile view">
-        <button
-          type="button"
-          (click)="setViewMode('quarter')"
-          [attr.aria-pressed]="vm.mode === 'quarter'"
-          class="px-3 py-1 rounded-lg font-medium transition-colors"
-          [class.bg-brand-600]="vm.mode === 'quarter'"
-          [class.text-white]="vm.mode === 'quarter'"
-          [class.shadow]="vm.mode === 'quarter'"
-          [class.text-gray-600]="vm.mode !== 'quarter'"
-          [class.hover:bg-gray-200]="vm.mode !== 'quarter'"
-        >
-          By quarter
-        </button>
-        <button
-          type="button"
-          (click)="setViewMode('month')"
-          [attr.aria-pressed]="vm.mode === 'month'"
-          class="px-3 py-1 rounded-lg font-medium transition-colors"
-          [class.bg-brand-600]="vm.mode === 'month'"
-          [class.text-white]="vm.mode === 'month'"
-          [class.shadow]="vm.mode === 'month'"
-          [class.text-gray-600]="vm.mode !== 'month'"
-          [class.hover:bg-gray-200]="vm.mode !== 'month'"
-        >
-          By month
-        </button>
+      <div class="flex flex-wrap items-center gap-2">
+        <!-- Projected control (the custom date-range picker), left of the view toggle -->
+        <ng-content></ng-content>
+
+        <!-- Quarter / Month view toggle (local, secondary) -->
+        <div class="inline-flex items-center gap-0.5 bg-gray-100 rounded-lg p-0.5 text-xs" role="group" aria-label="Tile view">
+          <button
+            type="button"
+            (click)="setViewMode('quarter')"
+            [attr.aria-pressed]="vm.mode === 'quarter'"
+            class="px-2.5 py-1 rounded-md font-semibold transition-colors"
+            [class.bg-white]="vm.mode === 'quarter'"
+            [class.shadow-sm]="vm.mode === 'quarter'"
+            [class.text-brand-700]="vm.mode === 'quarter'"
+            [class.text-gray-500]="vm.mode !== 'quarter'"
+            [class.hover:text-gray-700]="vm.mode !== 'quarter'"
+          >
+            Quarter
+          </button>
+          <button
+            type="button"
+            (click)="setViewMode('month')"
+            [attr.aria-pressed]="vm.mode === 'month'"
+            class="px-2.5 py-1 rounded-md font-semibold transition-colors"
+            [class.bg-white]="vm.mode === 'month'"
+            [class.shadow-sm]="vm.mode === 'month'"
+            [class.text-brand-700]="vm.mode === 'month'"
+            [class.text-gray-500]="vm.mode !== 'month'"
+            [class.hover:text-gray-700]="vm.mode !== 'month'"
+          >
+            Month
+          </button>
+        </div>
       </div>
     </div>
 
+    <!-- Period tiles. Only the active tile reads prominently (brand); the rest stay
+         readable but recede, so a row of figures doesn't overwhelm the eye. -->
     <div
-      class="grid gap-2"
-      [class.grid-cols-2]="vm.mode === 'quarter'"
-      [class.sm:grid-cols-3]="true"
+      class="grid gap-1.5"
+      [class.grid-cols-3]="vm.mode === 'quarter'"
+      [class.grid-cols-4]="vm.mode === 'month'"
+      [class.sm:grid-cols-5]="vm.mode === 'quarter'"
+      [class.sm:grid-cols-6]="vm.mode === 'month'"
       [class.lg:grid-cols-5]="vm.mode === 'quarter'"
       [class.lg:grid-cols-6]="vm.mode === 'month'"
     >
@@ -46,23 +59,27 @@
           type="button"
           (click)="select(tile.period)"
           [attr.aria-pressed]="tile.active"
-          class="text-left rounded-lg border px-3 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-400"
-          [class.border-brand-600]="tile.active"
+          class="text-left rounded-lg border px-2.5 py-1.5 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-400"
+          [class.border-brand-500]="tile.active"
           [class.bg-brand-50]="tile.active"
-          [class.ring-1]="tile.active"
-          [class.ring-brand-200]="tile.active"
           [class.border-gray-200]="!tile.active"
           [class.hover:border-brand-300]="!tile.active"
           [class.hover:bg-gray-50]="!tile.active"
         >
-          <p class="text-[11px] font-medium uppercase tracking-wide" [class.text-brand-700]="tile.active" [class.text-gray-500]="!tile.active">
+          <p class="text-[10px] font-semibold uppercase tracking-wide" [class.text-brand-700]="tile.active" [class.text-gray-400]="!tile.active">
             {{ tile.label }}
           </p>
-          <p class="mt-0.5 text-base font-extrabold text-ink tabular-nums">
+          <p
+            class="mt-0.5 text-sm tabular-nums"
+            [class.font-bold]="tile.active"
+            [class.text-brand-700]="tile.active"
+            [class.font-semibold]="!tile.active"
+            [class.text-gray-700]="!tile.active"
+          >
             @if (vm.isCurrency) {
               {{ tile.value | currency: 'USD' : 'symbol' : '1.0-0' }}
             } @else {
-              {{ tile.value | number: '1.0-0' }}<span class="text-xs font-semibold text-gray-400"> h</span>
+              {{ tile.value | number: '1.0-0' }}<span class="text-[10px] font-medium text-gray-400"> h</span>
             }
           </p>
         </button>

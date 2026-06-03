@@ -5,15 +5,20 @@
     @if (donut.empty) {
       <p class="py-8 text-sm text-gray-400 text-center">Nothing to display for this period.</p>
     } @else {
+      <!-- min-h reserves the height: on a period change ng-apexcharts destroys the
+           chart and re-renders asynchronously, which would otherwise collapse this
+           host to 0. With every chart on the page doing that at once, the document
+           shrinks and the scroll jumps. Reserving the height keeps layout stable. -->
       <apx-chart
+        class="block min-h-[340px]"
         [series]="donut.series"
         [labels]="donut.labels"
         [colors]="donut.colors"
         [chart]="chart"
-        [plotOptions]="donut.plotOptions"
+        [plotOptions]="plotOptions"
         [legend]="legend"
         [dataLabels]="dataLabels"
-        [tooltip]="donut.tooltip"
+        [tooltip]="tooltip"
       ></apx-chart>
     }
   </div>

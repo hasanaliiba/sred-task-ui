@@ -4,11 +4,11 @@
 <div class="sticky top-14 lg:top-0 z-20 bg-gray-50/95 backdrop-blur border-b border-gray-200">
   <div class="max-w-7xl mx-auto px-4 py-3 space-y-3">
     <app-client-header></app-client-header>
-    <div class="flex flex-wrap items-center justify-between gap-3">
-      <app-metric-toggle></app-metric-toggle>
+    <!-- Summary tiles are the data driver: the metric toggle + the custom date-range
+         picker live in their header, alongside the period tiles + quarter/month view. -->
+    <app-summary-tiles>
       <app-date-range-picker></app-date-range-picker>
-    </div>
-    <app-summary-tiles></app-summary-tiles>
+    </app-summary-tiles>
   </div>
 </div>
 

@@ -5,7 +5,6 @@ import {
   NgApexchartsModule,
   ApexAxisChartSeries,
   ApexChart,
-  ApexXAxis,
   ApexYAxis,
   ApexStroke,
   ApexMarkers,
@@ -16,6 +15,7 @@ import {
 } from 'ng-apexcharts';
 
 import { DashboardDataService } from '../../services/dashboard-data.service';
+import { stableXaxis } from '../../shared';
 import { sredExpenditure } from '../../core/derivations';
 
 const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 });
@@ -38,15 +38,19 @@ const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD
 export class ProjectChartComponent {
   private readonly data = inject(DashboardDataService);
 
+  private readonly xaxisFor = stableXaxis();
   readonly vm$ = this.data.projectSummaries$.pipe(
-    map((projects) => ({
-      empty: projects.length === 0,
-      series: [
-        { name: 'Hours', type: 'column', data: projects.map((p) => p.hours) },
-        { name: 'Amount', type: 'line', data: projects.map((p) => Math.round(sredExpenditure(p))) },
-      ] as ApexAxisChartSeries,
-      xaxis: { categories: projects.map((p) => p.name) } as ApexXAxis,
-    })),
+    map((projects) => {
+      const categories = projects.map((p) => p.name);
+      return {
+        empty: projects.length === 0,
+        series: [
+          { name: 'Hours', type: 'column', data: projects.map((p) => p.hours) },
+          { name: 'Amount', type: 'line', data: projects.map((p) => Math.round(sredExpenditure(p))) },
+        ] as ApexAxisChartSeries,
+        xaxis: this.xaxisFor(categories),
+      };
+    }),
   );
 
   readonly chart: ApexChart = {

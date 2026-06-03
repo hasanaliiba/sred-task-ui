@@ -5,7 +5,6 @@ import {
   NgApexchartsModule,
   ApexAxisChartSeries,
   ApexChart,
-  ApexXAxis,
   ApexYAxis,
   ApexPlotOptions,
   ApexDataLabels,
@@ -14,6 +13,7 @@ import {
 } from 'ng-apexcharts';
 
 import { DashboardDataService } from '../../services/dashboard-data.service';
+import { stableXaxis } from '../../shared';
 
 /**
  * Team hours chart (Feature H, screenshot pg. 4): a stacked bar per team of SR&ED
@@ -32,15 +32,19 @@ import { DashboardDataService } from '../../services/dashboard-data.service';
 export class TeamHoursChartComponent {
   private readonly data = inject(DashboardDataService);
 
+  private readonly xaxisFor = stableXaxis();
   readonly vm$ = this.data.teamHoursBreakdown$.pipe(
-    map((teams) => ({
-      categories: teams.map((t) => t.teamName),
-      series: [
-        { name: 'SR&ED', data: teams.map((t) => t.teamSredHours) },
-        { name: 'Unclaimed', data: teams.map((t) => t.teamUnclaimedHours) },
-      ] as ApexAxisChartSeries,
-      xaxis: { categories: teams.map((t) => t.teamName) } as ApexXAxis,
-    })),
+    map((teams) => {
+      const categories = teams.map((t) => t.teamName);
+      return {
+        categories,
+        series: [
+          { name: 'SR&ED', data: teams.map((t) => t.teamSredHours) },
+          { name: 'Unclaimed', data: teams.map((t) => t.teamUnclaimedHours) },
+        ] as ApexAxisChartSeries,
+        xaxis: this.xaxisFor(categories),
+      };
+    }),
   );
 
   readonly chart: ApexChart = {

@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import {
   NgApexchartsModule,
   ApexNonAxisChartSeries,
@@ -59,11 +59,20 @@ function groupSlices(slices: Slice[]): Slice[] {
 export class ProjectsSummaryComponent {
   private readonly data = inject(DashboardDataService);
 
-  /** Donut view-model — metric-aware series + formatters (all stable per emission). */
+  /** Active metric, kept current so the stable chart formatters reflect it without rebuilding option objects. */
+  private currentMetric: Metric = 'hours';
+  private readonly fmt = (v: number): string => formatterFor(this.currentMetric)(v);
+
+  /**
+   * Donut view-model — ONLY series/labels/colors change per emission. plotOptions and
+   * tooltip are stable class fields (below): rebuilding them each emission changed their
+   * input references, which made ng-apexcharts destroy + recreate the chart on every
+   * period/metric change, jumping the scroll position onto the donut.
+   */
   readonly donut$ = combineLatest([this.data.projectSummaries$, this.data.metric$, this.data.client$]).pipe(
+    tap(([, metric]) => (this.currentMetric = metric)),
     map(([projects, metric, client]) => {
       const rate = client?.sredCreditRate ?? 0;
-      const fmt = formatterFor(metric);
       // SR&ED projects only — keeps the donut total in sync with the period tiles + projection.
       const slices = groupSlices(
         projects
@@ -71,30 +80,12 @@ export class ProjectsSummaryComponent {
           .map((p) => ({ name: p.name, value: Math.round(projectMetricValue(p, metric, rate)), color: p.color })),
       );
       const series = slices.map((s) => s.value) as ApexNonAxisChartSeries;
-      const plotOptions: ApexPlotOptions = {
-        pie: {
-          donut: {
-            labels: {
-              show: true,
-              value: { formatter: (v: string) => fmt(Number(v)) },
-              total: {
-                show: true,
-                label: 'Total',
-                formatter: (w: { globals: { seriesTotals: number[] } }) =>
-                  fmt(w.globals.seriesTotals.reduce((a, b) => a + b, 0)),
-              },
-            },
-          },
-        },
-      };
       return {
         empty: series.length === 0 || series.every((v) => v === 0),
         metricLabel: METRIC_LABEL[metric],
         series,
         labels: slices.map((s) => s.name),
         colors: slices.map((s) => s.color),
-        plotOptions,
-        tooltip: { y: { formatter: fmt } } as ApexTooltip,
       };
     }),
   );
@@ -102,4 +93,21 @@ export class ProjectsSummaryComponent {
   readonly chart: ApexChart = { type: 'donut', height: 340, fontFamily: 'inherit', animations: { enabled: true } };
   readonly legend: ApexLegend = { position: 'bottom' };
   readonly dataLabels: ApexDataLabels = { enabled: true };
+  readonly plotOptions: ApexPlotOptions = {
+    pie: {
+      donut: {
+        labels: {
+          show: true,
+          value: { formatter: (v: string) => this.fmt(Number(v)) },
+          total: {
+            show: true,
+            label: 'Total',
+            formatter: (w: { globals: { seriesTotals: number[] } }) =>
+              this.fmt(w.globals.seriesTotals.reduce((a, b) => a + b, 0)),
+          },
+        },
+      },
+    },
+  };
+  readonly tooltip: ApexTooltip = { y: { formatter: (v: number) => this.fmt(v) } };
 }

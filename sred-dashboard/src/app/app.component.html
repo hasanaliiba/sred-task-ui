@@ -1,1 +1,4 @@
+@if (loading$ | async) {
+  <div class="route-loader" role="status" aria-label="Loading page"></div>
+}
 <router-outlet></router-outlet>

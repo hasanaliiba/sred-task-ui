@@ -5,6 +5,7 @@ import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { DashboardDataService } from '../../services/dashboard-data.service';
 import { Metric, Period } from '../../models';
 import { periodMetricTotal } from '../../core/derivations';
+import { MetricToggleComponent } from '../metric-toggle/metric-toggle.component';
 
 type ViewMode = 'quarter' | 'month';
 
@@ -54,7 +55,7 @@ const METRIC_LABELS: Record<Metric, string> = {
 @Component({
   selector: 'app-summary-tiles',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, DecimalPipe],
+  imports: [AsyncPipe, CurrencyPipe, DecimalPipe, MetricToggleComponent],
   templateUrl: './summary-tiles.component.html',
 })
 export class SummaryTilesComponent {
