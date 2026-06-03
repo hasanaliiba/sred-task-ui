@@ -193,7 +193,10 @@ export function projectMetricValue(summary: ProjectSummary, metric: Metric, cred
  * assistance is an annual figure, so it is intentionally not subtracted per-period here).
  */
 export function periodMetricTotal(ws: ClientWorkspace, period: Period, metric: Metric): number {
-  const summaries = buildProjectSummaries(ws, period);
+  // SR&ED-only across all three metrics — unclaimed projects (hours + labor) are excluded,
+  // so the tiles reconcile with the SR&ED projection and credit (only the blue strip, now
+  // removed, ever showed unclaimed totals).
+  const summaries = buildProjectSummaries(ws, period).filter((s) => s.isSred);
   switch (metric) {
     case 'hours':
       return summaries.reduce((sum, s) => sum + s.hours, 0);

@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "sred-dashboard",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["start"],
+      "cwd": "/Users/hasansali/Career/Projects/sred-final-v2/sred-dashboard",
+      "port": 4200
+    }
+  ]
+}

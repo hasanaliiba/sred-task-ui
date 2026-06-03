@@ -230,6 +230,16 @@ describe('derivations — period metric total (drives the tiles)', () => {
     expect(periodMetricTotal(ws, 'FY', 'credit')).toBe(950); // 1900 × 0.5
   });
 
+  it('is SR&ED-only: unclaimed hours and labor are excluded from the tiles', () => {
+    const ws = workedExampleWorkspace();
+    // 90h on an Unclaimed project (employee A @ $100/h) — must NOT inflate the tiles.
+    ws.projects.push({ id: 'unc', name: 'Unclaimed', color: '#999', isSred: false });
+    ws.timesheets.push({ employeeId: 'a', projectId: 'unc', hours: months({ m1: 90 }) });
+    expect(periodMetricTotal(ws, 'FY', 'hours')).toBe(80); // not 170
+    expect(periodMetricTotal(ws, 'FY', 'expenditure')).toBe(1900); // unclaimed $9,000 labor excluded
+    expect(periodMetricTotal(ws, 'FY', 'credit')).toBe(950);
+  });
+
   it('credit total mirrors the per-project credit sum (no government-assistance offset)', () => {
     const ws = workedExampleWorkspace();
     const summaries = buildProjectSummaries(ws, 'FY');

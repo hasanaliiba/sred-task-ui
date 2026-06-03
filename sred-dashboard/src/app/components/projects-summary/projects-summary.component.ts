@@ -67,8 +67,11 @@ export class ProjectsSummaryComponent {
     map(([projects, metric, client]) => {
       const rate = client?.sredCreditRate ?? 0;
       const fmt = formatterFor(metric);
+      // SR&ED projects only — keeps the donut total in sync with the period tiles + projection.
       const slices = groupSlices(
-        projects.map((p) => ({ name: p.name, value: Math.round(projectMetricValue(p, metric, rate)), color: p.color })),
+        projects
+          .filter((p) => p.isSred)
+          .map((p) => ({ name: p.name, value: Math.round(projectMetricValue(p, metric, rate)), color: p.color })),
       );
       const series = slices.map((s) => s.value) as ApexNonAxisChartSeries;
       const plotOptions: ApexPlotOptions = {
