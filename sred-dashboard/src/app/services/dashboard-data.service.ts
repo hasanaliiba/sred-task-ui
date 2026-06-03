@@ -181,6 +181,11 @@ export class DashboardDataService {
     map((w) => w?.vendorInvoices ?? []),
   );
 
+  /** Full fiscal-year SR&ED expenditure (period-independent) — drives the Manage-page stat cards. */
+  readonly expenditureSummaryFull$: Observable<ExpenditureSummary | null> = this.activeWorkspace$.pipe(
+    map((w) => (w ? buildExpenditureSummary(w, 'FY') : null)),
+  );
+
   readonly governmentAssistance$: Observable<number> = this.activeWorkspace$.pipe(
     map((w) => w?.governmentAssistanceTotal ?? 0),
   );
