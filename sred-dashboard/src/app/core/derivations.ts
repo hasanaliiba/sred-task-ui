@@ -23,6 +23,7 @@ import type {
   Projection,
   TeamCost,
   TeamDetail,
+  TeamMemberDetail,
   TeamHoursBreakdown,
 } from '../models';
 
@@ -357,6 +358,7 @@ export function buildTeamDetail(ws: ClientWorkspace, teamId: string | null, peri
   let unclaimedHours = 0;
   let sredCost = 0;
   let totalCost = 0;
+  const perMember: TeamMemberDetail[] = [];
   // Team's hours per project: sum each member's per-project lines into one map.
   const byProject = new Map<string, EmployeeProjectHours>();
   for (const e of members) {
@@ -366,6 +368,15 @@ export function buildTeamDetail(ws: ClientWorkspace, teamId: string | null, peri
     unclaimedHours += split.unclaimedHours;
     sredCost += split.sredHours * rate;
     totalCost += split.totalHours * rate;
+    perMember.push({
+      employeeId: e.id,
+      name: e.name,
+      hourlyRate: rate,
+      sredHours: split.sredHours,
+      totalHours: split.totalHours,
+      sredCost: split.sredHours * rate,
+      totalCost: split.totalHours * rate,
+    });
     for (const line of projectHoursForEmployee(ws, e.id, period)) {
       const existing = byProject.get(line.projectId);
       if (existing) {
@@ -388,6 +399,7 @@ export function buildTeamDetail(ws: ClientWorkspace, teamId: string | null, peri
     totalCost,
     credit: sredCost * ws.client.sredCreditRate,
     perProject: [...byProject.values()].filter((l) => l.hours > 0).sort((a, b) => b.hours - a.hours),
+    perMember: perMember.filter((m) => m.totalHours > 0).sort((a, b) => b.totalCost - a.totalCost),
   };
 }
 

@@ -49,6 +49,27 @@
         }
       </div>
 
+      <!-- Members (each member's hours · rate · total cost, desc by cost) -->
+      <div class="mt-5">
+        <p class="text-xs uppercase tracking-wide text-gray-400 mb-2">Members</p>
+        @if (detail.perMember.length === 0) {
+          <p class="text-sm text-gray-400">No members with logged hours.</p>
+        } @else {
+          <ul class="space-y-1.5 max-h-44 overflow-y-auto">
+            @for (m of detail.perMember; track m.employeeId) {
+              <li class="flex items-center justify-between gap-3 text-sm">
+                <span class="truncate min-w-0">{{ m.name }}</span>
+                <span class="flex items-center gap-3 shrink-0 tabular-nums">
+                  <span class="text-gray-500">{{ m.totalHours | number }}h</span>
+                  <span class="text-gray-400">{{ m.hourlyRate | currency: 'USD' : 'symbol' : '1.0-0' }}/h</span>
+                  <span class="w-16 text-right font-medium text-gray-700">{{ m.totalCost | currency: 'USD' : 'symbol' : '1.0-0' }}</span>
+                </span>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+
       <!-- Summary: hours, then cost (expenses) + credit -->
       <dl class="mt-5 grid grid-cols-3 gap-3 text-center border-t border-gray-100 pt-4">
         <div>

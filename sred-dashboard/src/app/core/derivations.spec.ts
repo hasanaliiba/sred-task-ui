@@ -306,6 +306,11 @@ describe('derivations — team detail (modal)', () => {
     expect(tm.perProject.length).toBe(1);
     expect(tm.perProject[0].projectId).toBe('p');
     expect(tm.perProject[0].hours).toBe(30);
+    // Per-member breakdown, desc by total cost: B ($400) then A ($1,000)? No — sorted desc.
+    expect(tm.perMember.map((m) => m.employeeId)).toEqual(['a', 'b']); // A $1,000 > B $400
+    expect(tm.perMember[0].hourlyRate).toBe(100);
+    expect(tm.perMember[0].totalCost).toBe(1000);
+    expect(tm.perMember[1].totalCost).toBe(400);
 
     const unassigned = buildTeamDetail(ws, null, 'FY')!; // C only
     expect(unassigned.teamName).toBe('Unassigned');
