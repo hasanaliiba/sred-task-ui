@@ -26,6 +26,8 @@ export interface ProjectContributor {
   name: string;
   teamName: string | null; // null = not on a team
   hours: number;
+  hourlyRate: number; // effective salary / standard annual hours
+  cost: number; // hours × hourlyRate
 }
 
 /** Grand totals across all projects (Req 5). */

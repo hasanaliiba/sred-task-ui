@@ -216,6 +216,7 @@ export function buildProjectContributors(
   period: Period,
 ): ProjectContributor[] {
   const emps = employeeMap(ws);
+  const std = ws.client.standardAnnualHours;
   const teamNames = new Map(ws.teams.map((t) => [t.id, t.name]));
   const byEmployee = new Map<string, number>();
   for (const t of ws.timesheets.filter((t) => t.projectId === projectId)) {
@@ -224,11 +225,14 @@ export function buildProjectContributors(
   return [...byEmployee.entries()]
     .map(([employeeId, hours]) => {
       const e = emps.get(employeeId);
+      const rate = e ? hourlyRate(e, std) : 0;
       return {
         employeeId,
         name: e?.name ?? employeeId,
         teamName: e?.teamId ? teamNames.get(e.teamId) ?? null : null,
         hours,
+        hourlyRate: rate,
+        cost: hours * rate,
       };
     })
     .filter((c) => c.hours > 0)

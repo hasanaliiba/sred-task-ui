@@ -279,6 +279,13 @@ describe('derivations — project contributors (modal)', () => {
     const a = rows.find((r) => r.employeeId === 'a')!;
     expect(a.teamName).toBe('Team');
     expect(rows.find((r) => r.employeeId === 'b')!.teamName).toBeNull();
+
+    // Rate + cost: A 10h @ $100 = $1,000; B 20h @ $20 = $400; C 50h @ $10 = $500.
+    expect(a.hourlyRate).toBe(100);
+    expect(a.cost).toBe(1000);
+    const c = rows.find((r) => r.employeeId === 'c')!;
+    expect(c.hourlyRate).toBe(10);
+    expect(c.cost).toBe(500);
   });
 });
 

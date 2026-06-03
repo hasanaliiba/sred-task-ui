@@ -30,12 +30,16 @@
         } @else {
           <ul class="space-y-1.5 max-h-44 overflow-y-auto">
             @for (c of people; track c.employeeId) {
-              <li class="flex items-center justify-between text-sm">
+              <li class="flex items-center justify-between gap-3 text-sm">
                 <span class="inline-flex items-center gap-2 min-w-0">
                   <span class="truncate">{{ c.name }}</span>
                   @if (c.teamName) { <span class="text-[10px] uppercase text-gray-400 shrink-0">{{ c.teamName }}</span> }
                 </span>
-                <span class="font-medium text-gray-700 shrink-0">{{ c.hours | number }}h</span>
+                <span class="flex items-center gap-3 shrink-0 tabular-nums">
+                  <span class="text-gray-500">{{ c.hours | number }}h</span>
+                  <span class="text-gray-400">{{ c.hourlyRate | currency: 'USD' : 'symbol' : '1.0-0' }}/h</span>
+                  <span class="w-16 text-right font-medium text-gray-700">{{ c.cost | currency: 'USD' : 'symbol' : '1.0-0' }}</span>
+                </span>
               </li>
             }
           </ul>
