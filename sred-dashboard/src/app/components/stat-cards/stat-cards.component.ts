@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { NgClass } from '@angular/common';
 
 /** One metric tile in a Manage-page stat row. `value`/`hint` are pre-formatted strings. */
 export interface StatCard {
@@ -16,8 +17,9 @@ export interface StatCard {
   selector: 'app-stat-cards',
   standalone: true,
   host: { class: 'block' },
+  imports: [NgClass],
   template: `
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="grid gap-4 sm:grid-cols-2" [ngClass]="gridCols">
       @for (c of cards; track c.label) {
         <div class="bg-white rounded-xl shadow ring-1 ring-gray-100 p-5">
           <p class="text-xs uppercase tracking-wide text-gray-400">{{ c.label }}</p>
@@ -32,4 +34,18 @@ export interface StatCard {
 })
 export class StatCardsComponent {
   @Input() cards: StatCard[] = [];
+
+  /** Spread the cards across the full row: column count matches the number of cards. */
+  get gridCols(): string {
+    switch (this.cards.length) {
+      case 1:
+        return 'lg:grid-cols-1';
+      case 2:
+        return 'lg:grid-cols-2';
+      case 3:
+        return 'lg:grid-cols-3';
+      default:
+        return 'lg:grid-cols-4';
+    }
+  }
 }
