@@ -93,6 +93,22 @@ Constraints unchanged: **RxJS observables only (no signals)**, the existing pale
 - `components/team-detail/team-detail.component.html`: add a **Members** section (name · hourly rate · total cost).
 - **Verify:** build + tests (extend the team-detail test); modal shows the per-member breakdown.
 
+### P3.7 — Login page redesign (two-panel split)
+- **What:** replace the single centered login card with a **two-column split** (refs: Uigeek / Pouyesh):
+  - **Left hero panel** — the brand **navy → brand gradient** (matching the sidebar), the **logo + name**
+    top-left, a **headline** + subtext (e.g. "SR&ED projections, simplified." / "Employee hours, project
+    costs, and projected R&D credits — in one place."), and a small **copyright** pinned at the bottom.
+  - **Right panel** — the existing **username/password** sign-in form, centered, with the logo, a
+    **"Sign in · Welcome back"** heading, the error region, the fields, the Sign In button, and the
+    **demo-credential quick-login chips** kept (great for the recruiter demo).
+- **Reuse:** `AuthService.login` + role-based routing and the existing reactive form are unchanged — this is
+  a **layout/visual restyle only**. Use `assets/images/logo.svg` for the brand mark.
+- **Responsive:** two columns on `lg+`; on mobile the hero collapses (hidden or a slim top band) and the
+  form takes the full width.
+- **Files:** `pages/login/login.component.html` (+ minor copy in `.ts` if needed); reuse the logo asset.
+- **Acceptance:** split layout on desktop; login + role routing still work; demo chips work; stacks cleanly
+  on mobile; build + tests green.
+
 ---
 
 ## Critical files

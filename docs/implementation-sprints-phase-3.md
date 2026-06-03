@@ -32,6 +32,7 @@
 | P3.4 | Manage-page stat cards                  | Replace client-header with full-year stat cards per page       |
 | P3.5 | Project contributor rate + cost         | Per-contributor hourly rate + cost in the project modal        |
 | P3.6 | Team per-member breakdown               | Members list (employee · rate · total cost) in the team modal  |
+| P3.7 | Login page redesign                     | Two-panel split — brand hero (left) + sign-in form (right)     |
 
 ---
 
@@ -161,6 +162,24 @@
   build + tests green.
 - **Verification:** open a team with members; verify member totals sum to the team's cost.
 - **Practices:** pure derivation, currency formatting, tabular numbers.
+
+## P3.7 — Login page redesign (two-panel split)
+- **Feature:** Replace the single centered login card with a polished **two-column split** layout.
+- **Goal / why:** The login is the first screen; a branded split (hero + form) reads far more professional
+  than a lone card (refs: Uigeek / Pouyesh login screens).
+- **Depends on:** P3.1 (logo asset); existing `AuthService` + login form.
+- **In scope:**
+  - **Left hero panel:** brand **navy → brand gradient** (matches the sidebar), **logo + name** top-left,
+    a **headline + subtext**, and a small **copyright** at the bottom.
+  - **Right panel:** the existing **username/password** form, centered, with the logo, a "Sign in ·
+    Welcome back" heading, the error region, fields, Sign In button, and the **demo quick-login chips**.
+  - Responsive: two columns on `lg+`; hero hidden/slim on mobile, form full-width.
+- **Out of scope:** auth logic, routing, the seeded users — restyle only.
+- **Files:** `pages/login/login.component.html` (+ minor copy in `.ts`); reuse `assets/images/logo.svg`.
+- **Acceptance:** split layout on desktop; login + role-based routing unchanged; demo chips work; clean
+  stack on mobile; build + tests green.
+- **Verification:** `ng serve`, view `/login` at 1280/768/375; sign in as `afiniti` and `admin`.
+- **Practices:** visual hierarchy, contrast on the dark hero, responsive layout, alt text on the logo.
 
 ---
 
