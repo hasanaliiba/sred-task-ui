@@ -137,6 +137,15 @@ Constraints unchanged: **RxJS observables only (no signals)**, the existing pale
   stat cards ↔ search/grid gaps).
 - **P3.9e — Project modal number layout:** re-place the project-detail totals (labor hours, labor/vendor/total
   cost, credit) more professionally.
+- **P3.9f — Sidebar hover-expand + collapse/pin toggle (done):** both sidebars grow from the thin icon rail
+  (`w-16`) to `w-56` on hover (lg+), revealing nav labels, the brand name, and the profile name/role; the
+  hover-expanded rail overlays content (fixed, z-40, labels fade in via `group-hover`). A **collapse/pin
+  toggle button** in the sidebar holds the open state (`sidebarPinned$` in `UiPreferencesService`); when
+  pinned the rail stays expanded and the content reflows to make room (no overlay). Mobile drawer unchanged.
+- **P3.9g — Overview reorder + records grids (done):** new section order — YTD projection → expenditure
+  summary → projects (chart + donut) → teams → employees. Added a **Records** section at the bottom: a new
+  `<app-overview-grids>` tabbed panel (Employees by default; toggle Invoices / Teams / Projects), reusing the
+  existing grid components (search + inline edit/delete; creation stays on the Manage pages).
 
 ---
 

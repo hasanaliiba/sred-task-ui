@@ -34,7 +34,7 @@
 | P3.6 | Team per-member breakdown               | Members list (employee · rate · total cost) in the team modal  |
 | P3.7 | Login page redesign                     | Two-panel split — brand hero (left) + sign-in form (right)     |
 | P3.8 | Overview UX polish (post-review)        | Chart scroll-jump fix, route loader, period-control merge, slim tiles, client-header declutter |
-| P3.9 | Visual polish pass (post-review)        | Rocket logo + favicon + floating default + bg gradient (a); Year Projection (b); expenditure (c); grid spacing (d); project modal (e) |
+| P3.9 | Visual polish pass (post-review)        | Logo/favicon + floating default + bg gradient (a); Year Projection (b); expenditure (c); grid spacing (d); project modal (e); sidebar hover-expand (f); Overview reorder + records grids (g) |
 
 ---
 
@@ -224,6 +224,18 @@
   stat cards ↔ search/grid). **Files:** `pages/{employees,teams,projects,invoices}/*`, `components/stat-cards/*`.
 - **P3.9e — Project modal number layout:** re-place the project-detail totals (labor hours, labor/vendor/total
   cost, credit) more professionally. **Files:** `components/project-detail/*`.
+- **P3.9f — Sidebar hover-expand + collapse/pin toggle (done):** both sidebars grow from the icon rail
+  (`w-16`) to `w-56` on hover (lg+), revealing nav labels + brand name + profile name/role; the hover-expanded
+  rail overlays content (fixed, z-40, `group-hover` reveals labels). A collapse/pin toggle button holds the
+  open state (`sidebarPinned$`); when pinned the rail stays `w-56` and the content reflows (shell margin
+  grows) instead of overlaying. Labels also reveal via the `group-[.is-pinned]` variant. Mobile drawer
+  unchanged. **Files:** `services/ui-preferences.service.ts`, `components/sidebar/{sidebar,admin-sidebar}.component.{ts,html}`,
+  `layouts/{client,admin}-shell.component.{ts,html}`.
+- **P3.9g — Overview reorder + records grids (done):** reordered the Overview to YTD → expenditure → projects
+  (chart + donut) → teams → employees; added a bottom **Records** section — a new `<app-overview-grids>`
+  tabbed panel (Employees default; toggle Invoices / Teams / Projects) reusing the grid components (search +
+  inline edit/delete; creation stays on the Manage pages). **Files:**
+  `components/overview-grids/*`, `pages/dashboard/dashboard.component.{ts,html}`.
 - **Verification (each):** `ng build` clean + `ng test` green; `ng serve` walk-through of the affected view.
 
 ---
