@@ -11,6 +11,7 @@ import { ProjectChartComponent } from '../../components/project-chart/project-ch
 import { ProjectsSummaryComponent } from '../../components/projects-summary/projects-summary.component';
 import { ExpenditureSummaryComponent } from '../../components/expenditure-summary/expenditure-summary.component';
 import { YearProjectionComponent } from '../../components/year-projection/year-projection.component';
+import { OverviewGridsComponent } from '../../components/overview-grids/overview-grids.component';
 import { RevealDirective } from '../../shared';
 
 /**
@@ -32,6 +33,7 @@ import { RevealDirective } from '../../shared';
     ProjectsSummaryComponent,
     ExpenditureSummaryComponent,
     YearProjectionComponent,
+    OverviewGridsComponent,
     RevealDirective,
   ],
   templateUrl: './dashboard.component.html',

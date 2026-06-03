@@ -13,35 +13,38 @@
 </div>
 
 <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
-  <!-- Year projection — headline KPIs + gauge (Req 6) -->
+  <!-- Year projection — headline KPIs (Req 6) -->
   <section appReveal>
     <app-year-projection></app-year-projection>
   </section>
 
-  <!-- Employee charts (Feature H) -->
-  <section appReveal class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <app-employee-hours-chart></app-employee-hours-chart>
-    <app-employee-hour-and-cost-chart></app-employee-hour-and-cost-chart>
+  <!-- SR&ED expenditure + credit breakdown, right after the YTD summary (Feature E) -->
+  <section appReveal>
+    <app-expenditure-summary></app-expenditure-summary>
   </section>
 
-  <!-- Team charts: SR&ED-vs-Unclaimed hours + SR&ED hours & cost (roster grid lives on /teams) -->
+  <!-- Projects: per-project hours/cost + cost-share donut (Req 4 & 5) -->
+  <section appReveal>
+    <app-project-chart></app-project-chart>
+  </section>
+  <section appReveal>
+    <app-projects-summary></app-projects-summary>
+  </section>
+
+  <!-- Teams: SR&ED-vs-Unclaimed hours + SR&ED hours & cost (Feature H) -->
   <section appReveal class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <app-team-hours-chart></app-team-hours-chart>
     <app-team-hour-and-cost-chart></app-team-hour-and-cost-chart>
   </section>
 
-  <!-- Per-project chart (Req 4) -->
-  <section appReveal>
-    <app-project-chart></app-project-chart>
+  <!-- Employees: SR&ED-vs-Unclaimed hours + SR&ED hours & cost (Feature H) -->
+  <section appReveal class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <app-employee-hours-chart></app-employee-hours-chart>
+    <app-employee-hour-and-cost-chart></app-employee-hour-and-cost-chart>
   </section>
 
-  <!-- All-projects summary: grand totals + cost-share donut (Req 5) -->
+  <!-- Records: tabbed grids (employees by default; toggle invoices / teams / projects) -->
   <section appReveal>
-    <app-projects-summary></app-projects-summary>
-  </section>
-
-  <!-- SR&ED expenditure + credit breakdown (period-bound; Feature E) -->
-  <section appReveal>
-    <app-expenditure-summary></app-expenditure-summary>
+    <app-overview-grids></app-overview-grids>
   </section>
 </main>
