@@ -36,17 +36,19 @@ describe('YearProjectionComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('derives the elapsed-percent gauge from fractionElapsed', async () => {
+  it('derives the elapsed percent from fractionElapsed', async () => {
     const vm = await firstValueFrom(component.vm$);
     expect(vm.pct).toBe(88); // 0.875 → 88%
-    expect(vm.gauge).toEqual([88]);
   });
 
-  it('renders YTD and projected figures', () => {
+  it('renders the three projection cards with projected figures', () => {
     fixture.detectChanges();
     const text = fixture.nativeElement.textContent as string;
     expect(text).toContain('Year Projection');
+    expect(text).toContain('SR&ED hours');
+    expect(text).toContain('SR&ED expenditure');
     expect(text).toContain('SR&ED credit');
-    expect(text).toContain('projected');
+    expect(text).toContain('projected full year');
+    expect(text).toContain('% elapsed');
   });
 });

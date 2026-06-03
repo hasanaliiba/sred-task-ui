@@ -4,73 +4,50 @@
       <div class="flex flex-wrap items-baseline justify-between gap-x-3 mb-3">
         <h2 class="text-lg font-bold text-ink">Year Projection</h2>
         <p class="text-xs text-gray-400">
-          Linear run-rate to {{ vm.client?.asOfDate | date: 'mediumDate' : 'UTC' }} · SR&amp;ED-eligible work only
+          Linear run-rate to {{ vm.client?.asOfDate | date: 'mediumDate' : 'UTC' }} · {{ vm.pct }}% of the year elapsed · SR&amp;ED-eligible work only
         </p>
       </div>
 
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <!-- 1. Fiscal year elapsed -->
-        <div class="bg-white rounded-xl shadow ring-1 ring-gray-100 p-5 flex flex-col">
-          <p class="text-xs uppercase tracking-wide text-gray-400">Fiscal year elapsed</p>
-          <div class="flex-1 flex items-center justify-center">
-            <apx-chart
-              [series]="vm.gauge"
-              [chart]="chart"
-              [labels]="gaugeLabels"
-              [plotOptions]="plotOptions"
-              [colors]="gaugeColors"
-            ></apx-chart>
-          </div>
-        </div>
-
-        <!-- 2. SR&ED hours -->
+      <div class="grid gap-4 sm:grid-cols-3">
+        <!-- SR&ED hours -->
         <div class="bg-white rounded-xl shadow ring-1 ring-gray-100 p-5">
-          <p class="text-xs uppercase tracking-wide text-gray-400">SR&amp;ED hours</p>
-          <div class="mt-4 flex items-end justify-between gap-2">
-            <div>
-              <p class="text-2xl font-extrabold text-ink leading-none" [appCountUp]="p.ytdHours" [countUpSuffix]="' h'"></p>
-              <p class="text-xs text-gray-400 mt-1.5">to date</p>
-            </div>
-            <div class="text-right">
-              <p class="text-lg font-bold text-brand-700 leading-none" [appCountUp]="p.projectedHours" [countUpSuffix]="' h'"></p>
-              <p class="text-xs text-gray-400 mt-1.5">projected</p>
-            </div>
+          <p class="text-xs font-medium uppercase tracking-wide text-gray-400">SR&amp;ED hours</p>
+          <p class="mt-1 text-3xl font-extrabold text-ink tabular-nums leading-none" [appCountUp]="p.projectedHours" [countUpSuffix]="' h'"></p>
+          <p class="mt-1 text-xs text-gray-400">projected full year</p>
+          <div class="mt-3 h-1.5 w-full rounded-full bg-gray-100 overflow-hidden">
+            <div class="h-full rounded-full bg-brand-500" [style.width.%]="vm.pct"></div>
+          </div>
+          <div class="mt-1.5 flex justify-between text-xs">
+            <span class="text-gray-500">YTD <span class="font-semibold text-gray-700 tabular-nums">{{ p.ytdHours | number: '1.0-0' }} h</span></span>
+            <span class="text-gray-400">{{ vm.pct }}% elapsed</span>
           </div>
         </div>
 
-        <!-- 3. SR&ED expenditure -->
+        <!-- SR&ED expenditure -->
         <div class="bg-white rounded-xl shadow ring-1 ring-gray-100 p-5">
-          <p class="text-xs uppercase tracking-wide text-gray-400">SR&amp;ED expenditure</p>
-          <div class="mt-4 flex items-end justify-between gap-2">
-            <div>
-              <p class="text-2xl font-extrabold text-ink leading-none" [appCountUp]="p.ytdAmount" countUpPrefix="$"></p>
-              <p class="text-xs text-gray-400 mt-1.5">to date</p>
-            </div>
-            <div class="text-right">
-              <p class="text-lg font-bold text-brand-700 leading-none" [appCountUp]="p.projectedAmount" countUpPrefix="$"></p>
-              <p class="text-xs text-gray-400 mt-1.5">projected</p>
-            </div>
+          <p class="text-xs font-medium uppercase tracking-wide text-gray-400">SR&amp;ED expenditure</p>
+          <p class="mt-1 text-3xl font-extrabold text-ink tabular-nums leading-none" [appCountUp]="p.projectedAmount" countUpPrefix="$"></p>
+          <p class="mt-1 text-xs text-gray-400">projected full year</p>
+          <div class="mt-3 h-1.5 w-full rounded-full bg-gray-100 overflow-hidden">
+            <div class="h-full rounded-full bg-brand-500" [style.width.%]="vm.pct"></div>
           </div>
-          @if (vm.exp; as exp) {
-            <p class="text-xs text-gray-400 mt-3 pt-3 border-t border-gray-100">
-              Labor {{ exp.sredLabor | currency: 'USD':'symbol':'1.0-0' }}
-              · Vendor {{ exp.sredVendor | currency: 'USD':'symbol':'1.0-0' }}
-            </p>
-          }
+          <div class="mt-1.5 flex justify-between text-xs">
+            <span class="text-gray-500">YTD <span class="font-semibold text-gray-700 tabular-nums">{{ p.ytdAmount | currency: 'USD' : 'symbol' : '1.0-0' }}</span></span>
+            <span class="text-gray-400">{{ vm.pct }}% elapsed</span>
+          </div>
         </div>
 
-        <!-- 4. SR&ED credit (white card, green number + green shadow) -->
+        <!-- SR&ED credit (emphasized) -->
         <div class="bg-white rounded-xl p-5 shadow-lg shadow-success/30 ring-1 ring-success/20">
-          <p class="text-xs uppercase tracking-wide text-success-dark/70">SR&amp;ED credit</p>
-          <div class="mt-4 flex items-end justify-between gap-2">
-            <div>
-              <p class="text-2xl font-extrabold text-success leading-none" [appCountUp]="p.ytdCredit" countUpPrefix="$"></p>
-              <p class="text-xs text-gray-400 mt-1.5">to date</p>
-            </div>
-            <div class="text-right">
-              <p class="text-lg font-bold text-success leading-none" [appCountUp]="p.projectedCredit" countUpPrefix="$"></p>
-              <p class="text-xs text-gray-400 mt-1.5">projected</p>
-            </div>
+          <p class="text-xs font-medium uppercase tracking-wide text-success-dark/70">SR&amp;ED credit</p>
+          <p class="mt-1 text-3xl font-extrabold text-success tabular-nums leading-none" [appCountUp]="p.projectedCredit" countUpPrefix="$"></p>
+          <p class="mt-1 text-xs text-gray-400">projected full year</p>
+          <div class="mt-3 h-1.5 w-full rounded-full bg-success/15 overflow-hidden">
+            <div class="h-full rounded-full bg-success" [style.width.%]="vm.pct"></div>
+          </div>
+          <div class="mt-1.5 flex justify-between text-xs">
+            <span class="text-gray-500">YTD <span class="font-semibold text-success-dark tabular-nums">{{ p.ytdCredit | currency: 'USD' : 'symbol' : '1.0-0' }}</span></span>
+            <span class="text-gray-400">{{ vm.pct }}% elapsed</span>
           </div>
         </div>
       </div>
