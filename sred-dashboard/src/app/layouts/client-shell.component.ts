@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
 import { SidebarComponent } from '../components/sidebar/sidebar.component';
 import { FeedbackModalComponent } from '../components/feedback/feedback-modal.component';
+import { UiPreferencesService } from '../services/ui-preferences.service';
 
 /**
  * Client shell (Phase 2): fixed left sidebar + <router-outlet> for the routed pages
@@ -14,10 +16,12 @@ import { FeedbackModalComponent } from '../components/feedback/feedback-modal.co
 @Component({
   selector: 'app-client-shell',
   standalone: true,
-  imports: [RouterOutlet, SidebarComponent, FeedbackModalComponent],
+  imports: [AsyncPipe, NgClass, RouterOutlet, SidebarComponent, FeedbackModalComponent],
   templateUrl: './client-shell.component.html',
 })
 export class ClientShellComponent {
+  /** Sidebar style preference (floating vs flush) — set from admin Settings. */
+  readonly floating$ = inject(UiPreferencesService).floatingSidebar$;
   navOpen = false;
   feedbackOpen = false;
 
