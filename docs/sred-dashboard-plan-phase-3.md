@@ -109,6 +109,35 @@ Constraints unchanged: **RxJS observables only (no signals)**, the existing pale
 - **Acceptance:** split layout on desktop; login + role routing still work; demo chips work; stacks cleanly
   on mobile; build + tests green.
 
+### P3.8 — Overview UX polish (post-review)
+- **What:** a round of polish after reviewing the running Overview page:
+  - **Chart scroll-jump fix** — a period change recreated every ApexChart (any non-series input change forces
+    a full destroy + async re-render), collapsing layout and jumping the scroll. A shared `stableXaxis()`
+    memoizer reuses the `xaxis` reference (categories are period-independent) so only `series` changes →
+    in-place `updateSeries`. The donut keeps a reserved min-height; its `plotOptions`/`tooltip` are stable fields.
+  - **Route progress bar** — a thin top loading bar driven by the router lifecycle.
+  - **Period-control consolidation** — the metric toggle moves into the summary-tiles header
+    ("[Hours|Expenditures|Credits] by period") as the page's data driver, with the date-range picker projected
+    beside the quarter/month view toggle.
+  - **Summary tiles slimmed** — compact segmented controls, tighter spacing, active-only emphasis so a row of
+    figures doesn't overwhelm.
+  - **Client header decluttered** — company name only; fiscal year / data as of / time zone as a clean
+    label/value strip with icons + dividers.
+
+### P3.9 — Visual polish pass (post-review)
+- **P3.9a — Branding + defaults + backdrop (done):** use the square rocket mark (`sredio-logo-2`) in both
+  sidebars + regenerate `favicon.ico` from it; default the sidebar to **floating**; add a subtle
+  light-blue→grey background gradient for a professional dashboard feel.
+- **P3.9b — Year Projection redesign:** remove the semicircle gauge; reshape into a clean row — the credit
+  card gets a polished "headline figure + thin elapsed progress bar" treatment (ref: earnest calculator),
+  hours / expenditure / credit as the three cards.
+- **P3.9c — Expenditure summary combined layout:** merge the breakdown + headline-credit cards into one clean
+  combined panel (ref image).
+- **P3.9d — Manage-grid spacing:** fix the cramped vertical rhythm on the manage pages (title/description ↔
+  stat cards ↔ search/grid gaps).
+- **P3.9e — Project modal number layout:** re-place the project-detail totals (labor hours, labor/vendor/total
+  cost, credit) more professionally.
+
 ---
 
 ## Critical files

@@ -33,6 +33,8 @@
 | P3.5 | Project contributor rate + cost         | Per-contributor hourly rate + cost in the project modal        |
 | P3.6 | Team per-member breakdown               | Members list (employee · rate · total cost) in the team modal  |
 | P3.7 | Login page redesign                     | Two-panel split — brand hero (left) + sign-in form (right)     |
+| P3.8 | Overview UX polish (post-review)        | Chart scroll-jump fix, route loader, period-control merge, slim tiles, client-header declutter |
+| P3.9 | Visual polish pass (post-review)        | Rocket logo + favicon + floating default + bg gradient (a); Year Projection (b); expenditure (c); grid spacing (d); project modal (e) |
 
 ---
 
@@ -180,6 +182,49 @@
   stack on mobile; build + tests green.
 - **Verification:** `ng serve`, view `/login` at 1280/768/375; sign in as `afiniti` and `admin`.
 - **Practices:** visual hierarchy, contrast on the dark hero, responsive layout, alt text on the logo.
+
+---
+
+## P3.8 — Overview UX polish (post-review)
+- **Feature:** A polish round after reviewing the running Overview page. Status: **done**.
+- **In scope:**
+  - **Chart scroll-jump fix:** a period change recreated every ApexChart (ng-apexcharts does a full
+    destroy + async `render()` on any non-series input change), collapsing layout and jumping scroll onto the
+    donut. Added shared `stableXaxis()` (categories are period-independent → reuse the `xaxis` reference) so
+    only `series` changes → in-place `updateSeries`, no recreate/flicker. Donut keeps a reserved min-height;
+    its `plotOptions`/`tooltip` are stable class fields.
+  - **Route progress bar:** `AppComponent` derives `loading$` from the router lifecycle and shows a thin
+    indeterminate top bar (lingers ~250ms so it's visible even on instant navigations).
+  - **Period-control consolidation:** metric toggle moves into the summary-tiles header
+    ("[Hours|Expenditures|Credits] by period"); date-range picker projected next to the quarter/month toggle.
+  - **Summary tiles slimmed:** compact segmented controls, tighter spacing, active-only emphasis.
+  - **Client header declutter:** company name only; fiscal year / data as of / time zone as an icon + label/
+    value strip with dividers.
+- **Files:** `components/{employee,team,project}*-chart/*`, `shared/stable-xaxis.ts`, `app.component.*`,
+  `components/summary-tiles/*`, `components/metric-toggle/*`, `pages/dashboard/*`, `components/client-header/*`.
+- **Verification:** scroll to the bottom of Overview, click period tiles — no scroll jump/flicker; loader
+  shows on navigation; build + tests green.
+
+---
+
+## P3.9 — Visual polish pass (post-review)
+- **P3.9a — Branding + defaults + backdrop (done):**
+  - Use the square rocket mark (`assets/images/sredio-logo-2.jpeg`) in both sidebars as a rounded tile;
+    regenerate `favicon.ico` from it (square → crisp).
+  - Default the sidebar to **floating** (`UiPreferencesService.floatingSidebar$$ = true`); admin toggle copy updated.
+  - Subtle light-blue→grey background gradient on `body` (removed the flat `bg-gray-50`).
+  - **Files:** `components/sidebar/*`, `src/index.html`, `src/favicon.ico`, `services/ui-preferences.service.ts`,
+    `pages/admin/admin-settings.component.html`, `src/styles.css`.
+- **P3.9b — Year Projection redesign:** remove the semicircle gauge; reshape into a clean row — credit card
+  gets a polished headline-figure + thin elapsed progress bar (ref: earnest calculator); hours / expenditure /
+  credit as the three cards. **Files:** `components/year-projection/*`.
+- **P3.9c — Expenditure summary combined layout:** merge the breakdown + headline-credit cards into one clean
+  panel (ref image). **Files:** `components/expenditure-summary/*`.
+- **P3.9d — Manage-grid spacing:** fix the cramped vertical rhythm on the manage pages (title/description ↔
+  stat cards ↔ search/grid). **Files:** `pages/{employees,teams,projects,invoices}/*`, `components/stat-cards/*`.
+- **P3.9e — Project modal number layout:** re-place the project-detail totals (labor hours, labor/vendor/total
+  cost, credit) more professionally. **Files:** `components/project-detail/*`.
+- **Verification (each):** `ng build` clean + `ng test` green; `ng serve` walk-through of the affected view.
 
 ---
 
