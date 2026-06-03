@@ -215,14 +215,14 @@
   - Subtle light-blue→grey background gradient on `body` (removed the flat `bg-gray-50`).
   - **Files:** `components/sidebar/*`, `src/index.html`, `src/favicon.ico`, `services/ui-preferences.service.ts`,
     `pages/admin/admin-settings.component.html`, `src/styles.css`.
-- **P3.9b — Year Projection redesign:** remove the semicircle gauge; reshape into a clean row — credit card
+- **P3.9b — Year Projection redesign (done):** remove the semicircle gauge; reshape into a clean row — credit card
   gets a polished headline-figure + thin elapsed progress bar (ref: earnest calculator); hours / expenditure /
   credit as the three cards. **Files:** `components/year-projection/*`.
-- **P3.9c — Expenditure summary combined layout:** merge the breakdown + headline-credit cards into one clean
+- **P3.9c — Expenditure summary combined layout (done):** merge the breakdown + headline-credit cards into one clean
   panel (ref image). **Files:** `components/expenditure-summary/*`.
-- **P3.9d — Manage-grid spacing:** fix the cramped vertical rhythm on the manage pages (title/description ↔
+- **P3.9d — Manage-grid spacing (done):** fix the cramped vertical rhythm on the manage pages (title/description ↔
   stat cards ↔ search/grid). **Files:** `pages/{employees,teams,projects,invoices}/*`, `components/stat-cards/*`.
-- **P3.9e — Project modal number layout:** re-place the project-detail totals (labor hours, labor/vendor/total
+- **P3.9e — Project modal number layout (done):** re-place the project-detail totals (labor hours, labor/vendor/total
   cost, credit) more professionally. **Files:** `components/project-detail/*`.
 - **P3.9f — Sidebar hover-expand + collapse/pin toggle (done):** both sidebars grow from the icon rail
   (`w-16`) to `w-56` on hover (lg+), revealing nav labels + brand name + profile name/role; the hover-expanded

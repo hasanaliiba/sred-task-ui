@@ -128,14 +128,14 @@ Constraints unchanged: **RxJS observables only (no signals)**, the existing pale
 - **P3.9a — Branding + defaults + backdrop (done):** use the square rocket mark (`sredio-logo-2`) in both
   sidebars + regenerate `favicon.ico` from it; default the sidebar to **floating**; add a subtle
   light-blue→grey background gradient for a professional dashboard feel.
-- **P3.9b — Year Projection redesign:** remove the semicircle gauge; reshape into a clean row — the credit
+- **P3.9b — Year Projection redesign (done):** remove the semicircle gauge; reshape into a clean row — the credit
   card gets a polished "headline figure + thin elapsed progress bar" treatment (ref: earnest calculator),
   hours / expenditure / credit as the three cards.
-- **P3.9c — Expenditure summary combined layout:** merge the breakdown + headline-credit cards into one clean
+- **P3.9c — Expenditure summary combined layout (done):** merge the breakdown + headline-credit cards into one clean
   combined panel (ref image).
-- **P3.9d — Manage-grid spacing:** fix the cramped vertical rhythm on the manage pages (title/description ↔
+- **P3.9d — Manage-grid spacing (done):** fix the cramped vertical rhythm on the manage pages (title/description ↔
   stat cards ↔ search/grid gaps).
-- **P3.9e — Project modal number layout:** re-place the project-detail totals (labor hours, labor/vendor/total
+- **P3.9e — Project modal number layout (done):** re-place the project-detail totals (labor hours, labor/vendor/total
   cost, credit) more professionally.
 - **P3.9f — Sidebar hover-expand + collapse/pin toggle (done):** both sidebars grow from the thin icon rail
   (`w-16`) to `w-56` on hover (lg+), revealing nav labels, the brand name, and the profile name/role; the
