@@ -19,6 +19,7 @@ import { RowActionsComponent } from '../row-actions/row-actions.component';
 @Component({
   selector: 'app-invoice-grid',
   standalone: true,
+  host: { class: 'block' },
   imports: [AsyncPipe, CurrencyPipe, DatePipe, VendorFormComponent, PaginatorComponent, AvatarComponent, RowActionsComponent],
   templateUrl: './invoice-grid.component.html',
 })

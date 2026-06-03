@@ -20,6 +20,7 @@ import { RowActionsComponent } from '../row-actions/row-actions.component';
 @Component({
   selector: 'app-team-grid',
   standalone: true,
+  host: { class: 'block' },
   imports: [
     AsyncPipe,
     DecimalPipe,

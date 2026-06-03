@@ -20,6 +20,7 @@ import { sredExpenditure } from '../../core/derivations';
 @Component({
   selector: 'app-project-grid',
   standalone: true,
+  host: { class: 'block' },
   imports: [
     AsyncPipe,
     CurrencyPipe,

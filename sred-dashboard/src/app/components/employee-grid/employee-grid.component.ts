@@ -19,6 +19,7 @@ import { RowActionsComponent } from '../row-actions/row-actions.component';
 @Component({
   selector: 'app-employee-grid',
   standalone: true,
+  host: { class: 'block' },
   imports: [
     AsyncPipe,
     CurrencyPipe,
