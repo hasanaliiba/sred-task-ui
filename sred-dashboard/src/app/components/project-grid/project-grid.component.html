@@ -1,18 +1,8 @@
 <div class="bg-white rounded-xl shadow ring-1 ring-gray-100 overflow-hidden">
-  <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
-    <div>
-      <h2 class="text-lg font-bold text-ink">Projects</h2>
-      <p class="text-sm text-gray-400">Add, edit, or remove projects · hours and cost shown for the full year · removing one cascades to its hours and invoices.</p>
-    </div>
-    <div class="flex items-center gap-2 shrink-0">
-      <input type="search" (input)="setSearch($any($event.target).value)" placeholder="Search projects…"
-        aria-label="Search projects"
-        class="w-40 sm:w-56 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-300 focus:border-brand-500 outline-none" />
-      <button type="button" (click)="openAdd()"
-        class="text-sm text-white bg-brand-600 hover:bg-brand-700 rounded-lg px-4 py-2 transition-colors">
-        + Add project
-      </button>
-    </div>
+  <div class="px-4 py-3 border-b border-gray-100">
+    <input type="search" (input)="setSearch($any($event.target).value)" placeholder="Search projects…"
+      aria-label="Search projects"
+      class="w-full sm:w-72 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-300 focus:border-brand-500 outline-none" />
   </div>
 
   @if (vm$ | async; as vm) {
@@ -21,13 +11,13 @@
     } @else {
       <div class="overflow-x-auto">
         <table class="w-full text-sm text-left">
-          <thead class="text-xs uppercase tracking-wide text-gray-500 bg-gray-50">
+          <thead class="text-xs tracking-wide text-gray-500 bg-gray-50/70">
             <tr>
-              <th class="px-6 py-3">Project</th>
-              <th class="px-6 py-3">SR&amp;ED</th>
-              <th class="px-6 py-3 text-right">Hours</th>
-              <th class="px-6 py-3 text-right">Amount</th>
-              <th class="px-6 py-3 text-right">Actions</th>
+              <th class="px-6 py-3 font-medium">Project</th>
+              <th class="px-6 py-3 font-medium">SR&amp;ED</th>
+              <th class="px-6 py-3 font-medium text-right">Hours</th>
+              <th class="px-6 py-3 font-medium text-right">Amount</th>
+              <th class="px-6 py-3 font-medium text-right">Actions</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100">
@@ -35,9 +25,9 @@
               <tr class="hover:bg-gray-50 transition-colors">
                 <td class="px-6 py-3 whitespace-nowrap">
                   <button type="button" (click)="openDetail(p)"
-                    class="inline-flex items-center gap-2 font-medium text-gray-900 hover:text-brand-600 transition-colors">
-                    <span class="h-2.5 w-2.5 rounded-full" [style.background-color]="p.color"></span>
-                    {{ p.name }}
+                    class="group inline-flex items-center gap-3 text-left">
+                    <app-avatar [name]="p.name" [color]="p.color"></app-avatar>
+                    <span class="font-medium text-brand-700 group-hover:underline">{{ p.name }}</span>
                   </button>
                 </td>
                 <td class="px-6 py-3">
@@ -50,10 +40,7 @@
                 <td class="px-6 py-3 text-right text-gray-600">{{ p.hours | number }}</td>
                 <td class="px-6 py-3 text-right font-semibold text-ink">{{ sredExpenditure(p) | currency: 'USD':'symbol':'1.0-0' }}</td>
                 <td class="px-6 py-3 text-right whitespace-nowrap">
-                  <button type="button" (click)="openEdit(p)"
-                    class="text-xs text-brand-600 hover:bg-brand-50 rounded px-2 py-1 transition-colors">Edit</button>
-                  <button type="button" (click)="askDelete(p)"
-                    class="text-xs text-danger hover:bg-danger/10 rounded px-2 py-1 transition-colors">Delete</button>
+                  <app-row-actions (edit)="openEdit(p)" (delete)="askDelete(p)"></app-row-actions>
                 </td>
               </tr>
             }

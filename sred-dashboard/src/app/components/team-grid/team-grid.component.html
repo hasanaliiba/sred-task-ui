@@ -1,19 +1,9 @@
 <div class="bg-white rounded-xl shadow ring-1 ring-gray-100 overflow-hidden">
   @if (vm$ | async; as vm) {
-    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
-      <div>
-        <h2 class="text-lg font-bold text-ink">Teams</h2>
-        <p class="text-sm text-gray-400">Add, edit, or remove teams and assign members · SR&amp;ED vs Unclaimed hours (full year) · removing a team unassigns its members.</p>
-      </div>
-      <div class="flex items-center gap-2 shrink-0">
-        <input type="search" (input)="setSearch($any($event.target).value)" placeholder="Search teams…"
-          aria-label="Search teams"
-          class="w-40 sm:w-56 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-300 focus:border-brand-500 outline-none" />
-        <button type="button" (click)="openAdd(vm.employees)"
-          class="text-sm text-white bg-brand-600 hover:bg-brand-700 rounded-lg px-4 py-2 transition-colors">
-          + Add team
-        </button>
-      </div>
+    <div class="px-4 py-3 border-b border-gray-100">
+      <input type="search" (input)="setSearch($any($event.target).value)" placeholder="Search teams…"
+        aria-label="Search teams"
+        class="w-full sm:w-72 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-300 focus:border-brand-500 outline-none" />
     </div>
 
     @if (vm.total === 0) {
@@ -21,14 +11,14 @@
     } @else {
       <div class="overflow-x-auto">
         <table class="w-full text-sm text-left">
-          <thead class="text-xs uppercase tracking-wide text-gray-500 bg-gray-50">
+          <thead class="text-xs tracking-wide text-gray-500 bg-gray-50/70">
             <tr>
-              <th class="px-6 py-3">Team</th>
-              <th class="px-6 py-3">Members</th>
-              <th class="px-6 py-3 text-right">SR&amp;ED Hours</th>
-              <th class="px-6 py-3 text-right">Unclaimed Hours</th>
-              <th class="px-6 py-3 text-right">Total Hours</th>
-              <th class="px-6 py-3 text-right">Actions</th>
+              <th class="px-6 py-3 font-medium">Team</th>
+              <th class="px-6 py-3 font-medium">Members</th>
+              <th class="px-6 py-3 font-medium text-right">SR&amp;ED Hours</th>
+              <th class="px-6 py-3 font-medium text-right">Unclaimed Hours</th>
+              <th class="px-6 py-3 font-medium text-right">Total Hours</th>
+              <th class="px-6 py-3 font-medium text-right">Actions</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100">
@@ -36,9 +26,9 @@
               <tr class="hover:bg-gray-50 transition-colors align-top">
                 <td class="px-6 py-3 whitespace-nowrap">
                   <button type="button" (click)="openDetail(team)"
-                    class="inline-flex items-center gap-2 font-medium text-gray-900 hover:text-brand-600 transition-colors">
-                    <span class="h-2.5 w-2.5 rounded-full" [style.background-color]="team.color"></span>
-                    {{ team.teamName }}
+                    class="group inline-flex items-center gap-3 text-left">
+                    <app-avatar [name]="team.teamName" [color]="team.color"></app-avatar>
+                    <span class="font-medium text-brand-700 group-hover:underline">{{ team.teamName }}</span>
                   </button>
                 </td>
                 <td class="px-6 py-3 text-gray-600">
@@ -52,10 +42,7 @@
                 <td class="px-6 py-3 text-right font-semibold text-ink">{{ team.teamSredHours + team.teamUnclaimedHours | number }}</td>
                 <td class="px-6 py-3 text-right whitespace-nowrap">
                   @if (team.teamId !== null) {
-                    <button type="button" (click)="openEdit(team, vm.employees)"
-                      class="text-xs text-brand-600 hover:bg-brand-50 rounded px-2 py-1 transition-colors">Edit</button>
-                    <button type="button" (click)="askDelete(team)"
-                      class="text-xs text-danger hover:bg-danger/10 rounded px-2 py-1 transition-colors">Delete</button>
+                    <app-row-actions (edit)="openEdit(team)" (delete)="askDelete(team)"></app-row-actions>
                   } @else {
                     <span class="text-xs text-gray-300">—</span>
                   }

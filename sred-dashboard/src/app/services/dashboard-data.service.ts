@@ -186,6 +186,11 @@ export class DashboardDataService {
     map((w) => (w ? buildExpenditureSummary(w, 'FY') : null)),
   );
 
+  /** Full fiscal-year per-employee hours split — feeds the Employees grid's hours column. */
+  readonly employeeHoursBreakdownFull$: Observable<HoursSplit[]> = this.activeWorkspace$.pipe(
+    map((w) => (w ? buildEmployeeHoursBreakdown(w, 'FY') : [])),
+  );
+
   readonly governmentAssistance$: Observable<number> = this.activeWorkspace$.pipe(
     map((w) => w?.governmentAssistanceTotal ?? 0),
   );

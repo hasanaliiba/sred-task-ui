@@ -8,6 +8,8 @@ import { Project, ProjectSummary } from '../../models';
 import { ProjectFormComponent } from '../project-form/project-form.component';
 import { ProjectDetailComponent } from '../project-detail/project-detail.component';
 import { PaginatorComponent } from '../paginator/paginator.component';
+import { AvatarComponent } from '../avatar/avatar.component';
+import { RowActionsComponent } from '../row-actions/row-actions.component';
 import { sredExpenditure } from '../../core/derivations';
 
 /**
@@ -18,7 +20,16 @@ import { sredExpenditure } from '../../core/derivations';
 @Component({
   selector: 'app-project-grid',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, DecimalPipe, ProjectFormComponent, ProjectDetailComponent, PaginatorComponent],
+  imports: [
+    AsyncPipe,
+    CurrencyPipe,
+    DecimalPipe,
+    ProjectFormComponent,
+    ProjectDetailComponent,
+    PaginatorComponent,
+    AvatarComponent,
+    RowActionsComponent,
+  ],
   templateUrl: './project-grid.component.html',
 })
 export class ProjectGridComponent {

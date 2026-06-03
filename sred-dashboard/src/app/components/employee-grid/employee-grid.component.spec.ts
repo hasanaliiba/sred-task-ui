@@ -22,6 +22,10 @@ const ROWS: EmployeeRow[] = [
 
 class FakeDataService {
   employees$ = of(ROWS);
+  employeeHoursBreakdownFull$ = of([
+    { id: 'e1', name: 'Anne User', sredHours: 1200, unclaimedHours: 200, totalHours: 1400 },
+    { id: 'e2', name: 'Sophia', sredHours: 800, unclaimedHours: 0, totalHours: 800 },
+  ]);
   teams$ = of([{ id: 't1', name: 'Rendering Team', color: '#28a745' }]);
   addEmployee = jasmine.createSpy('addEmployee');
   updateEmployee = jasmine.createSpy('updateEmployee');

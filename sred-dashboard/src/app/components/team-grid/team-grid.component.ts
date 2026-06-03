@@ -1,13 +1,15 @@
 import { Component, inject } from '@angular/core';
 import { AsyncPipe, DecimalPipe } from '@angular/common';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { DashboardDataService } from '../../services/dashboard-data.service';
 import { Employee, HoursSplit, Team, TeamHoursBreakdown } from '../../models';
 import { TeamFormComponent } from '../team-form/team-form.component';
 import { TeamDetailComponent } from '../team-detail/team-detail.component';
 import { PaginatorComponent } from '../paginator/paginator.component';
+import { AvatarComponent } from '../avatar/avatar.component';
+import { RowActionsComponent } from '../row-actions/row-actions.component';
 
 /**
  * Team list + CRUD. Lists teams with members and SR&ED/Unclaimed hours (full fiscal
@@ -18,7 +20,15 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 @Component({
   selector: 'app-team-grid',
   standalone: true,
-  imports: [AsyncPipe, DecimalPipe, TeamFormComponent, TeamDetailComponent, PaginatorComponent],
+  imports: [
+    AsyncPipe,
+    DecimalPipe,
+    TeamFormComponent,
+    TeamDetailComponent,
+    PaginatorComponent,
+    AvatarComponent,
+    RowActionsComponent,
+  ],
   templateUrl: './team-grid.component.html',
 })
 export class TeamGridComponent {
@@ -35,6 +45,9 @@ export class TeamGridComponent {
     this.search$,
     this.page$,
   ]).pipe(
+    // Keep the latest employee list so the page-header "Create team" button (which
+    // calls openAdd() with no args) and row edits can seed the member picker.
+    tap(([, employeeRows]) => (this.latestEmployees = employeeRows.map((r) => r.employee))),
     map(([teams, employeeRows, search, page]) => {
       const q = search.trim().toLowerCase();
       const filtered = q
@@ -76,6 +89,8 @@ export class TeamGridComponent {
   editing: Team | null = null;
   editingMemberIds: string[] = [];
   allEmployees: Employee[] = [];
+  /** Latest employee snapshot (kept current by vm$) for seeding the form. */
+  private latestEmployees: Employee[] = [];
   pendingDelete: TeamHoursBreakdown | null = null;
   detailOpen = false;
   detailTeamId: string | null = null;
@@ -89,17 +104,17 @@ export class TeamGridComponent {
     this.detailOpen = false;
   }
 
-  openAdd(employees: Employee[]): void {
+  openAdd(): void {
     this.editing = null;
     this.editingMemberIds = [];
-    this.allEmployees = employees;
+    this.allEmployees = this.latestEmployees;
     this.formOpen = true;
   }
 
-  openEdit(team: TeamHoursBreakdown, employees: Employee[]): void {
+  openEdit(team: TeamHoursBreakdown): void {
     this.editing = { id: team.teamId as string, name: team.teamName, color: team.color };
-    this.editingMemberIds = employees.filter((e) => e.teamId === team.teamId).map((e) => e.id);
-    this.allEmployees = employees;
+    this.editingMemberIds = this.latestEmployees.filter((e) => e.teamId === team.teamId).map((e) => e.id);
+    this.allEmployees = this.latestEmployees;
     this.formOpen = true;
   }
 

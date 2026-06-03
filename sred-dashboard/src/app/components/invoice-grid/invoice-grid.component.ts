@@ -7,6 +7,8 @@ import { DashboardDataService } from '../../services/dashboard-data.service';
 import { Project, VendorInvoice } from '../../models';
 import { VendorFormComponent } from '../vendor-form/vendor-form.component';
 import { PaginatorComponent } from '../paginator/paginator.component';
+import { AvatarComponent } from '../avatar/avatar.component';
+import { RowActionsComponent } from '../row-actions/row-actions.component';
 
 /**
  * Vendor invoices table + CRUD (Feature E). Lists the selected period's invoices
@@ -17,11 +19,23 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 @Component({
   selector: 'app-invoice-grid',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, DatePipe, VendorFormComponent, PaginatorComponent],
+  imports: [AsyncPipe, CurrencyPipe, DatePipe, VendorFormComponent, PaginatorComponent, AvatarComponent, RowActionsComponent],
   templateUrl: './invoice-grid.component.html',
 })
 export class InvoiceGridComponent {
   private readonly data = inject(DashboardDataService);
+
+  /** Tailwind classes for the status pill — green when done, amber when in progress, else slate. */
+  statusPill(status: string): string {
+    const s = (status ?? '').toLowerCase();
+    if (s.includes('complete') || s.includes('paid') || s.includes('done')) {
+      return 'bg-success/15 text-success-dark';
+    }
+    if (s.includes('progress') || s.includes('pending') || s.includes('review')) {
+      return 'bg-warning/20 text-warning-dark';
+    }
+    return 'bg-gray-100 text-gray-500';
+  }
 
   readonly pageSize = 10;
   private readonly page$ = new BehaviorSubject<number>(1);

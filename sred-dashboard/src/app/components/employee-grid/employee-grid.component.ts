@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
+import { AsyncPipe, CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -8,16 +8,28 @@ import { Employee } from '../../models';
 import { EmployeeFormComponent } from '../employee-form/employee-form.component';
 import { EmployeeDetailComponent } from '../employee-detail/employee-detail.component';
 import { PaginatorComponent } from '../paginator/paginator.component';
+import { AvatarComponent } from '../avatar/avatar.component';
+import { RowActionsComponent } from '../row-actions/row-actions.component';
 
 /**
  * Employee salary grid + CRUD (Req 3, Feature C). Lists employees with the derived
- * hourly rate, supports add / edit / remove via a modal form, and paginates the
- * table client-side (~10/page). Salary/rate are not period-dependent.
+ * hourly rate and full-year SR&ED hours, supports add / edit / remove via a modal
+ * form, and paginates the table client-side (~10/page). Salary/rate aren't period-dependent.
  */
 @Component({
   selector: 'app-employee-grid',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, DatePipe, EmployeeFormComponent, EmployeeDetailComponent, PaginatorComponent],
+  imports: [
+    AsyncPipe,
+    CurrencyPipe,
+    DatePipe,
+    DecimalPipe,
+    EmployeeFormComponent,
+    EmployeeDetailComponent,
+    PaginatorComponent,
+    AvatarComponent,
+    RowActionsComponent,
+  ],
   templateUrl: './employee-grid.component.html',
 })
 export class EmployeeGridComponent {
@@ -28,13 +40,26 @@ export class EmployeeGridComponent {
   private readonly page$ = new BehaviorSubject<number>(1);
   private readonly search$ = new BehaviorSubject<string>('');
 
-  /** Paged view: filters by name/province, clamps the page, and slices the rows. */
-  readonly vm$ = combineLatest([this.data.employees$, this.search$, this.page$]).pipe(
-    map(([rows, search, page]) => {
+  /** Paged view: joins FY SR&ED hours per employee, filters by name/province, clamps + slices. */
+  readonly vm$ = combineLatest([
+    this.data.employees$,
+    this.data.employeeHoursBreakdownFull$,
+    this.search$,
+    this.page$,
+  ]).pipe(
+    map(([rows, hours, search, page]) => {
+      const byId = new Map(hours.map((h) => [h.id, h]));
+      const withHours = rows.map((r) => ({
+        ...r,
+        sredHours: byId.get(r.employee.id)?.sredHours ?? 0,
+        totalHours: byId.get(r.employee.id)?.totalHours ?? 0,
+      }));
       const q = search.trim().toLowerCase();
       const filtered = q
-        ? rows.filter((r) => r.employee.name.toLowerCase().includes(q) || r.employee.province.toLowerCase().includes(q))
-        : rows;
+        ? withHours.filter(
+            (r) => r.employee.name.toLowerCase().includes(q) || r.employee.province.toLowerCase().includes(q),
+          )
+        : withHours;
       const total = filtered.length;
       const pages = Math.max(1, Math.ceil(total / this.pageSize));
       const current = Math.min(page, pages);
