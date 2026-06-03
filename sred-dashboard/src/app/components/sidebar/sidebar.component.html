@@ -1,49 +1,41 @@
-<div class="h-full bg-gradient-to-b from-navy to-brand-900 text-white flex flex-col">
+<div class="h-full bg-gradient-to-b from-navy to-brand-900 text-white flex flex-col items-center">
   <!-- Brand -->
-  <div class="h-16 flex items-center px-5 shrink-0 border-b border-white/10">
-    <img src="assets/images/logo.svg" alt="SR&amp;ED Dashboard logo" class="h-9 w-9 rounded-lg" />
+  <div class="h-16 w-full flex items-center justify-center shrink-0 border-b border-white/10">
+    <img src="assets/images/logo.svg" alt="SR&amp;ED Dashboard logo" class="h-8 w-8 rounded-lg" />
   </div>
 
-  <!-- Nav -->
-  <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1 text-sm">
+  <!-- Nav (icon-only rail; labels via tooltip) -->
+  <nav class="flex-1 overflow-y-auto w-full py-4 flex flex-col items-center gap-1 text-sm">
     <a routerLink="/analytics" routerLinkActive="bg-white/10 text-white border-logo" (click)="onNavigate()"
-      class="flex items-center gap-3 px-3 py-2.5 rounded-lg border-l-4 border-transparent text-white/80 hover:bg-white/10 transition-colors">
-      <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h12a1 1 0 001-1V10"/></svg>
-      Overview
+      title="Overview" aria-label="Overview"
+      class="h-11 w-11 flex items-center justify-center rounded-lg border-l-4 border-transparent text-white/80 hover:bg-white/10 transition-colors">
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h12a1 1 0 001-1V10"/></svg>
     </a>
 
-    <div class="pt-3">
-      <p class="px-3 pb-1 text-[11px] uppercase tracking-wider text-white/40">Manage</p>
-      @for (item of manage; track item.path) {
-        <a [routerLink]="item.path" routerLinkActive="bg-white/10 text-white border-logo" (click)="onNavigate()"
-          class="flex items-center gap-3 px-3 py-2.5 rounded-lg border-l-4 border-transparent text-white/80 hover:bg-white/10 transition-colors">
-          <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon"/></svg>
-          {{ item.label }}
-        </a>
-      }
-    </div>
+    <div class="my-2 h-px w-8 bg-white/10"></div>
+
+    @for (item of manage; track item.path) {
+      <a [routerLink]="item.path" routerLinkActive="bg-white/10 text-white border-logo" (click)="onNavigate()"
+        [title]="item.label" [attr.aria-label]="item.label"
+        class="h-11 w-11 flex items-center justify-center rounded-lg border-l-4 border-transparent text-white/80 hover:bg-white/10 transition-colors">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon"/></svg>
+      </a>
+    }
   </nav>
 
-  <!-- Bottom: client · Feedback (above) · Log out -->
-  <div class="border-t border-white/10 p-3 text-sm space-y-1">
+  <!-- Bottom: profile · Feedback · Log out (icon-only) -->
+  <div class="w-full border-t border-white/10 py-3 flex flex-col items-center gap-1">
     @if (currentUser$ | async; as user) {
-      <div class="flex items-center gap-3 px-3 py-2">
-        <span class="h-8 w-8 shrink-0 rounded-full bg-white/15 flex items-center justify-center text-xs font-semibold">{{ initials(user.displayName) }}</span>
-        <div class="min-w-0 leading-tight">
-          <p class="font-medium truncate">{{ user.displayName }}</p>
-          <p class="text-white/50 text-xs">{{ user.role === 'admin' ? 'Admin' : 'Client' }}</p>
-        </div>
-      </div>
+      <span [title]="user.displayName + ' · ' + (user.role === 'admin' ? 'Admin' : 'Client')"
+        class="h-9 w-9 rounded-full bg-white/15 flex items-center justify-center text-xs font-semibold">{{ initials(user.displayName) }}</span>
     }
-    <button type="button" (click)="openFeedback()"
-      class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border-l-4 border-transparent text-white/80 hover:bg-white/10 transition-colors">
-      <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12a8 8 0 01-8 8H7l-4 3V12a8 8 0 018-8h2a8 8 0 018 8z"/></svg>
-      Feedback
+    <button type="button" (click)="openFeedback()" title="Feedback" aria-label="Feedback"
+      class="h-11 w-11 flex items-center justify-center rounded-lg text-white/80 hover:bg-white/10 transition-colors">
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12a8 8 0 01-8 8H7l-4 3V12a8 8 0 018-8h2a8 8 0 018 8z"/></svg>
     </button>
-    <button type="button" (click)="logout()"
-      class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border-l-4 border-transparent bg-white/10 hover:bg-white/20 transition-colors">
-      <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-      Log out
+    <button type="button" (click)="logout()" title="Log out" aria-label="Log out"
+      class="h-11 w-11 flex items-center justify-center rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
     </button>
   </div>
 </div>
